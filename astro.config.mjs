@@ -1,11 +1,13 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
-// Deployed to GitHub Pages at https://felixgeekfox.github.io/rainbowcircuits/
-// If you move to a custom domain later, change `site` and set `base` to '/'.
+// Hosted on GitHub Pages at the custom domain https://rainbowcircuits.org
+// (see public/CNAME). At a custom domain the site is served from the root,
+// so `base` is '/'. To revert to the github.io project URL, set:
+//   site: 'https://felixgeekfox.github.io', base: '/rainbowcircuits'
 export default defineConfig({
-  site: 'https://felixgeekfox.github.io',
-  base: '/rainbowcircuits',
+  site: 'https://rainbowcircuits.org',
+  base: '/',
   trailingSlash: 'ignore',
   devToolbar: { enabled: false },
   vite: {
