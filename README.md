@@ -1,8 +1,9 @@
-# Rainbow Circuits — site & zine
+# Rainbow Circuits — site & newsletter
 
-The Rainbow Circuits community site and its web-native magazine, the
-**Rainbow Circuits Zine**. Built with [Astro](https://astro.build) as a fully
-static site — no database, no server, content lives in editable files.
+The Rainbow Circuits community site and its web-native publication, the
+**Rainbow Circuits Newsletter** (served under `/newsletter/`). Built with
+[Astro](https://astro.build) as a fully static site — no database, no server,
+content lives in editable files.
 
 ## Quick start
 
