@@ -1,0 +1,336 @@
+---
+import Base from '../layouts/Base.astro';
+import encrypted from '../content/protected/mod-guide.enc.json';
+
+// The moderator guide is AES-256-GCM encrypted (see scripts/encrypt-mods.mjs).
+// Only this ciphertext ships — the plaintext never enters the repo or the
+// page source. The passcode decrypts it in the browser.
+---
+
+<Base
+  title="Moderator Area — Rainbow Circuits"
+  description="A private area for the Rainbow Circuits moderator team."
+  path="/mods/"
+  noindex
+>
+  <div class="mods container">
+    <!-- Locked gate -->
+    <section class="gate" id="gate" aria-labelledby="gate-heading">
+      <p class="gate-lock" aria-hidden="true">🔒</p>
+      <h1 id="gate-heading">Moderator Area</h1>
+      <p class="gate-copy">
+        This page is for the Rainbow Circuits mod team. Enter the passcode to
+        read the moderator guide.
+      </p>
+      <form class="gate-form" id="gate-form">
+        <label for="passcode">Passcode</label>
+        <div class="gate-row">
+          <input
+            type="password"
+            id="passcode"
+            name="passcode"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            required
+            aria-describedby="gate-error"
+          />
+          <button type="submit" class="btn btn-primary">Unlock</button>
+        </div>
+        <p class="gate-error" id="gate-error" role="alert" hidden></p>
+      </form>
+      <p class="gate-hint">
+        Not a moderator? That’s okay — head back to the
+        <a href={import.meta.env.BASE_URL.replace(/\/$/, '') + '/newsletter/'}>Newsletter</a>.
+      </p>
+    </section>
+
+    <!-- Decrypted content lands here -->
+    <article class="mod-guide" id="mod-guide" hidden></article>
+
+    <div class="mods-footer" id="mods-footer" hidden>
+      <button type="button" class="btn btn-secondary" id="lock-again">Lock again</button>
+    </div>
+  </div>
+
+  <script type="application/json" id="mod-blob" set:html={JSON.stringify(encrypted)} />
+
+  <script>
+    const blob = JSON.parse(document.getElementById('mod-blob')!.textContent!);
+    const form = document.getElementById('gate-form') as HTMLFormElement;
+    const input = document.getElementById('passcode') as HTMLInputElement;
+    const errorBox = document.getElementById('gate-error')!;
+    const gate = document.getElementById('gate')!;
+    const guide = document.getElementById('mod-guide')!;
+    const footer = document.getElementById('mods-footer')!;
+    const lockButton = document.getElementById('lock-again')!;
+    const STORAGE_KEY = 'rc-mods-pass';
+
+    const b64ToBytes = (b64: string) =>
+      Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+
+    async function decrypt(passcode: string): Promise<string> {
+      const enc = new TextEncoder();
+      const keyMaterial = await crypto.subtle.importKey(
+        'raw', enc.encode(passcode), 'PBKDF2', false, ['deriveKey'],
+      );
+      const key = await crypto.subtle.deriveKey(
+        { name: 'PBKDF2', salt: b64ToBytes(blob.salt), iterations: blob.kdf.iterations, hash: blob.kdf.hash },
+        keyMaterial,
+        { name: 'AES-GCM', length: 256 },
+        false,
+        ['decrypt'],
+      );
+      const plaintext = await crypto.subtle.decrypt(
+        { name: 'AES-GCM', iv: b64ToBytes(blob.iv) },
+        key,
+        b64ToBytes(blob.ciphertext),
+      );
+      return new TextDecoder().decode(plaintext);
+    }
+
+    function reveal(html: string) {
+      guide.innerHTML = html;
+      gate.hidden = true;
+      guide.hidden = false;
+      footer.hidden = false;
+      guide.setAttribute('tabindex', '-1');
+      guide.focus();
+    }
+
+    async function tryUnlock(passcode: string, remember: boolean) {
+      // A wrong passcode makes AES-GCM throw (auth tag mismatch).
+      const html = await decrypt(passcode);
+      if (remember) sessionStorage.setItem(STORAGE_KEY, passcode);
+      reveal(html);
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      errorBox.hidden = true;
+      try {
+        await tryUnlock(input.value, true);
+      } catch {
+        errorBox.textContent = 'That passcode didn’t work. Check with the mod team and try again.';
+        errorBox.hidden = false;
+        input.select();
+      }
+    });
+
+    lockButton.addEventListener('click', () => {
+      sessionStorage.removeItem(STORAGE_KEY);
+      guide.innerHTML = '';
+      guide.hidden = true;
+      footer.hidden = true;
+      gate.hidden = false;
+      input.value = '';
+      input.focus();
+    });
+
+    // Stay unlocked while navigating within this browser session.
+    const saved = sessionStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      tryUnlock(saved, false).catch(() => sessionStorage.removeItem(STORAGE_KEY));
+    }
+  </script>
+</Base>
+
+<!-- Gate chrome: scoped styles (build-time elements). -->
+<style>
+  .mods { padding-block: 3rem 2rem; }
+  .gate {
+    max-width: 34rem;
+    margin-inline: auto;
+    text-align: center;
+    background: linear-gradient(160deg, rgba(237, 224, 248, 0.9), rgba(253, 240, 248, 0.9));
+    border: var(--card-border);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    padding: clamp(2rem, 5vw, 3rem);
+  }
+  .gate-lock { font-size: 2.5rem; }
+  .gate h1 { font-size: clamp(1.8rem, 5vw, 2.4rem); margin-top: 0.5rem; }
+  .gate-copy { color: var(--text-light); margin-top: 0.6rem; }
+  .gate-form { margin-top: 1.75rem; text-align: left; }
+  .gate-form label {
+    display: block;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 0.4rem;
+  }
+  .gate-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .gate-row input {
+    flex: 1 1 12rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    padding: 0.7rem 0.9rem;
+    border: 1.5px solid rgba(155, 114, 200, 0.35);
+    border-radius: 12px;
+    background: var(--white);
+    color: var(--text);
+  }
+  .gate-row input:focus { outline: 3px solid var(--violet); outline-offset: 1px; border-color: transparent; }
+  .gate-row .btn { border: none; }
+  .gate-error {
+    margin-top: 0.8rem;
+    background: var(--pink-soft);
+    border: 1.5px solid var(--rose-soft);
+    border-radius: 10px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .gate-hint { margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-light); }
+  .mods-footer { text-align: center; margin-top: 2.5rem; }
+  .mod-guide:focus { outline: none; }
+</style>
+
+<!--
+  Moderator-guide styles: global (is:global) because the content is injected
+  via innerHTML at runtime, so Astro's scoped attributes never reach it.
+  Everything is namespaced under .mod-guide so nothing leaks to other pages.
+-->
+<style is:global>
+  .mod-guide { max-width: 62rem; margin-inline: auto; }
+  .mod-guide .intro { text-align: center; margin-bottom: 3rem; }
+  .mod-guide .intro h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    color: var(--violet);
+  }
+  .mod-guide .intro p { color: var(--text-light); max-width: 40rem; margin: 0.6rem auto 0; }
+
+  .mod-guide .section { margin-bottom: 2.75rem; }
+  .mod-guide .section-title {
+    font-family: var(--font-ui);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--violet);
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1.25rem;
+  }
+  .mod-guide .section-title::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, var(--lavender), transparent);
+    border-radius: 2px;
+  }
+
+  .mod-guide .philosophy {
+    background: linear-gradient(135deg, #fdf0f8, #ede0f8);
+    border-radius: var(--card-radius);
+    padding: clamp(1.5rem, 4vw, 2.25rem);
+    box-shadow: var(--card-shadow);
+    border: 1.5px solid rgba(155, 114, 200, 0.18);
+  }
+  .mod-guide .philosophy p { line-height: 1.8; margin-bottom: 0.75rem; }
+  .mod-guide .philosophy p:last-child { margin-bottom: 0; }
+  .mod-guide .philosophy .question {
+    background: rgba(138, 95, 190, 0.12);
+    border-left: 4px solid var(--violet);
+    border-radius: 0 12px 12px 0;
+    padding: 0.9rem 1.25rem;
+    font-style: italic;
+    font-weight: 700;
+    color: var(--violet);
+    margin-top: 1rem;
+  }
+
+  .mod-guide .principles-grid,
+  .mod-guide .warning-grid,
+  .mod-guide .content-grid,
+  .mod-guide .tone-wrap {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+    gap: 1rem;
+  }
+  .mod-guide .principle-card {
+    background: var(--white);
+    border-radius: var(--card-radius);
+    padding: 1.5rem;
+    box-shadow: var(--card-shadow);
+    border: 1.5px solid rgba(155, 114, 200, 0.1);
+  }
+  .mod-guide .principle-num {
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--rose);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+  .mod-guide .principle-card h3 { font-family: var(--font-ui); font-size: 1.05rem; margin-bottom: 0.5rem; }
+  .mod-guide .principle-card p { font-size: 0.92rem; color: var(--text-light); }
+
+  .mod-guide .warn-card { border-radius: var(--card-radius); padding: 1.4rem; box-shadow: var(--card-shadow); }
+  .mod-guide .warn-card.friendly  { background: linear-gradient(135deg, #e8f8f0, #d4f0e8); border: 1.5px solid #a8dbc8; }
+  .mod-guide .warn-card.official  { background: linear-gradient(135deg, #fff8e8, #fde8c8); border: 1.5px solid #f0c870; }
+  .mod-guide .warn-card.temp      { background: linear-gradient(135deg, #fde8f0, #f9d0e0); border: 1.5px solid #e8a0b8; }
+  .mod-guide .warn-card.permanent { background: linear-gradient(135deg, #ede0f8, #ddc8f0); border: 1.5px solid #b890d8; }
+  .mod-guide .warn-card h3 { font-family: var(--font-ui); font-size: 0.95rem; margin-bottom: 0.7rem; }
+  .mod-guide .warn-card ul { list-style: none; padding: 0; }
+  .mod-guide .warn-card li { font-size: 0.88rem; padding: 0.15rem 0 0.15rem 1rem; position: relative; }
+  .mod-guide .warn-card li::before { content: '·'; position: absolute; left: 0.25rem; font-weight: 700; color: var(--text-light); }
+
+  .mod-guide .content-card { border-radius: var(--card-radius); padding: 1.6rem; box-shadow: var(--card-shadow); }
+  .mod-guide .content-card.encourage { background: linear-gradient(135deg, #e8f8f0, #d8f4e8); border: 1.5px solid #9cd8b8; }
+  .mod-guide .content-card.remove    { background: linear-gradient(135deg, #fde8f0, #fad4e4); border: 1.5px solid #e8a0b8; }
+  .mod-guide .content-card h3 { font-family: var(--font-ui); font-size: 1.05rem; margin-bottom: 0.8rem; }
+  .mod-guide .content-card ul { list-style: none; padding: 0; }
+  .mod-guide .content-card li { font-size: 0.92rem; padding: 0.2rem 0 0.2rem 1.4rem; position: relative; }
+  .mod-guide .content-card.encourage li::before { content: '✔'; position: absolute; left: 0; color: var(--teal); }
+  .mod-guide .content-card.remove li::before    { content: '✘'; position: absolute; left: 0; color: var(--rose); }
+
+  .mod-guide .tone-card { border-radius: var(--card-radius); padding: 1.5rem; box-shadow: var(--card-shadow); }
+  .mod-guide .tone-card.we-are    { background: linear-gradient(135deg, #ede0f8, #e0d4f8); border: 1.5px solid #c0a0e0; }
+  .mod-guide .tone-card.we-arenot { background: linear-gradient(135deg, #fdf0f0, #f8e0e0); border: 1.5px solid #e8b8b8; }
+  .mod-guide .tone-card h3 { font-family: var(--font-ui); margin-bottom: 0.7rem; }
+  .mod-guide .tone-card ul { list-style: none; padding: 0; }
+  .mod-guide .tone-card li { font-size: 0.92rem; padding: 0.2rem 0; }
+
+  .mod-guide .situations { display: flex; flex-direction: column; gap: 1rem; }
+  .mod-guide .situation-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 1.4rem 1.6rem;
+    box-shadow: var(--card-shadow);
+    border: 1.5px solid rgba(155, 114, 200, 0.1);
+  }
+  .mod-guide .situation-card h3 { font-family: var(--font-ui); font-size: 1rem; color: var(--violet); margin-bottom: 0.7rem; }
+  .mod-guide .situation-card .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr)); gap: 0.9rem; }
+  .mod-guide .situation-card .sub { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.25rem; color: var(--text-light); }
+  .mod-guide .situation-card .sub.allow { color: var(--teal); }
+  .mod-guide .situation-card .sub.deny  { color: var(--rose); }
+  .mod-guide .situation-card p { font-size: 0.92rem; line-height: 1.6; }
+
+  .mod-guide .pip-puddle {
+    background: linear-gradient(135deg, #fdf0f8, #ede0f8, #e0f0fd);
+    border-radius: var(--card-radius);
+    padding: clamp(1.75rem, 4vw, 2.25rem);
+    box-shadow: var(--card-shadow);
+    text-align: center;
+    margin-bottom: 2.75rem;
+    border: 1.5px solid rgba(155, 114, 200, 0.18);
+  }
+  .mod-guide .pip-puddle h2 { font-family: var(--font-ui); font-size: 1.3rem; color: var(--violet); margin-bottom: 1.25rem; }
+  .mod-guide .pip-puddle .checks { display: flex; flex-direction: column; gap: 0.75rem; max-width: 34rem; margin: 0 auto 1.1rem; text-align: left; }
+  .mod-guide .pip-puddle .check { background: rgba(255, 255, 255, 0.7); border-radius: 12px; padding: 0.9rem 1.1rem; border: 1px solid rgba(155, 114, 200, 0.15); }
+  .mod-guide .pip-puddle .verdict { font-weight: 700; color: var(--violet); font-style: italic; }
+
+  .mod-guide .promise {
+    background: linear-gradient(135deg, var(--lavender), var(--pink-soft));
+    border-radius: var(--card-radius);
+    padding: clamp(2rem, 5vw, 2.75rem);
+    text-align: center;
+    box-shadow: var(--card-shadow);
+    border: 1.5px solid rgba(155, 114, 200, 0.18);
+  }
+  .mod-guide .promise h2 { font-family: var(--font-display); font-size: 1.5rem; color: var(--violet); margin-bottom: 1rem; }
+  .mod-guide .promise p { line-height: 1.8; max-width: 40rem; margin: 0 auto 0.75rem; }
+  .mod-guide .promise p:last-child { margin-bottom: 0; font-weight: 700; color: var(--violet); }
+</style>

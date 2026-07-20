@@ -3,11 +3,13 @@
   "type": "module",
   "version": "1.0.0",
   "private": true,
-  "description": "Rainbow Circuits — community site and zine",
+  "description": "Rainbow Circuits — community site and newsletter",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "encrypt-mods": "node scripts/encrypt-mods.mjs",
+    "import-gallery": "node scripts/import-gallery.mjs"
   },
   "dependencies": {
     "astro": "^5.0.0",

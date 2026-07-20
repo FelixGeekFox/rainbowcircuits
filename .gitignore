@@ -9,6 +9,9 @@ npm-debug.log*
 # environment
 .env
 .env.production
+# moderator guide plaintext — only the encrypted blob is committed.
+# (the .example file is a safe placeholder and stays tracked)
+mod-content/mod-guide.html
 # OS
 .DS_Store
 Thumbs.db

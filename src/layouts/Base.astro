@@ -15,9 +15,11 @@ interface Props {
   structuredData?: object;
   /** Hide the standard site header (the issue page brings its own chrome). */
   bareHeader?: boolean;
+  /** Ask search engines not to index this page (e.g. the mod area). */
+  noindex?: boolean;
 }
 
-const { title, description, path, socialImage, structuredData, bareHeader = false } = Astro.props;
+const { title, description, path, socialImage, structuredData, bareHeader = false, noindex = false } = Astro.props;
 const canonical = new URL(withBase(path), Astro.site);
 ---
 
@@ -28,6 +30,7 @@ const canonical = new URL(withBase(path), Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
     <meta name="generator" content={Astro.generator} />

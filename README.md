@@ -77,6 +77,46 @@ no server). The simplest option:
 Until then the form validates but tells visitors to share feedback in the
 community instead. Spam protection (honeypot + timing) is built in.
 
+## The locked mod page
+
+The moderator guide lives at `/mods/` (unlinked from navigation, `noindex`).
+It's **encrypted**: the passcode decrypts the guide in the browser, and only
+the ciphertext (`src/content/protected/mod-guide.enc.json`) is committed. The
+plaintext never enters the public repo.
+
+**Editing the guide / setting the passcode:**
+
+1. Edit `mod-content/mod-guide.html` — this is your local, gitignored
+   plaintext (plain HTML). Keep a backup; it is the only editable copy and it
+   does **not** live in git.
+2. Encrypt it with your chosen passcode:
+
+   ```powershell
+   # PowerShell
+   $env:MOD_PASSCODE = "your team passphrase"
+   npm run encrypt-mods
+   ```
+   ```bash
+   # bash
+   MOD_PASSCODE="your team passphrase" npm run encrypt-mods
+   ```
+3. Commit + push the updated `src/content/protected/mod-guide.enc.json`.
+
+Now anyone visiting `/mods/` needs the passphrase to read the guide. To change
+who has access, pick a new passphrase and re-run step 2.
+
+**Ships with a demo:** out of the box the page is encrypted with placeholder
+content and the passcode `demo`, just so it works before you run the steps
+above. Your first `npm run encrypt-mods` replaces it with the real guide under
+your secret passcode.
+
+**Honest limits:** this is real cryptography (AES-256-GCM, PBKDF2), so the
+guide genuinely can't be read from the source without the passcode — but it's a
+single shared secret. Anyone you give it to can read and re-share the content,
+and there's no per-person access or revocation short of changing the passcode.
+Choose a strong passphrase. (Once you're happy with this page, you can retire
+the old public `rainbowcircuits-mods` site.)
+
 ## Deploying
 
 Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the site
