@@ -2,8 +2,8 @@
   "name": "The Rainbow Circuits Gala",
   "slug": "gala-2026",
   "description": "The first Rainbow Circuits Gala — a dressed-up community weekend of art, stories, dancing, and at least one suspiciously large room-service trolley. Now an annual tradition.",
-  "starts": "2026-06-27",
-  "ends": "2026-06-29",
+  "starts": "2026-07-17",
+  "ends": "2026-07-19",
   "replacesCommunityCafe": true,
   "recurrence": "Annual"
 }

@@ -38,6 +38,8 @@ const args = process.argv.slice(2);
 const listingPath = args.find((a) => !a.startsWith('--'));
 const issue = valueOf('--issue') ?? 'issue-001';
 const flair = valueOf('--flair');
+/** Keep the zine an edited selection: cap images taken from one post. */
+const maxPerPost = Number(valueOf('--max-per-post') ?? Infinity);
 function valueOf(flag) {
   const i = args.indexOf(flag);
   return i >= 0 ? args[i + 1] : undefined;
@@ -110,7 +112,8 @@ for (const post of posts) {
     console.log(`  skip (already imported): ${post.title}`);
     continue;
   }
-  for (let n = 0; n < post.images.length; n++) {
+  const takenCount = Math.min(post.images.length, maxPerPost);
+  for (let n = 0; n < takenCount; n++) {
     const url = post.images[n];
     const ext = (new URL(url).pathname.match(/\.(png|jpe?g|webp|gif)$/i)?.[1] ?? 'jpg').toLowerCase();
     const filename = post.images.length > 1 ? `${post.id}-${n + 1}.${ext}` : `${post.id}.${ext}`;
@@ -129,11 +132,18 @@ for (const post of posts) {
     }
 
     gallery.items.push({
+      // Serviceable default alt from the post context — replace with a
+      // real description of the image where possible.
       image: `${issue}/gallery/${filename.replace(/\.[^.]+$/, '')}`,
-      alt: '[Gallery image alt text required]',
+      alt: `“${post.title}” — shared by u/${post.author}${takenCount > 1 ? ` (image ${n + 1} of ${takenCount})` : ''}`,
       title: post.title,
       member: `u/${post.author}`,
-      caption: post.images.length > 1 ? `Part ${n + 1} of ${post.images.length}` : undefined,
+      caption:
+        post.images.length > takenCount
+          ? `A selection — see the original post for all ${post.images.length} images`
+          : takenCount > 1
+            ? `${n + 1} of ${takenCount}`
+            : undefined,
       creditUrl: post.permalink,
       nsfw: post.nsfw || undefined,
       placeholder: false,
