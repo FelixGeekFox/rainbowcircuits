@@ -1,0 +1,72 @@
+---
+import { SITE, withBase } from '../../lib/site';
+import SectionIntro from '../SectionIntro.astro';
+import ShareRow from '../ShareRow.astro';
+
+/**
+ * data: { message: string, contribute?: string }
+ */
+interface Props {
+  kicker?: string;
+  title: string;
+  data: Record<string, any>;
+  issueTitle: string;
+  issueUrl: string;
+}
+const { kicker, title, data, issueTitle, issueUrl } = Astro.props;
+---
+
+<SectionIntro kicker={kicker} title={title} />
+
+<div class="closing card">
+  <p class="closing-mascots" aria-hidden="true">🐦 ✨ 🐸</p>
+  <p class="closing-message">{data.message}</p>
+
+  {data.contribute && (
+    <div class="closing-contribute">
+      <h3>Be part of Issue #002</h3>
+      <p>{data.contribute}</p>
+    </div>
+  )}
+
+  <div class="closing-links">
+    <a class="btn btn-primary" href={SITE.communityUrl} rel="noopener">Back to the community</a>
+    <a class="btn btn-secondary" href={withBase('/zine/issues/')}>Browse the archive</a>
+  </div>
+
+  <div class="closing-share">
+    <ShareRow url={issueUrl} title={`${issueTitle} — ${SITE.zineName}`} label="Share this issue" />
+  </div>
+</div>
+
+<style>
+  .closing {
+    max-width: 46rem;
+    margin-inline: auto;
+    padding: clamp(2rem, 5vw, 3.25rem);
+    text-align: center;
+    background: linear-gradient(160deg, var(--lavender), var(--pink-soft));
+  }
+  .closing-mascots { font-size: 1.6rem; margin-bottom: 1rem; }
+  .closing-message { font-size: 1.1rem; line-height: 1.75; }
+  .closing-contribute {
+    margin-top: 2rem;
+    background: rgba(255, 255, 255, 0.65);
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+  }
+  .closing-contribute h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+  .closing-contribute p { font-size: 0.98rem; color: var(--text); }
+  .closing-links {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+  }
+  .closing-share {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+  }
+</style>

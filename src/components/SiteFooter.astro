@@ -1,0 +1,45 @@
+---
+import { SITE, withBase } from '../lib/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p class="footer-mascots" aria-hidden="true">🐦 💜 🐸</p>
+    <p class="footer-line">
+      <strong>Rainbow Circuits</strong> — every story matters, every heart belongs.
+    </p>
+    <ul class="footer-links">
+      <li><a href={withBase('/zine/')}>Zine home</a></li>
+      <li><a href={withBase('/zine/issues/')}>Issue archive</a></li>
+      <li><a href={SITE.communityUrl} rel="noopener">Back to the community</a></li>
+    </ul>
+    <p class="footer-copy">© {year} Rainbow Circuits. Made with kindness, glitter, and a small amount of harmless chaos.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: 4rem;
+    border-top: 1px solid rgba(155, 114, 200, 0.15);
+    background: linear-gradient(180deg, transparent, rgba(232, 213, 245, 0.35));
+    text-align: center;
+    padding-block: 2.5rem 2rem;
+  }
+  .footer-mascots { font-size: 1.3rem; margin-bottom: 0.5rem; }
+  .footer-line { font-size: 1rem; color: var(--text); }
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    list-style: none;
+    margin-block: 1rem;
+  }
+  .footer-links a {
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .footer-copy { font-size: 0.85rem; color: var(--text-light); }
+</style>

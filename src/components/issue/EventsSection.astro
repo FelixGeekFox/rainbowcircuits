@@ -1,0 +1,168 @@
+---
+import { getCollection } from 'astro:content';
+import SectionIntro from '../SectionIntro.astro';
+
+/**
+ * Renders the recurring community events from the events collection.
+ * Weekly + weekend events get large cards; monthly traditions get
+ * smaller ones. Events with pausesForSpecialEvents get an explicit
+ * "pauses during special event weekends" note.
+ * data: { intro?: string }
+ */
+interface Props {
+  kicker?: string;
+  title: string;
+  data: Record<string, any>;
+}
+const { kicker, title, data } = Astro.props;
+
+const events = (await getCollection('events'))
+  .filter((event) => event.data.active)
+  .sort((a, b) => a.data.displayOrder - b.data.displayOrder);
+const regulars = events.filter((e) => e.data.frequency !== 'monthly');
+const monthlies = events.filter((e) => e.data.frequency === 'monthly');
+---
+
+<SectionIntro kicker={kicker} title={title} />
+{data.intro && <p class="events-intro">{data.intro}</p>}
+
+<div class="events">
+  <ul class="events-grid">
+    {regulars.map((event) => (
+      <li class="event-card card" style={`--event-accent: ${event.data.accent};`}>
+        <p class="event-emoji" aria-hidden="true">{event.data.emoji}</p>
+        <h3>{event.data.name}</h3>
+        <p class="event-schedule">{event.data.schedule}</p>
+        <p class="event-desc">{event.data.description}</p>
+        {event.data.pausesForSpecialEvents && (
+          <p class="event-pause">
+            Pauses during special event weekends — when something bigger takes over,
+            the café politely closes its doors and joins the party.
+          </p>
+        )}
+        {event.data.participationIdeas.length > 0 && (
+          <div class="event-ideas">
+            <p class="event-ideas-label">Joining in can be as small as:</p>
+            <ul>
+              {event.data.participationIdeas.map((idea) => <li>{idea}</li>)}
+            </ul>
+          </div>
+        )}
+      </li>
+    ))}
+  </ul>
+
+  {monthlies.length > 0 && (
+    <div class="monthlies">
+      <h3 class="monthlies-title">Monthly traditions</h3>
+      <ul class="monthlies-grid">
+        {monthlies.map((event) => (
+          <li class="monthly-card card" style={`--event-accent: ${event.data.accent};`}>
+            <p class="event-emoji" aria-hidden="true">{event.data.emoji}</p>
+            <div>
+              <h4>{event.data.name}</h4>
+              <p class="event-desc">{event.data.description}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  <p class="events-footnote">
+    Participation is whatever you want it to be — an image, a paragraph, a screenshot,
+    a comment, a reaction, or simply being quietly present. All of it counts.
+  </p>
+</div>
+
+<style>
+  .events-intro {
+    text-align: center;
+    max-width: 42rem;
+    margin: -1rem auto 2rem;
+    color: var(--text-light);
+  }
+  .events { max-width: 62rem; margin-inline: auto; }
+  .events-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+    gap: 1.25rem;
+  }
+  .event-card {
+    padding: 1.75rem 1.5rem;
+    border-top: 4px solid var(--event-accent);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .event-emoji { font-size: 1.8rem; line-height: 1; }
+  .event-card h3 { font-size: 1.35rem; }
+  .event-schedule {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--event-accent);
+  }
+  .event-desc { font-size: 0.96rem; color: var(--text); }
+  .event-pause {
+    font-size: 0.88rem;
+    color: var(--text-light);
+    background: var(--peach);
+    border-radius: 12px;
+    padding: 0.6rem 0.9rem;
+  }
+  .event-ideas { margin-top: auto; padding-top: 0.5rem; }
+  .event-ideas-label {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-bottom: 0.3rem;
+  }
+  .event-ideas ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .event-ideas li {
+    font-family: var(--font-ui);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-light);
+    background: var(--paper-warm);
+    border-radius: 999px;
+    padding: 0.2rem 0.7rem;
+  }
+  .monthlies { margin-top: 2.5rem; }
+  .monthlies-title {
+    text-align: center;
+    font-size: 1.3rem;
+    margin-bottom: 1.25rem;
+  }
+  .monthlies-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+    gap: 1.25rem;
+  }
+  .monthly-card {
+    padding: 1.4rem 1.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    border-left: 4px solid var(--event-accent);
+  }
+  .monthly-card h4 { font-size: 1.1rem; margin-bottom: 0.3rem; }
+  .events-footnote {
+    margin-top: 2.25rem;
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--text-light);
+    max-width: 44rem;
+    margin-inline: auto;
+  }
+</style>

@@ -1,0 +1,131 @@
+---
+/**
+ * "Inside This Issue" — sticky sidebar on desktop, collapsible
+ * disclosure on mobile. Highlights the current section while reading.
+ */
+interface Props {
+  sections: { id: string; title: string }[];
+}
+const { sections } = Astro.props;
+---
+
+<nav class="issue-toc" aria-label="Inside this issue">
+  <details class="toc-disclosure">
+    <summary>
+      <span class="toc-label">Inside This Issue</span>
+      <span class="toc-chevron" aria-hidden="true">▾</span>
+    </summary>
+    <ol class="toc-list">
+      {sections.map((section, i) => (
+        <li>
+          <a href={`#${section.id}`} data-toc-link={section.id}>
+            <span class="toc-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            {section.title}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </details>
+</nav>
+
+<script>
+  // Keep the disclosure open on desktop, collapsible on mobile,
+  // and highlight the section currently in view.
+  const toc = document.querySelector('.issue-toc');
+  const details = toc?.querySelector<HTMLDetailsElement>('details');
+  if (toc && details) {
+    const desktop = window.matchMedia('(min-width: 64rem)');
+    const syncOpen = () => { if (desktop.matches) details.open = true; };
+    desktop.addEventListener('change', syncOpen);
+    syncOpen();
+
+    const links = new Map<string, HTMLAnchorElement>();
+    toc.querySelectorAll<HTMLAnchorElement>('[data-toc-link]').forEach((a) => {
+      links.set(a.dataset.tocLink!, a);
+      // On mobile, collapse the menu after choosing a section.
+      a.addEventListener('click', () => { if (!desktop.matches) details.open = false; });
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            links.forEach((a) => a.removeAttribute('aria-current'));
+            links.get(entry.target.id)?.setAttribute('aria-current', 'true');
+          }
+        }
+      },
+      { rootMargin: '-20% 0px -70% 0px' },
+    );
+    links.forEach((_, id) => {
+      const target = document.getElementById(id);
+      if (target) observer.observe(target);
+    });
+  }
+</script>
+
+<style>
+  .issue-toc {
+    position: sticky;
+    top: 0.5rem;
+    z-index: 100;
+  }
+  .toc-disclosure {
+    background: rgba(253, 246, 240, 0.94);
+    backdrop-filter: blur(8px);
+    border: var(--card-border);
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+  }
+  summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.6rem;
+    cursor: pointer;
+    padding: 0.85rem 1.1rem;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    color: var(--violet);
+  }
+  summary::-webkit-details-marker { display: none; }
+  .toc-chevron { transition: transform 0.2s ease; }
+  details[open] .toc-chevron { transform: rotate(180deg); }
+  .toc-list {
+    list-style: none;
+    padding: 0 0.6rem 0.8rem;
+    max-height: min(60vh, 30rem);
+    overflow-y: auto;
+  }
+  .toc-list a {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding: 0.42rem 0.6rem;
+    border-radius: 10px;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--text-light);
+    text-decoration: none;
+  }
+  .toc-num {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--rose-soft);
+  }
+  .toc-list a:hover { background: var(--pink-soft); color: var(--text); }
+  .toc-list a[aria-current='true'] {
+    background: var(--lavender);
+    color: var(--text);
+  }
+
+  @media (min-width: 64rem) {
+    /* Desktop: the sidebar variant — the parent grid places it. */
+    .issue-toc { top: 1.5rem; }
+    summary { pointer-events: none; }
+    .toc-chevron { display: none; }
+  }
+</style>

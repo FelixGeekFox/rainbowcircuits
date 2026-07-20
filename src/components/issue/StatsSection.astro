@@ -1,0 +1,96 @@
+---
+import SectionIntro from '../SectionIntro.astro';
+
+/**
+ * data: {
+ *   note?: string,
+ *   stats: { value: string, label: string, confirmed: boolean,
+ *            playful: boolean, placeholderNote?: string }[]
+ * }
+ * `confirmed` marks real figures; `playful` marks editorial jokes.
+ * Unconfirmed serious figures render their placeholderNote so nothing
+ * fake ships as fact.
+ */
+interface Props {
+  kicker?: string;
+  title: string;
+  data: Record<string, any>;
+}
+const { kicker, title, data } = Astro.props;
+const accents = ['var(--rose)', 'var(--violet)', 'var(--teal)', 'var(--gold)', 'var(--coral)', 'var(--cyan)'];
+---
+
+<SectionIntro kicker={kicker} title={title} />
+
+<div class="stats-grid">
+  {(data.stats ?? []).map((stat: any, i: number) => (
+    <div class="stat card" style={`--stat-accent: ${accents[i % accents.length]};`}>
+      <p class="stat-value">
+        {stat.confirmed || stat.playful ? stat.value : (
+          <span class="stat-tbc" title={stat.placeholderNote}>soon™</span>
+        )}
+      </p>
+      <p class="stat-label">{stat.label}</p>
+      {stat.playful && <p class="stat-tag">certified nonsense</p>}
+      {!stat.confirmed && !stat.playful && (
+        <p class="stat-tag pending">{stat.placeholderNote ?? '[Confirmed figure to be added]'}</p>
+      )}
+    </div>
+  ))}
+</div>
+
+<style>
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+    gap: 1rem;
+    max-width: 60rem;
+    margin-inline: auto;
+  }
+  .stat {
+    padding: 1.5rem 1.25rem 1.25rem;
+    text-align: center;
+    border-top: 4px solid var(--stat-accent);
+  }
+  .stat-value {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    font-weight: 600;
+    color: var(--stat-accent);
+    line-height: 1;
+  }
+  .stat-tbc { font-style: italic; font-size: 0.7em; }
+  .stat-label {
+    margin-top: 0.5rem;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--text);
+  }
+  .stat-tag {
+    margin-top: 0.5rem;
+    display: inline-block;
+    font-family: var(--font-ui);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-light);
+    background: var(--peach);
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+  }
+  .stat-tag.pending { background: var(--lavender); }
+</style>
+
+{data.note && <p class="stats-note container">{data.note}</p>}
+
+<style>
+  .stats-note {
+    max-width: 44rem;
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--text-light);
+  }
+</style>

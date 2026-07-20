@@ -1,0 +1,17 @@
+{
+  "name": "Pip's Post Office",
+  "slug": "pips-post-office",
+  "emoji": "💌",
+  "description": "A monthly space for kind notes, letters, postcards, encouragement, and messages from the heart — delivered by a very determined sparrow.",
+  "frequency": "monthly",
+  "schedule": "Monthly",
+  "active": true,
+  "pausesForSpecialEvents": false,
+  "participationIdeas": [
+    "A note of encouragement",
+    "A postcard to the community",
+    "A thank-you to someone specific"
+  ],
+  "accent": "var(--rose)",
+  "displayOrder": 4
+}

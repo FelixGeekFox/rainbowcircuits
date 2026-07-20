@@ -1,0 +1,299 @@
+---
+import { Image } from 'astro:assets';
+import { getEntry } from 'astro:content';
+import { getImage } from '../../lib/images';
+import SectionIntro from '../SectionIntro.astro';
+import PlaceholderImage from '../PlaceholderImage.astro';
+
+/**
+ * Responsive gallery with an accessible <dialog> lightbox:
+ * keyboard navigable, visible close button, background scroll locked,
+ * captions and credits retained in the expanded view.
+ * data: { gallery: string, intro?: string }
+ */
+interface Props {
+  kicker?: string;
+  title: string;
+  data: Record<string, any>;
+}
+const { kicker, title, data } = Astro.props;
+
+const galleryEntry = await getEntry('gallery', data.gallery);
+if (!galleryEntry) throw new Error(`Gallery "${data.gallery}" not found`);
+const { items, initiallyVisible } = galleryEntry.data;
+---
+
+<SectionIntro kicker={kicker} title={title} />
+{data.intro && <p class="gallery-intro">{data.intro}</p>}
+
+<div class="gallery" data-gallery>
+  <ul class="gallery-grid">
+    {items.map((item, index) => (
+      <li class="gallery-item" hidden={index >= initiallyVisible ? true : undefined}>
+        <button
+          type="button"
+          class="gallery-open"
+          data-lightbox-open={index}
+          aria-haspopup="dialog"
+        >
+          {(() => {
+            const img = getImage(item.image);
+            return img ? (
+              <Image
+                src={img}
+                alt={item.alt}
+                widths={[360, 560, 800]}
+                sizes="(min-width: 64rem) 20rem, (min-width: 40rem) 45vw, 92vw"
+                loading="lazy"
+              />
+            ) : (
+              <PlaceholderImage label={item.alt} ratio="4 / 3" icon="🎨" />
+            );
+          })()}
+          <span class="visually-hidden">Open “{item.title}” by {item.member} in the gallery viewer</span>
+        </button>
+        <div class="gallery-meta">
+          <p class="gallery-title">{item.title}</p>
+          <p class="gallery-credit">
+            {item.member}
+            {item.companion && <span class="gallery-companion"> · with {item.companion}</span>}
+          </p>
+          {item.contentWarning && <p class="gallery-cw">CW: {item.contentWarning}</p>}
+        </div>
+      </li>
+    ))}
+  </ul>
+
+  {items.length > initiallyVisible && (
+    <div class="gallery-more-wrap">
+      <button type="button" class="btn btn-secondary" data-gallery-more>
+        Show more from the gallery
+      </button>
+    </div>
+  )}
+
+  <dialog class="lightbox" data-lightbox aria-label="Gallery viewer">
+    <div class="lightbox-frame">
+      <button type="button" class="lightbox-close" data-lightbox-close>
+        <span aria-hidden="true">✕</span>
+        <span class="visually-hidden">Close gallery viewer</span>
+      </button>
+
+      {items.map((item, index) => (
+        <figure class="lightbox-slide" data-slide={index} hidden>
+          {(() => {
+            const img = getImage(item.image);
+            return img ? (
+              <Image
+                src={img}
+                alt={item.alt}
+                widths={[800, 1200, 1800]}
+                sizes="90vw"
+                loading="lazy"
+              />
+            ) : (
+              <PlaceholderImage label={item.alt} ratio="4 / 3" icon="🎨" />
+            );
+          })()}
+          <figcaption>
+            <strong>{item.title}</strong>
+            <span>
+              {item.member}
+              {item.companion && ` · with ${item.companion}`}
+            </span>
+            {item.caption && <span class="lightbox-caption">{item.caption}</span>}
+            {item.creditUrl && (
+              <a href={item.creditUrl} rel="noopener">View creator profile</a>
+            )}
+          </figcaption>
+        </figure>
+      ))}
+
+      <div class="lightbox-nav">
+        <button type="button" data-lightbox-prev>
+          <span aria-hidden="true">←</span> Previous
+        </button>
+        <p class="lightbox-count" aria-live="polite"><span data-lightbox-counter></span></p>
+        <button type="button" data-lightbox-next>
+          Next <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </div>
+  </dialog>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((gallery) => {
+    // "Show more" — reveal the rest of the grid.
+    const moreButton = gallery.querySelector<HTMLButtonElement>('[data-gallery-more]');
+    moreButton?.addEventListener('click', () => {
+      gallery.querySelectorAll<HTMLElement>('.gallery-item[hidden]').forEach((item) => {
+        item.hidden = false;
+      });
+      moreButton.closest<HTMLElement>('.gallery-more-wrap')!.hidden = true;
+    });
+
+    // Lightbox.
+    const dialog = gallery.querySelector<HTMLDialogElement>('[data-lightbox]');
+    if (!dialog) return;
+    const slides = Array.from(dialog.querySelectorAll<HTMLElement>('[data-slide]'));
+    const counter = dialog.querySelector<HTMLElement>('[data-lightbox-counter]');
+    let current = 0;
+
+    const show = (index: number) => {
+      current = (index + slides.length) % slides.length;
+      slides.forEach((slide, i) => { slide.hidden = i !== current; });
+      if (counter) counter.textContent = `${current + 1} of ${slides.length}`;
+    };
+
+    gallery.querySelectorAll<HTMLButtonElement>('[data-lightbox-open]').forEach((button) => {
+      button.addEventListener('click', () => {
+        show(Number(button.dataset.lightboxOpen));
+        dialog.showModal();
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    const unlockScroll = () => { document.body.style.overflow = ''; };
+    const close = () => { dialog.close(); unlockScroll(); };
+    dialog.querySelector('[data-lightbox-close]')?.addEventListener('click', close);
+    dialog.querySelector('[data-lightbox-prev]')?.addEventListener('click', () => show(current - 1));
+    dialog.querySelector('[data-lightbox-next]')?.addEventListener('click', () => show(current + 1));
+
+    dialog.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') show(current - 1);
+      if (event.key === 'ArrowRight') show(current + 1);
+    });
+
+    // Click on the backdrop closes.
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) close();
+    });
+
+    // Esc closes the dialog natively; restore scrolling in every case.
+    dialog.addEventListener('cancel', unlockScroll);
+    dialog.addEventListener('close', unlockScroll);
+  });
+</script>
+
+<style>
+  .gallery-intro {
+    text-align: center;
+    max-width: 40rem;
+    margin: -1rem auto 2rem;
+    color: var(--text-light);
+  }
+  .gallery { max-width: var(--wide); margin-inline: auto; }
+  .gallery-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(17rem, 100%), 1fr));
+    gap: 1.25rem;
+  }
+  .gallery-open {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    background: none;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .gallery-open:hover { transform: translateY(-3px); box-shadow: var(--card-shadow-hover); }
+  .gallery-open :global(img) { width: 100%; height: auto; }
+  .gallery-meta { padding: 0.7rem 0.35rem 0; }
+  .gallery-title {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.98rem;
+    color: var(--text);
+  }
+  .gallery-credit { font-size: 0.88rem; color: var(--text-light); }
+  .gallery-cw {
+    margin-top: 0.25rem;
+    display: inline-block;
+    font-family: var(--font-ui);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--gold);
+    background: var(--peach);
+    border-radius: 999px;
+    padding: 0.1rem 0.6rem;
+  }
+  .gallery-more-wrap { text-align: center; margin-top: 2rem; }
+
+  /* lightbox */
+  .lightbox {
+    border: none;
+    border-radius: 20px;
+    padding: 0;
+    background: var(--twilight-deep);
+    color: var(--on-twilight);
+    width: min(92vw, 64rem);
+    max-height: 90vh;
+  }
+  .lightbox::backdrop {
+    background: rgba(34, 25, 54, 0.85);
+    backdrop-filter: blur(4px);
+  }
+  .lightbox-frame { padding: 1rem; }
+  .lightbox-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 2;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 999px;
+    border: 2px solid rgba(246, 239, 250, 0.4);
+    background: rgba(34, 25, 54, 0.7);
+    color: var(--on-twilight);
+    font-size: 1.1rem;
+  }
+  .lightbox-close:hover { border-color: var(--gold-soft); color: var(--gold-soft); }
+  .lightbox-slide { margin: 0; }
+  .lightbox-slide :global(img),
+  .lightbox-slide :global(.placeholder-frame) {
+    width: 100%;
+    max-height: 62vh;
+    object-fit: contain;
+    border-radius: 12px;
+  }
+  .lightbox-slide figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.9rem 0.5rem 0.3rem;
+    font-size: 0.95rem;
+    color: var(--on-twilight-soft);
+  }
+  .lightbox-slide figcaption strong {
+    font-family: var(--font-ui);
+    color: var(--on-twilight);
+  }
+  .lightbox-slide figcaption a { color: var(--gold-soft); }
+  .lightbox-caption { font-style: italic; }
+  .lightbox-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 0.5rem 0.25rem;
+  }
+  .lightbox-nav button {
+    background: none;
+    border: 2px solid rgba(246, 239, 250, 0.35);
+    border-radius: 999px;
+    color: var(--on-twilight);
+    font-weight: 700;
+    padding: 0.45rem 1.1rem;
+  }
+  .lightbox-nav button:hover { border-color: var(--gold-soft); color: var(--gold-soft); }
+  .lightbox-count {
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    color: var(--on-twilight-soft);
+  }
+</style>

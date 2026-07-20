@@ -1,0 +1,85 @@
+---
+/** Copy-link + share controls for issues, sections, and articles. */
+interface Props {
+  /** Absolute URL to share. */
+  url: string;
+  title: string;
+  label?: string;
+}
+const { url, title, label = 'Share this' } = Astro.props;
+const encodedUrl = encodeURIComponent(url);
+const encodedTitle = encodeURIComponent(title);
+---
+
+<div class="share-row">
+  <span class="share-label">{label}:</span>
+  <button type="button" class="share-chip" data-copy-link={url}>
+    <span aria-hidden="true">🔗</span> Copy link
+  </button>
+  <a
+    class="share-chip"
+    href={`https://bsky.app/intent/compose?text=${encodedTitle}%20${encodedUrl}`}
+    rel="noopener"
+  >
+    Bluesky<span class="visually-hidden"> (opens share dialog)</span>
+  </a>
+  <a
+    class="share-chip"
+    href={`https://www.reddit.com/submit?url=${encodedUrl}&title=${encodedTitle}`}
+    rel="noopener"
+  >
+    Reddit<span class="visually-hidden"> (opens share dialog)</span>
+  </a>
+  <span class="share-status" role="status" aria-live="polite"></span>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy-link]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const status = button.closest('.share-row')?.querySelector('.share-status');
+      try {
+        await navigator.clipboard.writeText(button.dataset.copyLink!);
+        if (status) status.textContent = 'Link copied!';
+      } catch {
+        if (status) status.textContent = button.dataset.copyLink!;
+      }
+      setTimeout(() => { if (status) status.textContent = ''; }, 2500);
+    });
+  });
+</script>
+
+<style>
+  .share-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .share-label {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--text-light);
+  }
+  .share-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--violet);
+    background: var(--white);
+    border: 1.5px solid rgba(155, 114, 200, 0.35);
+    border-radius: 999px;
+    padding: 0.35rem 0.9rem;
+    text-decoration: none;
+  }
+  .share-chip:hover { border-color: var(--rose); color: var(--rose); }
+  .share-status {
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--teal);
+  }
+</style>

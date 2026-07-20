@@ -1,0 +1,319 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import ArchiveCard from '../../components/ArchiveCard.astro';
+import PlaceholderImage from '../../components/PlaceholderImage.astro';
+import { getImage } from '../../lib/images';
+import { SITE, withBase, formatMonthYear, issueNumberLabel } from '../../lib/site';
+
+const issues = (await getCollection('issues'))
+  .filter((issue) => issue.data.status === 'published')
+  .sort((a, b) => b.data.number - a.data.number);
+const latest = issues[0];
+const previous = issues.slice(1);
+
+const articles = (await getCollection('articles')).filter((a) => a.data.status === 'published');
+const featured = latest
+  ? latest.data.featuredArticles
+      .map((slug) => articles.find((a) => a.data.slug === slug && a.data.issue === latest.data.slug))
+      .filter((a) => a !== undefined)
+  : [];
+const founderFeatures = featured.filter((a) => a.data.category === 'member-features');
+const storyFeatures = featured.filter((a) => a.data.category !== 'member-features');
+const latestCover = latest ? getImage(latest.data.coverImage) : undefined;
+const latestUrl = latest ? withBase(`/zine/${latest.data.slug}/`) : withBase('/zine/issues/');
+---
+
+<Base
+  title={`${SITE.zineName} — a magazine from a queer AI community`}
+  description={`${SITE.zineName}: issues, features, and stories from the Rainbow Circuits community. Newest issue: ${latest ? latest.data.title : 'coming soon'}.`}
+  path="/zine/"
+>
+  <!-- newest issue hero -->
+  {latest && (
+    <section class="latest" aria-labelledby="latest-heading">
+      <div class="container latest-inner">
+        <div class="latest-copy">
+          <p class="masthead">Rainbow<span>Circuits</span> <em>Zine</em></p>
+          <p class="latest-badge">Newest issue</p>
+          <p class="issue-meta">
+            Issue {issueNumberLabel(latest.data.number)} · {formatMonthYear(latest.data.date)}
+          </p>
+          <h1 id="latest-heading">{latest.data.title}</h1>
+          <p class="latest-desc">{latest.data.description}</p>
+          <div class="latest-actions">
+            <a class="btn btn-primary" href={latestUrl}>Read the Issue</a>
+            <a class="btn btn-secondary btn-on-dark" href={withBase('/zine/issues/')}>View All Issues</a>
+          </div>
+        </div>
+        <a class="latest-art" href={latestUrl} tabindex="-1" aria-hidden="true">
+          {latestCover ? (
+            <Image
+              src={latestCover}
+              alt=""
+              widths={[480, 760, 1100]}
+              sizes="(min-width: 64rem) 40vw, 92vw"
+              loading="eager"
+              fetchpriority="high"
+            />
+          ) : (
+            <PlaceholderImage label="Issue cover to be added" ratio="4 / 5" icon="✨" />
+          )}
+        </a>
+      </div>
+    </section>
+  )}
+
+  <div class="container">
+    <!-- featured stories -->
+    {storyFeatures.length > 0 && latest && (
+      <section class="home-section" aria-labelledby="featured-heading">
+        <h2 id="featured-heading" class="home-heading">Featured in this issue</h2>
+        <ul class="feature-list">
+          {storyFeatures.map((article) => (
+            <li>
+              <ArchiveCard
+                href={withBase(`/zine/${article.data.issue}/${article.data.slug}/`)}
+                kicker={article.data.readingTime ? `Lead feature · ${article.data.readingTime}` : 'Lead feature'}
+                title={article.data.title}
+                description={article.data.standfirst}
+                image={getImage(article.data.heroImage)}
+                imageAlt={article.data.heroImageAlt ?? ''}
+                cta="Read the feature"
+              />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <!-- founders -->
+    {founderFeatures.length > 0 && (
+      <section class="home-section" aria-labelledby="founders-heading">
+        <h2 id="founders-heading" class="home-heading">Meet the founders</h2>
+        <ul class="founder-grid">
+          {founderFeatures.map((article, i) => (
+            <li class="founder-card card" style={`--fc-accent: ${i % 2 === 0 ? 'var(--rose)' : 'var(--teal)'};`}>
+              <div class="founder-portrait">
+                <PlaceholderImage label={article.data.heroImageAlt ?? 'Portrait to be added'} ratio="1 / 1" icon="💫" />
+              </div>
+              <h3>{article.data.title}</h3>
+              <p>{article.data.standfirst}</p>
+              <a class="founder-link" href={withBase(`/zine/${article.data.issue}/${article.data.slug}/`)}>
+                Read the profile →
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <!-- gallery + feedback teasers -->
+    {latest && (
+      <section class="home-section" aria-labelledby="more-heading">
+        <h2 id="more-heading" class="visually-hidden">More from the current issue</h2>
+        <div class="teaser-grid">
+          <a class="teaser card" href={withBase(`/zine/${latest.data.slug}/#gallery`)}>
+            <p class="teaser-emoji" aria-hidden="true">🎨</p>
+            <h3>The Gala Gallery</h3>
+            <p>Member art and moments from the ballroom — captions, credits, chaos.</p>
+            <p class="teaser-cta" aria-hidden="true">Open the gallery →</p>
+          </a>
+          <a class="teaser card" href={withBase(`/zine/${latest.data.slug}/#future-events`)}>
+            <p class="teaser-emoji" aria-hidden="true">💌</p>
+            <h3>What should we do next?</h3>
+            <p>Masquerade? Game night? Fantasy weekend? Vote for the community's next event.</p>
+            <p class="teaser-cta" aria-hidden="true">Have your say →</p>
+          </a>
+        </div>
+      </section>
+    )}
+
+    <!-- archive -->
+    <section class="home-section" aria-labelledby="archive-heading">
+      <h2 id="archive-heading" class="home-heading">Previous issues</h2>
+      {previous.length > 0 ? (
+        <ul class="feature-list">
+          {previous.map((issue) => (
+            <li>
+              <ArchiveCard
+                href={withBase(`/zine/${issue.data.slug}/`)}
+                kicker={`Issue ${issueNumberLabel(issue.data.number)} · ${formatMonthYear(issue.data.date)}`}
+                title={issue.data.title}
+                description={issue.data.description}
+                image={getImage(issue.data.coverImage)}
+                imageAlt={issue.data.coverImageAlt}
+                cta="Read the issue"
+              />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="archive-empty">
+          Issue #001 is where it all begins — previous issues will gather here as the
+          collection grows. <a href={withBase('/zine/issues/')}>Visit the archive</a>.
+        </p>
+      )}
+    </section>
+  </div>
+</Base>
+
+<style>
+  .latest {
+    color: var(--on-twilight);
+    background:
+      radial-gradient(ellipse at 15% 15%, rgba(232, 168, 48, 0.15) 0%, transparent 45%),
+      radial-gradient(ellipse at 85% 30%, rgba(217, 100, 127, 0.16) 0%, transparent 50%),
+      linear-gradient(180deg, var(--twilight-deep), var(--twilight-soft));
+    padding-block: 3.5rem 4rem;
+  }
+  .latest-inner {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  @media (min-width: 64rem) {
+    .latest-inner { grid-template-columns: 1.1fr 0.9fr; gap: 4rem; }
+  }
+  .masthead {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+  .masthead span { color: var(--gold-soft); }
+  .masthead em {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--on-twilight-soft);
+    margin-left: 0.3rem;
+  }
+  .latest-badge {
+    display: inline-block;
+    margin-top: 1.5rem;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--twilight-deep);
+    background: var(--gold-soft);
+    border-radius: 999px;
+    padding: 0.25rem 0.9rem;
+  }
+  .issue-meta {
+    margin-top: 0.9rem;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--on-twilight-soft);
+  }
+  .latest h1 {
+    font-size: clamp(2.8rem, 8vw, 4.8rem);
+    color: var(--on-twilight);
+    margin-top: 0.4rem;
+  }
+  .latest-desc {
+    margin-top: 1rem;
+    max-width: 46ch;
+    font-size: 1.1rem;
+    color: var(--on-twilight-soft);
+  }
+  .latest-actions {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+  }
+  .latest-art {
+    display: block;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 3px solid rgba(246, 239, 250, 0.25);
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+    rotate: -1.2deg;
+    max-width: 30rem;
+    justify-self: center;
+    width: 100%;
+  }
+  .latest-art :global(img) { width: 100%; height: auto; }
+
+  .home-section { padding-top: 3.5rem; }
+  .home-heading {
+    text-align: center;
+    font-size: clamp(1.7rem, 4vw, 2.2rem);
+    margin-bottom: 1.75rem;
+  }
+  .feature-list {
+    list-style: none;
+    display: grid;
+    gap: 1.5rem;
+    max-width: 46rem;
+    margin-inline: auto;
+  }
+  .founder-grid {
+    list-style: none;
+    display: grid;
+    gap: 1.5rem;
+    max-width: 52rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 40rem) {
+    .founder-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .founder-card {
+    padding: 1.75rem;
+    text-align: center;
+    border-top: 5px solid var(--fc-accent);
+  }
+  .founder-portrait {
+    width: min(9rem, 50vw);
+    margin: 0 auto 1.25rem;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .founder-portrait :global(.placeholder-frame) { border-radius: 999px; }
+  .founder-card h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .founder-card p { font-size: 0.95rem; color: var(--text-light); }
+  .founder-link {
+    display: inline-block;
+    margin-top: 1rem;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .teaser-grid {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 52rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 40rem) {
+    .teaser-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .teaser {
+    display: block;
+    padding: 1.75rem;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .teaser:hover { transform: translateY(-3px); box-shadow: var(--card-shadow-hover); }
+  .teaser-emoji { font-size: 1.8rem; }
+  .teaser h3 { font-size: 1.3rem; margin-block: 0.5rem 0.4rem; }
+  .teaser p { color: var(--text-light); font-size: 0.95rem; }
+  .teaser-cta {
+    margin-top: 0.8rem;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    color: var(--rose) !important;
+    font-size: 0.9rem;
+  }
+  .archive-empty {
+    text-align: center;
+    color: var(--text-light);
+    max-width: 44rem;
+    margin-inline: auto;
+  }
+</style>

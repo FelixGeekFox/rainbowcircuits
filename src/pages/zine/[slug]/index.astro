@@ -1,0 +1,294 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import ProgressBar from '../../../components/ProgressBar.astro';
+import IssueToc from '../../../components/IssueToc.astro';
+import ShareRow from '../../../components/ShareRow.astro';
+import ArchiveCard from '../../../components/ArchiveCard.astro';
+import SiteHeader from '../../../components/SiteHeader.astro';
+import CoverHero from '../../../components/issue/CoverHero.astro';
+import FoundersLetter from '../../../components/issue/FoundersLetter.astro';
+import LeadFeature from '../../../components/issue/LeadFeature.astro';
+import StatsSection from '../../../components/issue/StatsSection.astro';
+import GallerySection from '../../../components/issue/GallerySection.astro';
+import EventsSection from '../../../components/issue/EventsSection.astro';
+import FounderProfileSection from '../../../components/issue/FounderProfileSection.astro';
+import FeedbackSection from '../../../components/issue/FeedbackSection.astro';
+import MascotCorner from '../../../components/issue/MascotCorner.astro';
+import ClosingSection from '../../../components/issue/ClosingSection.astro';
+import { CATEGORIES } from '../../../data/categories';
+import { SITE, withBase, formatMonthYear, issueNumberLabel } from '../../../lib/site';
+
+/**
+ * One dynamic route serves two kinds of page under /zine/:
+ *  - issue pages   (/zine/issue-001/)  — the continuous reading experience
+ *  - topic archives (/zine/community/) — newest-first article listings
+ * Topic pages are only generated for categories with published articles,
+ * so empty archives never ship.
+ */
+export async function getStaticPaths() {
+  const issues = (await getCollection('issues')).filter((i) => i.data.status === 'published');
+  const articles = (await getCollection('articles')).filter((a) => a.data.status === 'published');
+
+  const issuePaths = issues.map((issue) => ({
+    params: { slug: issue.data.slug },
+    props: { kind: 'issue' as const, issue, issues, articles },
+  }));
+
+  const categoryPaths = CATEGORIES.filter((category) =>
+    articles.some((a) => a.data.category === category.slug),
+  ).map((category) => ({
+    params: { slug: category.slug },
+    props: { kind: 'category' as const, category, issues, articles },
+  }));
+
+  return [...issuePaths, ...categoryPaths];
+}
+
+const { kind, issues, articles } = Astro.props;
+
+const sortedIssues = [...issues].sort((a, b) => b.data.number - a.data.number);
+
+// ── issue page data ──────────────────────────────────────────
+const issue = kind === 'issue' ? Astro.props.issue : undefined;
+const sections = issue?.data.sections ?? [];
+const tocSections = sections.map((s) => ({ id: s.id, title: s.title }));
+const issueUrl = issue
+  ? new URL(withBase(`/zine/${issue.data.slug}/`), Astro.site).toString()
+  : '';
+const issueIndex = issue
+  ? sortedIssues.findIndex((i) => i.data.slug === issue.data.slug)
+  : -1;
+const newerIssue = issueIndex > 0 ? sortedIssues[issueIndex - 1] : undefined;
+const olderIssue =
+  issueIndex >= 0 && issueIndex < sortedIssues.length - 1 ? sortedIssues[issueIndex + 1] : undefined;
+
+// ── category page data ───────────────────────────────────────
+const category = kind === 'category' ? Astro.props.category : undefined;
+const categoryArticles = category
+  ? articles
+      .filter((a) => a.data.category === category.slug)
+      .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  : [];
+
+const title = issue
+  ? (issue.data.seoTitle ?? `${issue.data.title} — ${SITE.zineName}`)
+  : `${category!.name} — ${SITE.zineName}`;
+const description = issue
+  ? (issue.data.seoDescription ?? issue.data.description)
+  : category!.description;
+const path = `/zine/${Astro.params.slug}/`;
+
+const structuredData = issue
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'PublicationIssue',
+      issueNumber: issue.data.number,
+      name: issue.data.title,
+      datePublished: issue.data.date.toISOString().slice(0, 10),
+      description: issue.data.description,
+      isPartOf: { '@type': 'Periodical', name: SITE.zineName },
+    }
+  : undefined;
+---
+
+<Base title={title} description={description} path={path} structuredData={structuredData} bareHeader={kind === 'issue'}>
+  {issue ? (
+    <>
+      <ProgressBar />
+      <div class="issue-chrome">
+        <SiteHeader onDark />
+      </div>
+      <article class="issue">
+        <CoverHero issue={issue.data} firstSectionId={sections[0]?.id ?? 'cover'} />
+
+        <div class="issue-layout container">
+          <aside class="issue-sidebar" id="toc-panel">
+            <IssueToc sections={tocSections} />
+          </aside>
+
+          <div class="issue-sections">
+            {sections.map((section) => (
+              <section
+                class="issue-section"
+                id={section.id}
+                aria-labelledby={`${section.id}-heading`}
+                data-section-heading-id={section.id}
+              >
+                <span id={`${section.id}-heading`} class="visually-hidden">{section.title}</span>
+                {section.type === 'founders-letter' && (
+                  <FoundersLetter kicker={section.kicker} title={section.title} data={section.data} />
+                )}
+                {section.type === 'lead-feature' && (
+                  <LeadFeature kicker={section.kicker} title={section.title} data={section.data} issueSlug={issue.data.slug} />
+                )}
+                {section.type === 'stats' && (
+                  <StatsSection kicker={section.kicker} title={section.title} data={section.data} />
+                )}
+                {section.type === 'gallery' && (
+                  <GallerySection kicker={section.kicker} title={section.title} data={section.data} />
+                )}
+                {section.type === 'events' && (
+                  <EventsSection kicker={section.kicker} title={section.title} data={section.data} />
+                )}
+                {section.type === 'founder-profile' && (
+                  <FounderProfileSection kicker={section.kicker} title={section.title} data={section.data} issueSlug={issue.data.slug} />
+                )}
+                {section.type === 'feedback' && (
+                  <FeedbackSection kicker={section.kicker} title={section.title} data={section.data} />
+                )}
+                {section.type === 'mascot-corner' && (
+                  <MascotCorner kicker={section.kicker} title={section.title} data={section.data} />
+                )}
+                {section.type === 'closing' && (
+                  <ClosingSection
+                    kicker={section.kicker}
+                    title={section.title}
+                    data={section.data}
+                    issueTitle={issue.data.title}
+                    issueUrl={issueUrl}
+                  />
+                )}
+                <div class="section-share">
+                  <ShareRow
+                    url={`${issueUrl}#${section.id}`}
+                    title={`${section.title} — ${issue.data.title}`}
+                    label="Share this section"
+                  />
+                </div>
+              </section>
+            ))}
+
+            <nav class="issue-pagination" aria-label="Other issues">
+              {olderIssue ? (
+                <a href={withBase(`/zine/${olderIssue.data.slug}/`)} class="pag-link">
+                  <span class="pag-dir">← Previous issue</span>
+                  <span class="pag-title">{olderIssue.data.title}</span>
+                </a>
+              ) : (
+                <p class="pag-end">This is the very first issue. It all starts here. <span aria-hidden="true">✨</span></p>
+              )}
+              {newerIssue ? (
+                <a href={withBase(`/zine/${newerIssue.data.slug}/`)} class="pag-link pag-next">
+                  <span class="pag-dir">Next issue →</span>
+                  <span class="pag-title">{newerIssue.data.title}</span>
+                </a>
+              ) : (
+                <p class="pag-end pag-next">Issue {issueNumberLabel(issue.data.number + 1)} is still being dreamt up.</p>
+              )}
+            </nav>
+          </div>
+        </div>
+      </article>
+    </>
+  ) : (
+    <div class="container topic-page">
+      <header class="topic-header">
+        <p class="kicker">Topic archive</p>
+        <h1>{category!.name}</h1>
+        <p class="topic-desc">{category!.description}</p>
+      </header>
+      <ul class="topic-list">
+        {categoryArticles.map((article) => {
+          const issueOfArticle = issues.find((i) => i.data.slug === article.data.issue);
+          return (
+            <li>
+              <ArchiveCard
+                href={withBase(`/zine/${article.data.issue}/${article.data.slug}/`)}
+                kicker={issueOfArticle ? `Issue ${issueNumberLabel(issueOfArticle.data.number)} · ${formatMonthYear(article.data.date)}` : formatMonthYear(article.data.date)}
+                title={article.data.title}
+                description={article.data.standfirst}
+                cta="Read the article"
+              />
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  )}
+</Base>
+
+<style>
+  .issue-chrome {
+    position: relative;
+    z-index: 10;
+  }
+  /* overlay the header on the twilight cover */
+  .issue :global(.cover) { margin-top: -3.6rem; padding-top: 6rem; }
+
+  .issue-layout {
+    display: grid;
+    gap: 2rem;
+    padding-top: 2.5rem;
+  }
+  @media (min-width: 64rem) {
+    .issue-layout {
+      grid-template-columns: 16rem minmax(0, 1fr);
+      gap: 3rem;
+      align-items: start;
+    }
+  }
+  .issue-sections { min-width: 0; }
+  .issue-section {
+    padding-block: 3.5rem;
+    scroll-margin-top: 4.5rem;
+  }
+  .issue-section + .issue-section {
+    border-top: 1px solid rgba(155, 114, 200, 0.18);
+  }
+  .section-share {
+    margin-top: 2.5rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .issue-pagination {
+    display: grid;
+    gap: 1rem;
+    padding-block: 3rem 2rem;
+    border-top: 1px solid rgba(155, 114, 200, 0.18);
+  }
+  @media (min-width: 40rem) {
+    .issue-pagination { grid-template-columns: 1fr 1fr; }
+  }
+  .pag-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-decoration: none;
+    background: var(--white);
+    border-radius: 16px;
+    border: var(--card-border);
+    box-shadow: var(--card-shadow);
+    padding: 1.1rem 1.4rem;
+  }
+  .pag-dir {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--rose);
+  }
+  .pag-title { font-family: var(--font-display); font-size: 1.2rem; color: var(--text); }
+  .pag-end {
+    align-self: center;
+    font-size: 0.92rem;
+    color: var(--text-light);
+    padding: 1.1rem 1.4rem;
+  }
+  .pag-next { text-align: right; }
+
+  /* topic archive */
+  .topic-page { padding-top: 3rem; }
+  .topic-header { text-align: center; margin-bottom: 2.5rem; }
+  .topic-header h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-top: 0.3rem; }
+  .topic-desc { color: var(--text-light); max-width: 44rem; margin: 0.6rem auto 0; }
+  .topic-list {
+    list-style: none;
+    display: grid;
+    gap: 1.5rem;
+    max-width: 46rem;
+    margin-inline: auto;
+  }
+</style>

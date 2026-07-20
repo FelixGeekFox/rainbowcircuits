@@ -1,0 +1,83 @@
+---
+import { SITE, withBase } from '../lib/site';
+
+interface Props {
+  /** Render on a twilight background (issue covers). */
+  onDark?: boolean;
+}
+const { onDark = false } = Astro.props;
+
+const links = [
+  { href: withBase('/zine/'), label: 'Zine home' },
+  { href: withBase('/zine/issue-001/'), label: 'Current issue' },
+  { href: withBase('/zine/issues/'), label: 'All issues' },
+  { href: SITE.communityUrl, label: 'Community', external: true },
+];
+---
+
+<header class:list={['site-header', { 'on-dark': onDark }]}>
+  <nav class="container header-inner" aria-label="Rainbow Circuits">
+    <a class="wordmark" href={withBase('/')}>
+      <span class="wordmark-heart" aria-hidden="true">🌈</span>
+      <span>Rainbow<b>Circuits</b></span>
+    </a>
+    <ul class="header-links">
+      {links.map((link) => (
+        <li>
+          <a href={link.href} {...(link.external ? { rel: 'noopener' } : {})}>
+            {link.label}{link.external && <span class="visually-hidden"> (opens the community site)</span>}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid rgba(155, 114, 200, 0.15);
+    background: rgba(253, 246, 240, 0.85);
+    backdrop-filter: blur(6px);
+  }
+  .site-header.on-dark {
+    background: rgba(34, 25, 54, 0.7);
+    border-bottom-color: rgba(246, 239, 250, 0.12);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-block: 0.8rem;
+  }
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-ui);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .wordmark b { color: var(--violet); }
+  .on-dark .wordmark { color: var(--on-twilight); }
+  .on-dark .wordmark b { color: var(--gold-soft); }
+  .header-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.4rem;
+    list-style: none;
+  }
+  .header-links a {
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: var(--text-light);
+  }
+  .header-links a:hover { color: var(--rose); text-decoration: underline; }
+  .on-dark .header-links a { color: var(--on-twilight-soft); }
+  .on-dark .header-links a:hover { color: var(--gold-soft); }
+</style>

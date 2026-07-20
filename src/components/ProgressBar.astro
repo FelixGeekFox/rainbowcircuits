@@ -1,0 +1,52 @@
+---
+/**
+ * Reading progress: a thin circuit-style line across the top of the
+ * viewport that illuminates as the reader moves through the page.
+ * Purely decorative — hidden from assistive tech.
+ */
+---
+
+<div class="progress-track" aria-hidden="true">
+  <div class="progress-line" id="reading-progress"></div>
+</div>
+
+<script>
+  const line = document.getElementById('reading-progress');
+  if (line) {
+    let ticking = false;
+    const update = () => {
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - window.innerHeight;
+      const progress = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+      line.style.transform = `scaleX(${progress})`;
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
+  }
+</script>
+
+<style>
+  .progress-track {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 4px;
+    z-index: 150;
+    background: rgba(155, 114, 200, 0.12);
+  }
+  .progress-line {
+    height: 100%;
+    background: var(--circuit-rainbow);
+    transform-origin: left;
+    transform: scaleX(0);
+    border-radius: 0 2px 2px 0;
+    box-shadow: 0 0 8px rgba(232, 168, 48, 0.5);
+  }
+</style>

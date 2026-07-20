@@ -1,0 +1,210 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { getImage } from '../../lib/images';
+import { formatMonthYear, issueNumberLabel } from '../../lib/site';
+import PlaceholderImage from '../PlaceholderImage.astro';
+
+interface Props {
+  issue: CollectionEntry<'issues'>['data'];
+  /** id of the first content section, for the Begin Reading button. */
+  firstSectionId: string;
+}
+const { issue, firstSectionId } = Astro.props;
+const cover = getImage(issue.coverImage);
+---
+
+<header class="cover" id="cover">
+  <div class="cover-inner container">
+    <div class="cover-copy">
+      <p class="masthead">Rainbow<span>Circuits</span></p>
+      <p class="issue-meta">
+        <span class="issue-num">Issue {issueNumberLabel(issue.number)}</span>
+        <span aria-hidden="true">·</span>
+        <time datetime={issue.date.toISOString().slice(0, 10)}>{formatMonthYear(issue.date)}</time>
+      </p>
+      <h1 class="issue-title">{issue.title}</h1>
+      <p class="issue-desc">{issue.description}</p>
+
+      {issue.coverLines.length > 0 && (
+        <ul class="cover-lines">
+          {issue.coverLines.map((line) => <li>{line}</li>)}
+        </ul>
+      )}
+
+      <div class="cover-actions">
+        <a class="btn btn-primary" href={`#${firstSectionId}`}>Begin Reading</a>
+        <a class="btn btn-secondary btn-on-dark" href="#toc-panel">Inside This Issue</a>
+      </div>
+    </div>
+
+    <div class="cover-art">
+      {cover ? (
+        <Image
+          src={cover}
+          alt={issue.coverImageAlt}
+          widths={[480, 760, 1100]}
+          sizes="(min-width: 64rem) 44vw, 92vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      ) : (
+        <PlaceholderImage label={issue.coverImageAlt} ratio="4 / 5" icon="✨" />
+      )}
+    </div>
+  </div>
+
+  <a class="scroll-prompt" href={`#${firstSectionId}`} aria-hidden="true" tabindex="-1">
+    <span class="scroll-dot"></span>
+  </a>
+</header>
+
+<style>
+  .cover {
+    position: relative;
+    min-height: 92svh;
+    display: grid;
+    align-items: center;
+    color: var(--on-twilight);
+    background:
+      radial-gradient(ellipse at 20% 10%, rgba(232, 168, 48, 0.16) 0%, transparent 45%),
+      radial-gradient(ellipse at 85% 25%, rgba(217, 100, 127, 0.18) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 95%, rgba(91, 191, 160, 0.12) 0%, transparent 45%),
+      linear-gradient(180deg, var(--twilight-deep), var(--twilight) 55%, var(--twilight-soft));
+    overflow: hidden;
+    padding-block: 3.5rem 4.5rem;
+  }
+  /* gentle stars */
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 12% 22%, rgba(255, 255, 255, 0.6) 50%, transparent 51%),
+      radial-gradient(1px 1px at 34% 8%, rgba(255, 255, 255, 0.45) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 58% 16%, rgba(253, 232, 216, 0.5) 50%, transparent 51%),
+      radial-gradient(1px 1px at 78% 6%, rgba(255, 255, 255, 0.4) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 90% 38%, rgba(232, 213, 245, 0.5) 50%, transparent 51%),
+      radial-gradient(1px 1px at 6% 60%, rgba(255, 255, 255, 0.35) 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 44% 72%, rgba(255, 255, 255, 0.3) 50%, transparent 51%);
+    pointer-events: none;
+  }
+  .cover-inner {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+    position: relative;
+  }
+  @media (min-width: 64rem) {
+    .cover-inner { grid-template-columns: 1.1fr 0.9fr; gap: 4rem; }
+  }
+
+  .masthead {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    letter-spacing: 0.02em;
+    color: var(--on-twilight);
+  }
+  .masthead span { color: var(--gold-soft); }
+
+  .issue-meta {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+    margin-top: 1.6rem;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+  }
+  .issue-meta time { color: var(--on-twilight-soft); }
+
+  .issue-title {
+    font-size: clamp(3rem, 9vw, 5.5rem);
+    font-weight: 600;
+    color: var(--on-twilight);
+    margin-top: 0.4rem;
+    font-variation-settings: 'opsz' 144;
+  }
+  .issue-desc {
+    margin-top: 1.2rem;
+    max-width: 46ch;
+    font-size: clamp(1.05rem, 2vw, 1.2rem);
+    color: var(--on-twilight-soft);
+  }
+
+  .cover-lines {
+    margin-top: 1.8rem;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+  .cover-lines li {
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.98rem;
+    color: var(--on-twilight);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .cover-lines li::before {
+    content: '';
+    width: 14px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--circuit-rainbow);
+    flex-shrink: 0;
+  }
+
+  .cover-actions {
+    margin-top: 2.2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+  }
+
+  .cover-art {
+    border-radius: 24px;
+    overflow: hidden;
+    border: 3px solid rgba(246, 239, 250, 0.25);
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.4);
+    rotate: 1.2deg;
+    max-width: 34rem;
+    justify-self: center;
+    width: 100%;
+  }
+  .cover-art :global(img) { width: 100%; height: auto; }
+
+  .scroll-prompt {
+    position: absolute;
+    left: 50%;
+    bottom: 1.1rem;
+    translate: -50% 0;
+    width: 26px;
+    height: 42px;
+    border: 2px solid rgba(246, 239, 250, 0.5);
+    border-radius: 999px;
+    display: grid;
+    justify-items: center;
+    padding-top: 7px;
+  }
+  .scroll-dot {
+    width: 4px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--gold-soft);
+    animation: scroll-hint 2.2s ease-in-out infinite;
+  }
+  @keyframes scroll-hint {
+    0%, 100% { translate: 0 0; opacity: 1; }
+    55% { translate: 0 14px; opacity: 0.2; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-dot { animation: none; }
+  }
+</style>

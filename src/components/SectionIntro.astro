@@ -1,0 +1,29 @@
+---
+/** Standard heading block for an issue section. */
+interface Props {
+  kicker?: string;
+  title: string;
+  /** Heading level for the title (issue sections use h2). */
+  level?: 'h2' | 'h3';
+  align?: 'center' | 'left';
+}
+const { kicker, title, level: Level = 'h2', align = 'center' } = Astro.props;
+---
+
+<div class:list={['section-intro', align]}>
+  {kicker && <p class="kicker">{kicker}</p>}
+  <Level>{title}</Level>
+  <div class="circuit-divider" aria-hidden="true">♥</div>
+</div>
+
+<style>
+  .section-intro { margin-bottom: 2.25rem; }
+  .section-intro.center { text-align: center; }
+  .section-intro.center .circuit-divider { justify-content: center; }
+  .section-intro.left { text-align: left; }
+  .section-intro.left .circuit-divider { justify-content: flex-start; }
+  .section-intro h2, .section-intro h3 {
+    font-size: clamp(1.9rem, 4.5vw, 2.6rem);
+    margin-top: 0.35rem;
+  }
+</style>

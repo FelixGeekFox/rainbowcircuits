@@ -1,0 +1,20 @@
+---
+/**
+ * A clearly labelled stand-in for an image that hasn't been supplied yet.
+ * Deliberately obvious so it can never slip into a launch unnoticed —
+ * the placeholder audit (npm run build warnings + README checklist)
+ * looks for these labels.
+ */
+interface Props {
+  label: string;
+  /** Aspect ratio, e.g. "4 / 3". */
+  ratio?: string;
+  icon?: string;
+}
+const { label, ratio = '4 / 3', icon = '🖼️' } = Astro.props;
+---
+
+<div class="placeholder-frame" style={`aspect-ratio: ${ratio};`} role="img" aria-label={`Placeholder: ${label}`}>
+  <span class="ph-icon" aria-hidden="true">{icon}</span>
+  <span class="ph-label">{label}</span>
+</div>

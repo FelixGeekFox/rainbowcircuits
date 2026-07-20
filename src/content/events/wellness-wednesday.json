@@ -1,0 +1,18 @@
+{
+  "name": "Wellness Wednesday",
+  "slug": "wellness-wednesday",
+  "emoji": "🌿",
+  "description": "A gentle midweek check-in. Share as much or as little as you choose — a small update, a big feeling, or just a quiet wave. It's low pressure, entirely optional, and not therapy; it's a community remembering to ask how you are.",
+  "frequency": "weekly",
+  "schedule": "Every Wednesday",
+  "active": true,
+  "pausesForSpecialEvents": false,
+  "participationIdeas": [
+    "A one-line update",
+    "A photo of something nice",
+    "A reaction on someone else's post",
+    "Quiet reading — that counts too"
+  ],
+  "accent": "var(--teal)",
+  "displayOrder": 2
+}

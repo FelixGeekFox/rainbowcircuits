@@ -1,0 +1,71 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import PlaceholderImage from './PlaceholderImage.astro';
+
+interface Props {
+  href: string;
+  kicker: string;
+  title: string;
+  description: string;
+  cta?: string;
+  image?: ImageMetadata;
+  imageAlt?: string;
+  /** Extra line, e.g. the issue's main feature. */
+  detail?: string;
+}
+const { href, kicker, title, description, cta = 'Read more', image, imageAlt = '', detail } = Astro.props;
+---
+
+<article class="archive-card card">
+  {image ? (
+    <a href={href} tabindex="-1" aria-hidden="true" class="archive-art">
+      <Image src={image} alt="" widths={[400, 640]} sizes="(min-width: 40rem) 14rem, 92vw" loading="lazy" />
+    </a>
+  ) : (
+    <div class="archive-art">
+      <PlaceholderImage label={imageAlt || 'Cover image to be added'} ratio="4 / 5" icon="📖" />
+    </div>
+  )}
+  <div class="archive-body">
+    <p class="kicker">{kicker}</p>
+    <h3><a href={href}>{title}</a></h3>
+    {detail && <p class="archive-detail">{detail}</p>}
+    <p class="archive-desc">{description}</p>
+    <p class="archive-cta" aria-hidden="true">{cta} →</p>
+  </div>
+</article>
+
+<style>
+  .archive-card {
+    display: grid;
+    overflow: hidden;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .archive-card:hover { transform: translateY(-3px); box-shadow: var(--card-shadow-hover); }
+  @media (min-width: 40rem) {
+    .archive-card { grid-template-columns: 13rem 1fr; }
+  }
+  .archive-art { display: block; }
+  .archive-art :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .archive-art :global(.placeholder-frame) { height: 100%; border-radius: 0; border: none; }
+  .archive-body { padding: 1.5rem 1.75rem; display: flex; flex-direction: column; gap: 0.4rem; }
+  .archive-body h3 { font-size: 1.45rem; }
+  .archive-body h3 a { color: var(--text); text-decoration: none; }
+  .archive-body h3 a:hover { color: var(--violet); }
+  .archive-detail {
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--gold);
+  }
+  .archive-desc { font-size: 0.95rem; color: var(--text-light); }
+  .archive-cta {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--rose);
+  }
+</style>

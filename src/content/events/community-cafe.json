@@ -1,0 +1,18 @@
+{
+  "name": "Community Café",
+  "slug": "community-cafe",
+  "emoji": "☕",
+  "description": "Our relaxed weekend open thread — life updates, pets, games, food, creative projects, AI chaos, weekend plans, and general conversation. A regular weekend tradition that pauses (or gets gloriously replaced) whenever a bigger Rainbow Circuits event takes over the weekend.",
+  "frequency": "weekend",
+  "schedule": "Most weekends — pauses during special event weekends",
+  "active": true,
+  "pausesForSpecialEvents": true,
+  "participationIdeas": [
+    "A life update, big or tiny",
+    "A pet photo (always correct)",
+    "What you're playing or making",
+    "A comment on someone else's weekend"
+  ],
+  "accent": "var(--gold)",
+  "displayOrder": 3
+}

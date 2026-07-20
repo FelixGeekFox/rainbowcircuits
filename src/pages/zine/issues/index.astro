@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import ArchiveCard from '../../../components/ArchiveCard.astro';
+import { getImage } from '../../../lib/images';
+import { SITE, withBase, formatMonthYear, issueNumberLabel } from '../../../lib/site';
+
+const issues = (await getCollection('issues'))
+  .filter((issue) => issue.data.status === 'published')
+  .sort((a, b) => b.data.number - a.data.number);
+const articles = (await getCollection('articles')).filter((a) => a.data.status === 'published');
+---
+
+<Base
+  title={`Issue archive — ${SITE.zineName}`}
+  description="Every issue of the Rainbow Circuits Zine, newest first. Previous issues stay permanently on the shelf."
+  path="/zine/issues/"
+>
+  <div class="container archive-page">
+    <header class="archive-header">
+      <p class="kicker">The collection</p>
+      <h1>All Issues</h1>
+      <p class="archive-sub">
+        Every issue stays on this shelf permanently — newest first, like any good magazine rack.
+      </p>
+    </header>
+
+    <ul class="archive-list">
+      {issues.map((issue) => {
+        const leadSlug = issue.data.featuredArticles[0];
+        const lead = articles.find((a) => a.data.slug === leadSlug && a.data.issue === issue.data.slug);
+        return (
+          <li>
+            <ArchiveCard
+              href={withBase(`/zine/${issue.data.slug}/`)}
+              kicker={`Issue ${issueNumberLabel(issue.data.number)} · ${formatMonthYear(issue.data.date)}`}
+              title={issue.data.title}
+              detail={lead ? `Main feature: ${lead.data.title}` : undefined}
+              description={issue.data.description}
+              image={getImage(issue.data.coverImage)}
+              imageAlt={issue.data.coverImageAlt}
+              cta="Read the issue"
+            />
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .archive-page { padding-top: 3rem; }
+  .archive-header { text-align: center; margin-bottom: 2.5rem; }
+  .archive-header h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-top: 0.3rem; }
+  .archive-sub { color: var(--text-light); max-width: 44rem; margin: 0.6rem auto 0; }
+  .archive-list {
+    list-style: none;
+    display: grid;
+    gap: 1.5rem;
+    max-width: 46rem;
+    margin-inline: auto;
+  }
+</style>

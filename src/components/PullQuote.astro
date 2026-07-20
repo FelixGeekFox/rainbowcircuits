@@ -1,0 +1,48 @@
+---
+interface Props {
+  quote: string;
+  attribution?: string;
+  accent?: string;
+}
+const { quote, attribution, accent = 'var(--violet)' } = Astro.props;
+---
+
+<figure class="pull-quote" style={`--pq-accent: ${accent};`}>
+  <blockquote>
+    <p>{quote}</p>
+  </blockquote>
+  {attribution && <figcaption>— {attribution}</figcaption>}
+</figure>
+
+<style>
+  .pull-quote {
+    margin-block: 2.5rem;
+    padding-inline: 1rem;
+    text-align: center;
+  }
+  .pull-quote blockquote p {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.35rem, 3vw, 1.8rem);
+    line-height: 1.35;
+    color: var(--pq-accent);
+    max-width: 26ch;
+    margin-inline: auto;
+  }
+  .pull-quote blockquote::before {
+    content: '❝';
+    display: block;
+    font-size: 1.6rem;
+    color: var(--pq-accent);
+    opacity: 0.5;
+    margin-bottom: 0.3rem;
+  }
+  .pull-quote figcaption {
+    margin-top: 0.8rem;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--text-light);
+  }
+</style>

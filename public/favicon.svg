@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="rainbow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e8829a"/>
+      <stop offset="0.25" stop-color="#e8a830"/>
+      <stop offset="0.5" stop-color="#5bbfa0"/>
+      <stop offset="0.75" stop-color="#6fb9d8"/>
+      <stop offset="1" stop-color="#9b72c8"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#2c2140"/>
+  <!-- circuit heart -->
+  <path d="M32 50 C18 40 10 32 10 22 C10 14 16 10 22 10 C27 10 30 13 32 17 C34 13 37 10 42 10 C48 10 54 14 54 22 C54 32 46 40 32 50 Z"
+        fill="none" stroke="url(#rainbow)" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="32" cy="28" r="3.5" fill="#e8a830"/>
+  <path d="M32 31 V41 M32 41 H24 M32 41 H40" stroke="url(#rainbow)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+</svg>

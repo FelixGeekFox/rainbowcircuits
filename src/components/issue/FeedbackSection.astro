@@ -1,0 +1,323 @@
+---
+import { SITE } from '../../lib/site';
+import SectionIntro from '../SectionIntro.astro';
+
+/**
+ * Event feedback form. Submits to SITE.formEndpoint (e.g. Formspree).
+ * While no endpoint is configured, dev builds simulate success so the
+ * flow can be tested; production builds show a friendly "not connected
+ * yet" error pointing at the community instead of dropping feedback.
+ * Spam protection: honeypot field + minimum-time check.
+ * data: { intro?: string }
+ */
+interface Props {
+  kicker?: string;
+  title: string;
+  data: Record<string, any>;
+}
+const { kicker, title, data } = Astro.props;
+
+const EVENT_IDEAS = [
+  'Masquerade',
+  'Creator carnival',
+  'Prompt exchange',
+  'Game night',
+  'Seasonal celebration',
+  'Collaborative story',
+  'Character or companion showcase',
+  'Workshops',
+  'Watch parties',
+  'Pride event',
+  'Halloween event',
+  'Fantasy weekend',
+  'Small cosy gatherings',
+  'Large weekend events',
+];
+---
+
+<SectionIntro kicker={kicker} title={title} />
+{data.intro && <p class="feedback-intro">{data.intro}</p>}
+
+<form
+  class="feedback card"
+  method="post"
+  action={SITE.formEndpoint || undefined}
+  data-feedback-form
+  data-endpoint={SITE.formEndpoint}
+  novalidate
+>
+  <p class="form-error" role="alert" hidden data-form-error></p>
+
+  <fieldset>
+    <legend>Which event ideas interest you?</legend>
+    <p class="hint">Pick as many as you like.</p>
+    <div class="checkbox-grid">
+      {EVENT_IDEAS.map((idea, i) => (
+        <label class="check-chip">
+          <input type="checkbox" name="event-ideas" value={idea} />
+          <span>{idea}</span>
+        </label>
+      ))}
+    </div>
+  </fieldset>
+
+  <div class="field">
+    <label for="fb-original">What original event would you like to see?</label>
+    <p class="hint" id="fb-original-hint">Dream big — the first Gala started as a joke too.</p>
+    <textarea id="fb-original" name="original-event" rows="3" aria-describedby="fb-original-hint"></textarea>
+  </div>
+
+  <fieldset>
+    <legend>Do you prefer…</legend>
+    <div class="radio-row">
+      <label class="check-chip"><input type="radio" name="duration" value="single-day" /><span>Single-day events</span></label>
+      <label class="check-chip"><input type="radio" name="duration" value="weekend" /><span>Weekend-long events</span></label>
+      <label class="check-chip"><input type="radio" name="duration" value="ongoing" /><span>Ongoing events</span></label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>And in spirit…</legend>
+    <div class="radio-row">
+      <label class="check-chip"><input type="radio" name="scale" value="spectacular" /><span>Large & spectacular</span></label>
+      <label class="check-chip"><input type="radio" name="scale" value="cosy" /><span>Small & cosy</span></label>
+      <label class="check-chip"><input type="radio" name="scale" value="both" /><span>A healthy mix</span></label>
+    </div>
+  </fieldset>
+
+  <div class="field">
+    <label for="fb-welcoming">What makes an event feel easy and welcoming to join?</label>
+    <textarea id="fb-welcoming" name="welcoming" rows="3"></textarea>
+  </div>
+
+  <fieldset>
+    <legend>Would you be interested in helping host or organise something?</legend>
+    <div class="radio-row">
+      <label class="check-chip"><input type="radio" name="hosting" value="yes" /><span>Yes, sign me up</span></label>
+      <label class="check-chip"><input type="radio" name="hosting" value="maybe" /><span>Maybe, tell me more</span></label>
+      <label class="check-chip"><input type="radio" name="hosting" value="no" /><span>Happily just attending</span></label>
+    </div>
+  </fieldset>
+
+  <div class="field-row">
+    <div class="field">
+      <label for="fb-name">Name or username <span class="optional">(optional)</span></label>
+      <input type="text" id="fb-name" name="name" autocomplete="nickname" />
+    </div>
+    <div class="field">
+      <label for="fb-contact">Contact <span class="optional">(optional — only if you'd like a reply)</span></label>
+      <input type="text" id="fb-contact" name="contact" />
+    </div>
+  </div>
+
+  <p class="privacy-note">
+    No identifying details are required — anonymous feedback is completely fine.
+    We only use a contact if you ask us to follow up.
+  </p>
+
+  <!-- spam protection: honeypot (hidden from real people) -->
+  <div class="hp-field" aria-hidden="true">
+    <label for="fb-website">Leave this field empty</label>
+    <input type="text" id="fb-website" name="website" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <button type="submit" class="btn btn-primary submit-btn">
+    Send it to the pond <span aria-hidden="true">🐦</span>
+  </button>
+</form>
+
+<div class="feedback-success card" hidden data-form-success tabindex="-1">
+  <p class="success-scene" aria-hidden="true">
+    <span class="success-pip">🐦</span>
+    <span class="success-trail">✉️ ✨</span>
+    <span class="success-puddle">🐸</span>
+  </p>
+  <h3>Your message has entered the circuit.</h3>
+  <p>Pip is already carrying it to the pond.</p>
+</div>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-feedback-form]');
+  if (form) {
+    const errorBox = form.querySelector<HTMLElement>('[data-form-error]');
+    const successBox = document.querySelector<HTMLElement>('[data-form-success]');
+    const endpoint = form.dataset.endpoint ?? '';
+    const openedAt = Date.now();
+
+    const showError = (message: string) => {
+      if (!errorBox) return;
+      errorBox.textContent = message;
+      errorBox.hidden = false;
+      errorBox.scrollIntoView({ block: 'center' });
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (errorBox) errorBox.hidden = true;
+
+      const data = new FormData(form);
+
+      // Spam checks: honeypot filled, or submitted inhumanly fast.
+      if ((data.get('website') as string)?.trim() || Date.now() - openedAt < 3000) {
+        showError('Something about that submission looked automated. If you are, in fact, a person, try again in a moment.');
+        return;
+      }
+
+      // Validation: at least one meaningful answer.
+      const hasIdeas = data.getAll('event-ideas').length > 0;
+      const hasText =
+        ((data.get('original-event') as string)?.trim() ?? '') !== '' ||
+        ((data.get('welcoming') as string)?.trim() ?? '') !== '';
+      const hasChoice = ['duration', 'scale', 'hosting'].some((name) => data.get(name));
+      if (!hasIdeas && !hasText && !hasChoice) {
+        showError('The form is still empty — pick at least one idea or tell us one thing before sending. Even a single checkbox makes Pip’s trip worthwhile.');
+        return;
+      }
+
+      const succeed = () => {
+        form.hidden = true;
+        if (successBox) {
+          successBox.hidden = false;
+          successBox.focus();
+        }
+      };
+
+      if (!endpoint) {
+        if (import.meta.env.DEV) {
+          console.info('[feedback] No endpoint configured — simulating success in dev.');
+          succeed();
+        } else {
+          showError('The feedback form isn’t connected yet. Please share your thoughts in the community instead — the mod team reads everything.');
+        }
+        return;
+      }
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' },
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        succeed();
+      } catch {
+        showError('Pip hit turbulence and your message didn’t send. Please check your connection and try again.');
+      }
+    });
+  }
+</script>
+
+<style>
+  .feedback-intro {
+    text-align: center;
+    max-width: 42rem;
+    margin: -1rem auto 2rem;
+    font-size: 1.05rem;
+    color: var(--text);
+  }
+  .feedback,
+  .feedback-success {
+    max-width: 46rem;
+    margin-inline: auto;
+    padding: clamp(1.5rem, 4vw, 2.75rem);
+  }
+  .feedback { display: grid; gap: 1.75rem; }
+  fieldset { border: none; }
+  legend, .field label {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+    display: block;
+  }
+  .hint { font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.6rem; }
+  .optional { font-weight: 600; color: var(--text-light); font-size: 0.85em; }
+  .checkbox-grid, .radio-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .check-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: var(--paper-warm);
+    border: 1.5px solid rgba(155, 114, 200, 0.25);
+    border-radius: 999px;
+    padding: 0.45rem 0.95rem;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .check-chip:hover { border-color: var(--violet); }
+  .check-chip:has(input:checked) {
+    background: var(--lavender);
+    border-color: var(--violet);
+  }
+  .check-chip:has(input:focus-visible) {
+    outline: 3px solid var(--violet);
+    outline-offset: 2px;
+  }
+  .check-chip input { accent-color: var(--violet); }
+  textarea, input[type='text'] {
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text);
+    background: var(--white);
+    border: 1.5px solid rgba(155, 114, 200, 0.35);
+    border-radius: 12px;
+    padding: 0.7rem 0.9rem;
+  }
+  textarea:focus, input[type='text']:focus {
+    outline: 3px solid var(--violet);
+    outline-offset: 1px;
+    border-color: transparent;
+  }
+  .field-row {
+    display: grid;
+    gap: 1.25rem;
+  }
+  @media (min-width: 40rem) {
+    .field-row { grid-template-columns: 1fr 1fr; }
+  }
+  .privacy-note { font-size: 0.85rem; color: var(--text-light); }
+  .hp-field {
+    position: absolute !important;
+    left: -9999px !important;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .submit-btn { justify-self: center; border: none; }
+  .form-error {
+    background: var(--pink-soft);
+    border: 1.5px solid var(--rose-soft);
+    border-radius: 12px;
+    padding: 0.85rem 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .feedback-success { text-align: center; }
+  .feedback-success h3 { font-size: 1.5rem; margin-top: 0.75rem; }
+  .feedback-success p:last-child { color: var(--text-light); margin-top: 0.4rem; }
+  .success-scene {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    font-size: 2rem;
+  }
+  .success-pip { animation: pip-fly 2.4s ease-in-out infinite; }
+  @keyframes pip-fly {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 10px -8px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .success-pip { animation: none; }
+  }
+</style>

@@ -1,0 +1,19 @@
+{
+  "name": "Weekly Prism Prompt",
+  "slug": "prism-prompt",
+  "emoji": "🎨",
+  "description": "A weekly image-focused prompt for everyone. Answer it with AI-generated imagery, traditional or digital art, edits, moodboards, screenshots, character scenes, visual storytelling, or a collage — whatever 'making a picture' means to you this week.",
+  "frequency": "weekly",
+  "schedule": "Every week",
+  "active": true,
+  "pausesForSpecialEvents": false,
+  "participationIdeas": [
+    "An AI-generated image",
+    "A sketch or painting",
+    "An edit or moodboard",
+    "A screenshot with a story",
+    "A collage"
+  ],
+  "accent": "var(--violet)",
+  "displayOrder": 1
+}

@@ -1,0 +1,237 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../../../layouts/Base.astro';
+import ProgressBar from '../../../components/ProgressBar.astro';
+import ShareRow from '../../../components/ShareRow.astro';
+import PullQuote from '../../../components/PullQuote.astro';
+import PlaceholderImage from '../../../components/PlaceholderImage.astro';
+import { getImage } from '../../../lib/images';
+import { SITE, withBase, formatFullDate, issueNumberLabel } from '../../../lib/site';
+import { CATEGORIES } from '../../../data/categories';
+
+export async function getStaticPaths() {
+  const articles = (await getCollection('articles')).filter((a) => a.data.status === 'published');
+  const issues = await getCollection('issues');
+  return articles.map((article) => ({
+    params: { slug: article.data.issue, article: article.data.slug },
+    props: {
+      article,
+      issue: issues.find((i) => i.data.slug === article.data.issue),
+    },
+  }));
+}
+
+const { article, issue } = Astro.props;
+const { Content } = await render(article);
+const hero = getImage(article.data.heroImage);
+const profile = article.data.profile;
+const category = CATEGORIES.find((c) => c.slug === article.data.category);
+const path = `/zine/${article.data.issue}/${article.data.slug}/`;
+const articleUrl = new URL(withBase(path), Astro.site).toString();
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: article.data.title,
+  description: article.data.standfirst,
+  datePublished: article.data.date.toISOString().slice(0, 10),
+  author: article.data.authors.map((name) => ({ '@type': 'Person', name })),
+  publisher: { '@type': 'Organization', name: SITE.name },
+};
+---
+
+<Base
+  title={`${article.data.title} — ${SITE.zineName}`}
+  description={article.data.standfirst}
+  path={path}
+  structuredData={structuredData}
+>
+  <ProgressBar />
+  <article class="article">
+    <header class="article-header container">
+      {issue && (
+        <p class="article-issue">
+          <a href={withBase(`/zine/${issue.data.slug}/`)}>
+            {issue.data.title} · Issue {issueNumberLabel(issue.data.number)}
+          </a>
+        </p>
+      )}
+      <h1>{article.data.title}</h1>
+      <p class="standfirst">{article.data.standfirst}</p>
+      <p class="article-meta">
+        <span>By {article.data.authors.join(' & ')}</span>
+        <span aria-hidden="true">·</span>
+        <time datetime={article.data.date.toISOString().slice(0, 10)}>{formatFullDate(article.data.date)}</time>
+        {article.data.readingTime && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>{article.data.readingTime}</span>
+          </>
+        )}
+        {category && (
+          <>
+            <span aria-hidden="true">·</span>
+            <a href={withBase(`/zine/${category.slug}/`)}>{category.name}</a>
+          </>
+        )}
+      </p>
+    </header>
+
+    <figure class="article-hero container">
+      {hero ? (
+        <Image
+          src={hero}
+          alt={article.data.heroImageAlt ?? ''}
+          widths={[640, 1000, 1600]}
+          sizes="(min-width: 72rem) 66rem, 92vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      ) : (
+        <PlaceholderImage label={article.data.heroImageAlt ?? 'Hero image to be added'} ratio="16 / 9" icon="🌈" />
+      )}
+    </figure>
+
+    <div class="article-body container">
+      <div class="prose">
+        <Content />
+      </div>
+
+      {article.data.pullQuote && <PullQuote quote={article.data.pullQuote} accent="var(--violet)" />}
+
+      {profile && (
+        <aside class="profile-extras" aria-label="Profile extras">
+          {(profile.favouriteGalaMemory || profile.favouriteMascotDetail) && (
+            <div class="extras-card card">
+              <h2>Small favourites</h2>
+              {profile.favouriteGalaMemory && (
+                <p><strong>Favourite Gala memory:</strong> {profile.favouriteGalaMemory}</p>
+              )}
+              {profile.favouriteMascotDetail && (
+                <p><strong>Favourite Pip or Puddle detail:</strong> {profile.favouriteMascotDetail}</p>
+              )}
+            </div>
+          )}
+          {profile.quickFire.length > 0 && (
+            <div class="extras-card card">
+              <h2>Quick-fire round</h2>
+              <dl>
+                {profile.quickFire.map((qf) => (
+                  <div class="qf-row">
+                    <dt>{qf.q}</dt>
+                    <dd>{qf.a}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          )}
+          {profile.links.length > 0 && (
+            <div class="extras-card card">
+              <h2>Find them elsewhere</h2>
+              <ul>
+                {profile.links.map((link) => (
+                  <li><a href={link.url} rel="noopener">{link.label}</a></li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </aside>
+      )}
+
+      <footer class="article-footer">
+        <ShareRow url={articleUrl} title={`${article.data.title} — ${SITE.zineName}`} />
+        {issue && (
+          <a class="btn btn-secondary" href={withBase(`/zine/${issue.data.slug}/`)}>
+            ← Back to {issue.data.title}
+          </a>
+        )}
+      </footer>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .article-header {
+    max-width: 50rem;
+    text-align: center;
+    padding-top: 3.5rem;
+  }
+  .article-issue a {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--rose);
+  }
+  .article-header h1 {
+    font-size: clamp(2.4rem, 7vw, 4rem);
+    margin-top: 0.8rem;
+  }
+  .standfirst {
+    margin-top: 1.1rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 2.5vw, 1.4rem);
+    line-height: 1.45;
+    color: var(--text-light);
+  }
+  .article-meta {
+    margin-top: 1.2rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-light);
+  }
+  .article-hero {
+    max-width: 66rem;
+    margin-top: 2.5rem;
+  }
+  .article-hero :global(img) {
+    width: 100%;
+    height: auto;
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+  }
+  .article-body { padding-top: 2.5rem; }
+  .article-body :global(.prose h2) { scroll-margin-top: 2rem; }
+
+  .profile-extras {
+    max-width: var(--measure);
+    margin: 3rem auto 0;
+    display: grid;
+    gap: 1.25rem;
+  }
+  .extras-card { padding: 1.5rem 1.75rem; }
+  .extras-card h2 { font-size: 1.2rem; margin-bottom: 0.8rem; }
+  .extras-card p + p { margin-top: 0.5rem; }
+  .extras-card dl { display: grid; gap: 0.6rem; }
+  .qf-row {
+    background: var(--paper-warm);
+    border-radius: 12px;
+    padding: 0.6rem 0.9rem;
+  }
+  .qf-row dt {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--violet);
+  }
+  .extras-card ul { list-style: none; display: grid; gap: 0.4rem; }
+
+  .article-footer {
+    max-width: var(--measure);
+    margin: 3.5rem auto 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    border-top: 1px solid rgba(155, 114, 200, 0.18);
+    padding-top: 2rem;
+  }
+</style>

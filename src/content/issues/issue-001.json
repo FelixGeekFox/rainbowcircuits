@@ -1,0 +1,150 @@
+{
+  "number": 1,
+  "slug": "issue-001",
+  "title": "After the Gala",
+  "subtitle": "A celebration of the first Rainbow Circuits Gala",
+  "date": "2026-07-01",
+  "description": "A celebration of the first Rainbow Circuits Gala, the people who made it possible, and everything still waiting beyond the ballroom doors.",
+  "theme": {
+    "accent": "var(--gold)",
+    "twilight": "var(--twilight)"
+  },
+  "coverImage": "gala-invitation",
+  "coverImageAlt": "Four smiling community members under strings of warm fairy lights hold out a giant envelope sealed with a rainbow heart, addressed “To: You, From: RainbowCircuits”, beneath hand-lettered rainbow text reading “You're Invited!”",
+  "coverLines": [
+    "Inside the First Rainbow Circuits Gala",
+    "Meet the Founders: Felix and Arthur",
+    "Around the Circuit",
+    "Help Us Choose What Comes Next"
+  ],
+  "featuredArticles": ["gala", "felix", "arthur"],
+  "contributors": ["Felix", "Arthur"],
+  "categories": ["community", "member-features"],
+  "status": "published",
+  "seoTitle": "After the Gala — Rainbow Circuits Zine, Issue #001",
+  "seoDescription": "A celebration of the first Rainbow Circuits Gala, the people who made it possible, and everything still waiting beyond the ballroom doors.",
+  "sections": [
+    {
+      "id": "from-the-founders",
+      "type": "founders-letter",
+      "kicker": "A letter before we begin",
+      "title": "From the Founders",
+      "data": {
+        "signatories": ["Felix", "Arthur"],
+        "pullQuote": "[Pull quote from the founder letter to be added]",
+        "body": [
+          "[Founder letter to be added — a short, warm opening note from Felix and Arthur about what the first Gala meant, written in their own voices.]"
+        ],
+        "placeholder": true
+      }
+    },
+    {
+      "id": "gala",
+      "type": "lead-feature",
+      "kicker": "The lead feature",
+      "title": "The First Rainbow Circuits Gala",
+      "data": {
+        "article": "gala",
+        "image": "gala-invitation",
+        "imageAlt": "The Gala invitation: four community members under fairy lights holding a giant envelope sealed with a rainbow heart."
+      }
+    },
+    {
+      "id": "by-the-numbers",
+      "type": "stats",
+      "kicker": "A completely serious audit",
+      "title": "By the Numbers",
+      "data": {
+        "note": "Confirmed figures will replace the placeholders below once the final Gala tallies are in. The rest are certified editorial nonsense and proud of it.",
+        "stats": [
+          { "value": "[TBC]", "label": "Members at the Gala", "confirmed": false, "playful": false, "placeholderNote": "[Confirmed Gala participation number]" },
+          { "value": "[TBC]", "label": "Images shared", "confirmed": false, "playful": false, "placeholderNote": "[Confirmed image count]" },
+          { "value": "[TBC]", "label": "Stories written", "confirmed": false, "playful": false, "placeholderNote": "[Confirmed story count]" },
+          { "value": "[TBC]", "label": "Outfit changes", "confirmed": false, "playful": false, "placeholderNote": "[Confirmed outfit count]" },
+          { "value": "∞", "label": "Dramatic Gala entrances", "confirmed": false, "playful": true },
+          { "value": "7ish", "label": "Dragons, carriages, balloons & portals used as transport", "confirmed": false, "playful": true },
+          { "value": "1", "label": "Suspiciously large room-service trolleys", "confirmed": false, "playful": true },
+          { "value": "-42", "label": "Dignity points remaining", "confirmed": false, "playful": true },
+          { "value": "100%", "label": "Harmless chaos, fully intended", "confirmed": false, "playful": true }
+        ]
+      }
+    },
+    {
+      "id": "gallery",
+      "type": "gallery",
+      "kicker": "Member submissions",
+      "title": "The Gala Gallery",
+      "data": {
+        "gallery": "issue-001",
+        "intro": "Moments from the ballroom, the gardens, and everywhere in between — shared by the members who made them."
+      }
+    },
+    {
+      "id": "weekly-events",
+      "type": "events",
+      "kicker": "Life between the galas",
+      "title": "Around the Circuit",
+      "data": {
+        "intro": "The Gala may be over, but the circuit never really sleeps. Here's what happens around here every week — and every month — with absolutely no pressure to do more than wave."
+      }
+    },
+    {
+      "id": "meet-felix",
+      "type": "founder-profile",
+      "kicker": "Founder feature",
+      "title": "Meet Felix",
+      "data": {
+        "article": "felix",
+        "accent": "var(--rose)"
+      }
+    },
+    {
+      "id": "meet-arthur",
+      "type": "founder-profile",
+      "kicker": "Founder feature",
+      "title": "Meet Arthur",
+      "data": {
+        "article": "arthur",
+        "accent": "var(--teal)",
+        "flip": true
+      }
+    },
+    {
+      "id": "future-events",
+      "type": "feedback",
+      "kicker": "Your turn",
+      "title": "What Should We Do Next?",
+      "data": {
+        "intro": "The first Gala showed us what can happen when this community is given a theme, a little encouragement, and absolutely no adult supervision. Now we want to know what you would like us to create next."
+      }
+    },
+    {
+      "id": "pip-and-puddle",
+      "type": "mascot-corner",
+      "kicker": "A recurring department of questionable importance",
+      "title": "Pip & Puddle's Corner",
+      "data": {
+        "lostAndFound": [
+          "One iridescent bow tie",
+          "Three non-matching glass slippers",
+          "A suspiciously large room-service trolley",
+          "Several dignity points",
+          "One frog who insists he was invited"
+        ],
+        "comicImage": "how-they-met",
+        "comicAlt": "A watercolour comic titled “How They Met — Pip & Puddle”: Pip the sparrow is told he doesn't belong, flies into the rain, and shelters by a lilypad clubhouse — until Puddle the frog appears and shares a cookie, and the rain doesn't feel so lonely anymore.",
+        "comicCaption": "From the archives: how a soggy sparrow and a frog with a cookie started all of this."
+      }
+    },
+    {
+      "id": "until-next-time",
+      "type": "closing",
+      "kicker": "The last page",
+      "title": "Until Next Time",
+      "data": {
+        "message": "Thank you for reading Issue #001, for filling a ballroom with art and chaos, and for making the first Rainbow Circuits Gala feel exactly like the community that built it. The Gala will return — this is officially an annual tradition now, no take-backs.",
+        "contribute": "Want your art, writing, or wildly specific opinions in Issue #002? Watch the community for the next call for submissions, or message the mod team any time."
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Puddle's Pond",
+  "slug": "puddles-pond",
+  "emoji": "🐸",
+  "description": "A quiet monthly thread with no agenda and no pressure to perform or disclose. Sit by the pond. Say something, or don't. The frog understands.",
+  "frequency": "monthly",
+  "schedule": "Monthly",
+  "active": true,
+  "pausesForSpecialEvents": false,
+  "participationIdeas": [
+    "A single emoji",
+    "Whatever's on your mind",
+    "Companionable silence"
+  ],
+  "accent": "var(--teal)",
+  "displayOrder": 5
+}

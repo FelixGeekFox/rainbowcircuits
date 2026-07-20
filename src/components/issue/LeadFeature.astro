@@ -1,0 +1,135 @@
+---
+import { Image } from 'astro:assets';
+import { getEntry, render } from 'astro:content';
+import { getImage } from '../../lib/images';
+import { withBase } from '../../lib/site';
+import SectionIntro from '../SectionIntro.astro';
+import PullQuote from '../PullQuote.astro';
+import PlaceholderImage from '../PlaceholderImage.astro';
+
+/**
+ * The in-issue presentation of the lead feature: hero image, standfirst,
+ * a map of what's inside, and a link to the standalone article.
+ * data: { article: string, image?: string, imageAlt?: string }
+ */
+interface Props {
+  kicker?: string;
+  title: string;
+  data: Record<string, any>;
+  issueSlug: string;
+}
+const { kicker, title, data, issueSlug } = Astro.props;
+
+const article = await getEntry('articles', data.article);
+if (!article) throw new Error(`Lead feature article "${data.article}" not found`);
+const { headings } = await render(article);
+const chapters = headings.filter((h) => h.depth === 2);
+const hero = getImage(data.image);
+const articleUrl = withBase(`/zine/${issueSlug}/${article.data.slug}/`);
+---
+
+<SectionIntro kicker={kicker} title={title} />
+
+<div class="feature">
+  <figure class="feature-hero">
+    {hero ? (
+      <Image
+        src={hero}
+        alt={data.imageAlt ?? ''}
+        widths={[640, 1000, 1600]}
+        sizes="(min-width: 72rem) 66rem, 92vw"
+        loading="lazy"
+      />
+    ) : (
+      <PlaceholderImage label="Lead feature image to be added" ratio="16 / 9" icon="🎉" />
+    )}
+    {data.imageAlt && <figcaption class="visually-hidden">{data.imageAlt}</figcaption>}
+  </figure>
+
+  <p class="standfirst">{article.data.standfirst}</p>
+
+  {article.data.pullQuote && (
+    <PullQuote quote={article.data.pullQuote} accent="var(--gold)" />
+  )}
+
+  <div class="chapter-map card">
+    <h3>Inside this feature</h3>
+    <ol>
+      {chapters.map((chapter) => (
+        <li>
+          <a href={`${articleUrl}#${chapter.slug}`}>{chapter.text}</a>
+        </li>
+      ))}
+    </ol>
+    <div class="chapter-cta">
+      <a class="btn btn-primary" href={articleUrl}>
+        Read the full feature
+        {article.data.readingTime && <span class="reading-time">· {article.data.readingTime}</span>}
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .feature { max-width: 60rem; margin-inline: auto; }
+  .feature-hero {
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+  }
+  .feature-hero :global(img) { width: 100%; height: auto; }
+  .standfirst {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2.6vw, 1.5rem);
+    line-height: 1.45;
+    color: var(--text);
+    max-width: 34ch;
+    margin: 2rem auto 0;
+    text-align: center;
+  }
+  .chapter-map {
+    margin-top: 2.5rem;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  .chapter-map h3 {
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--rose);
+    margin-bottom: 1rem;
+  }
+  .chapter-map ol {
+    list-style: none;
+    display: grid;
+    gap: 0.4rem 2rem;
+    counter-reset: chapter;
+  }
+  @media (min-width: 40rem) {
+    .chapter-map ol { grid-template-columns: 1fr 1fr; }
+  }
+  .chapter-map li {
+    counter-increment: chapter;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+  .chapter-map li::before {
+    content: counter(chapter, decimal-leading-zero);
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: var(--gold);
+  }
+  .chapter-map a {
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.98rem;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .chapter-map a:hover { color: var(--rose); text-decoration: underline; }
+  .chapter-cta { margin-top: 1.75rem; text-align: center; }
+  .reading-time { font-weight: 600; opacity: 0.85; }
+</style>

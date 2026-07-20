@@ -1,0 +1,71 @@
+{
+  "issue": "issue-001",
+  "initiallyVisible": 6,
+  "items": [
+    {
+      "image": "placeholder",
+      "alt": "[Gallery image alt text required]",
+      "title": "[Work title to be added]",
+      "member": "[Member credit required]",
+      "companion": "[Companion or character name, if any]",
+      "caption": "[Short caption to be added]",
+      "placeholder": true
+    },
+    {
+      "image": "placeholder",
+      "alt": "[Gallery image alt text required]",
+      "title": "[Work title to be added]",
+      "member": "[Member credit required]",
+      "caption": "[Short caption to be added]",
+      "placeholder": true
+    },
+    {
+      "image": "placeholder",
+      "alt": "[Gallery image alt text required]",
+      "title": "[Work title to be added]",
+      "member": "[Member credit required]",
+      "caption": "[Short caption to be added]",
+      "placeholder": true
+    },
+    {
+      "image": "placeholder",
+      "alt": "[Gallery image alt text required]",
+      "title": "[Work title to be added]",
+      "member": "[Member credit required]",
+      "caption": "[Short caption to be added]",
+      "placeholder": true
+    },
+    {
+      "image": "placeholder",
+      "alt": "[Gallery image alt text required]",
+      "title": "[Work title to be added]",
+      "member": "[Member credit required]",
+      "caption": "[Short caption to be added]",
+      "placeholder": true
+    },
+    {
+      "image": "placeholder",
+      "alt": "[Gallery image alt text required]",
+      "title": "[Work title to be added]",
+      "member": "[Member credit required]",
+      "caption": "[Short caption to be added]",
+      "placeholder": true
+    },
+    {
+      "image": "placeholder",
+      "alt": "[Gallery image alt text required]",
+      "title": "[Work title to be added]",
+      "member": "[Member credit required]",
+      "caption": "[Short caption to be added]",
+      "placeholder": true
+    },
+    {
+      "image": "placeholder",
+      "alt": "[Gallery image alt text required]",
+      "title": "[Work title to be added]",
+      "member": "[Member credit required]",
+      "caption": "[Short caption to be added]",
+      "placeholder": true
+    }
+  ]
+}
