@@ -11,7 +11,7 @@ heroImageAlt: "[Portrait of Arthur to be added]"
 pullQuote: "[Personal quote from Arthur to be added]"
 tags: ["founders", "arthur"]
 readingTime: "6 min read"
-status: "published"
+status: "draft"
 profile:
   role: "Co-founder"
   favouriteGalaMemory: "[Arthur's favourite Gala memory to be added]"

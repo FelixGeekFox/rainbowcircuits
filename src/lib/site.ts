@@ -5,7 +5,8 @@
 
 export const SITE = {
   name: 'Rainbow Circuits',
-  zineName: 'Rainbow Circuits Zine',
+  /** Public display name of the publication (shown in titles, share text, mastheads). */
+  zineName: 'Rainbow Circuits Newsletter',
   tagline: 'A queer-first community built around kindness, creativity, curiosity, and connection through AI.',
   /** Main community home. */
   communityUrl: 'https://www.reddit.com/r/RainbowCircuits/',

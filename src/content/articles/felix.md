@@ -11,7 +11,7 @@ heroImageAlt: "[Portrait of Felix to be added]"
 pullQuote: "[Personal quote from Felix to be added]"
 tags: ["founders", "felix"]
 readingTime: "6 min read"
-status: "published"
+status: "draft"
 profile:
   role: "Co-founder"
   favouriteGalaMemory: "[Felix's favourite Gala memory to be added]"

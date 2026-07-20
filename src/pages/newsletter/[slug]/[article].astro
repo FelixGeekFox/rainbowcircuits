@@ -27,7 +27,7 @@ const { Content } = await render(article);
 const hero = getImage(article.data.heroImage);
 const profile = article.data.profile;
 const category = CATEGORIES.find((c) => c.slug === article.data.category);
-const path = `/zine/${article.data.issue}/${article.data.slug}/`;
+const path = `/newsletter/${article.data.issue}/${article.data.slug}/`;
 const articleUrl = new URL(withBase(path), Astro.site).toString();
 
 const structuredData = {
@@ -52,7 +52,7 @@ const structuredData = {
     <header class="article-header container">
       {issue && (
         <p class="article-issue">
-          <a href={withBase(`/zine/${issue.data.slug}/`)}>
+          <a href={withBase(`/newsletter/${issue.data.slug}/`)}>
             {issue.data.title} · Issue {issueNumberLabel(issue.data.number)}
           </a>
         </p>
@@ -72,7 +72,7 @@ const structuredData = {
         {category && (
           <>
             <span aria-hidden="true">·</span>
-            <a href={withBase(`/zine/${category.slug}/`)}>{category.name}</a>
+            <a href={withBase(`/newsletter/${category.slug}/`)}>{category.name}</a>
           </>
         )}
       </p>
@@ -142,7 +142,7 @@ const structuredData = {
       <footer class="article-footer">
         <ShareRow url={articleUrl} title={`${article.data.title} — ${SITE.zineName}`} />
         {issue && (
-          <a class="btn btn-secondary" href={withBase(`/zine/${issue.data.slug}/`)}>
+          <a class="btn btn-secondary" href={withBase(`/newsletter/${issue.data.slug}/`)}>
             ← Back to {issue.data.title}
           </a>
         )}

@@ -20,7 +20,7 @@ const article = await getEntry('articles', data.article);
 if (!article) throw new Error(`Founder profile article "${data.article}" not found`);
 const profile = article.data.profile;
 const accent = data.accent ?? 'var(--violet)';
-const articleUrl = withBase(`/zine/${issueSlug}/${article.data.slug}/`);
+const articleUrl = withBase(`/newsletter/${issueSlug}/${article.data.slug}/`);
 const quickFirePreview = (profile?.quickFire ?? []).slice(0, 2);
 ---
 

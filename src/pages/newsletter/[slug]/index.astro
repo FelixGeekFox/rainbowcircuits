@@ -20,9 +20,9 @@ import { CATEGORIES } from '../../../data/categories';
 import { SITE, withBase, formatMonthYear, issueNumberLabel } from '../../../lib/site';
 
 /**
- * One dynamic route serves two kinds of page under /zine/:
- *  - issue pages   (/zine/issue-001/)  — the continuous reading experience
- *  - topic archives (/zine/community/) — newest-first article listings
+ * One dynamic route serves two kinds of page under /newsletter/:
+ *  - issue pages   (/newsletter/issue-001/)  — the continuous reading experience
+ *  - topic archives (/newsletter/community/) — newest-first article listings
  * Topic pages are only generated for categories with published articles,
  * so empty archives never ship.
  */
@@ -54,7 +54,7 @@ const issue = kind === 'issue' ? Astro.props.issue : undefined;
 const sections = issue?.data.sections ?? [];
 const tocSections = sections.map((s) => ({ id: s.id, title: s.title }));
 const issueUrl = issue
-  ? new URL(withBase(`/zine/${issue.data.slug}/`), Astro.site).toString()
+  ? new URL(withBase(`/newsletter/${issue.data.slug}/`), Astro.site).toString()
   : '';
 const issueIndex = issue
   ? sortedIssues.findIndex((i) => i.data.slug === issue.data.slug)
@@ -77,7 +77,7 @@ const title = issue
 const description = issue
   ? (issue.data.seoDescription ?? issue.data.description)
   : category!.description;
-const path = `/zine/${Astro.params.slug}/`;
+const path = `/newsletter/${Astro.params.slug}/`;
 
 const structuredData = issue
   ? {
@@ -161,7 +161,7 @@ const structuredData = issue
 
             <nav class="issue-pagination" aria-label="Other issues">
               {olderIssue ? (
-                <a href={withBase(`/zine/${olderIssue.data.slug}/`)} class="pag-link">
+                <a href={withBase(`/newsletter/${olderIssue.data.slug}/`)} class="pag-link">
                   <span class="pag-dir">← Previous issue</span>
                   <span class="pag-title">{olderIssue.data.title}</span>
                 </a>
@@ -169,7 +169,7 @@ const structuredData = issue
                 <p class="pag-end">This is the very first issue. It all starts here. <span aria-hidden="true">✨</span></p>
               )}
               {newerIssue ? (
-                <a href={withBase(`/zine/${newerIssue.data.slug}/`)} class="pag-link pag-next">
+                <a href={withBase(`/newsletter/${newerIssue.data.slug}/`)} class="pag-link pag-next">
                   <span class="pag-dir">Next issue →</span>
                   <span class="pag-title">{newerIssue.data.title}</span>
                 </a>
@@ -194,7 +194,7 @@ const structuredData = issue
           return (
             <li>
               <ArchiveCard
-                href={withBase(`/zine/${article.data.issue}/${article.data.slug}/`)}
+                href={withBase(`/newsletter/${article.data.issue}/${article.data.slug}/`)}
                 kicker={issueOfArticle ? `Issue ${issueNumberLabel(issueOfArticle.data.number)} · ${formatMonthYear(article.data.date)}` : formatMonthYear(article.data.date)}
                 title={article.data.title}
                 description={article.data.standfirst}

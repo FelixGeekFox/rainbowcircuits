@@ -13,8 +13,8 @@ const articles = (await getCollection('articles')).filter((a) => a.data.status =
 
 <Base
   title={`Issue archive — ${SITE.zineName}`}
-  description="Every issue of the Rainbow Circuits Zine, newest first. Previous issues stay permanently on the shelf."
-  path="/zine/issues/"
+  description="Every issue of the Rainbow Circuits Newsletter, newest first. Previous issues stay permanently on the shelf."
+  path="/newsletter/issues/"
 >
   <div class="container archive-page">
     <header class="archive-header">
@@ -32,7 +32,7 @@ const articles = (await getCollection('articles')).filter((a) => a.data.status =
         return (
           <li>
             <ArchiveCard
-              href={withBase(`/zine/${issue.data.slug}/`)}
+              href={withBase(`/newsletter/${issue.data.slug}/`)}
               kicker={`Issue ${issueNumberLabel(issue.data.number)} · ${formatMonthYear(issue.data.date)}`}
               title={issue.data.title}
               detail={lead ? `Main feature: ${lead.data.title}` : undefined}

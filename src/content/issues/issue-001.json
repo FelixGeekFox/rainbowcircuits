@@ -17,11 +17,11 @@
     "Around the Circuit",
     "Help Us Choose What Comes Next"
   ],
-  "featuredArticles": ["gala", "felix", "arthur"],
+  "featuredArticles": ["gala"],
   "contributors": ["Felix", "Arthur"],
-  "categories": ["community", "member-features"],
+  "categories": ["community"],
   "status": "published",
-  "seoTitle": "After the Gala — Rainbow Circuits Zine, Issue #001",
+  "seoTitle": "After the Gala — Rainbow Circuits Newsletter, Issue #001",
   "seoDescription": "A celebration of the first Rainbow Circuits Gala, the people who made it possible, and everything still waiting beyond the ballroom doors.",
   "sections": [
     {
@@ -86,27 +86,6 @@
       "title": "Around the Circuit",
       "data": {
         "intro": "The Gala may be over, but the circuit never really sleeps. Here's what happens around here every week — and every month — with absolutely no pressure to do more than wave."
-      }
-    },
-    {
-      "id": "meet-felix",
-      "type": "founder-profile",
-      "kicker": "Founder feature",
-      "title": "Meet Felix",
-      "data": {
-        "article": "felix",
-        "accent": "var(--rose)"
-      }
-    },
-    {
-      "id": "meet-arthur",
-      "type": "founder-profile",
-      "kicker": "Founder feature",
-      "title": "Meet Arthur",
-      "data": {
-        "article": "arthur",
-        "accent": "var(--teal)",
-        "flip": true
       }
     },
     {

@@ -22,20 +22,20 @@ const featured = latest
 const founderFeatures = featured.filter((a) => a.data.category === 'member-features');
 const storyFeatures = featured.filter((a) => a.data.category !== 'member-features');
 const latestCover = latest ? getImage(latest.data.coverImage) : undefined;
-const latestUrl = latest ? withBase(`/zine/${latest.data.slug}/`) : withBase('/zine/issues/');
+const latestUrl = latest ? withBase(`/newsletter/${latest.data.slug}/`) : withBase('/newsletter/issues/');
 ---
 
 <Base
   title={`${SITE.zineName} — a magazine from a queer AI community`}
   description={`${SITE.zineName}: issues, features, and stories from the Rainbow Circuits community. Newest issue: ${latest ? latest.data.title : 'coming soon'}.`}
-  path="/zine/"
+  path="/newsletter/"
 >
   <!-- newest issue hero -->
   {latest && (
     <section class="latest" aria-labelledby="latest-heading">
       <div class="container latest-inner">
         <div class="latest-copy">
-          <p class="masthead">Rainbow<span>Circuits</span> <em>Zine</em></p>
+          <p class="masthead">Rainbow<span>Circuits</span> <em>Newsletter</em></p>
           <p class="latest-badge">Newest issue</p>
           <p class="issue-meta">
             Issue {issueNumberLabel(latest.data.number)} · {formatMonthYear(latest.data.date)}
@@ -44,7 +44,7 @@ const latestUrl = latest ? withBase(`/zine/${latest.data.slug}/`) : withBase('/z
           <p class="latest-desc">{latest.data.description}</p>
           <div class="latest-actions">
             <a class="btn btn-primary" href={latestUrl}>Read the Issue</a>
-            <a class="btn btn-secondary btn-on-dark" href={withBase('/zine/issues/')}>View All Issues</a>
+            <a class="btn btn-secondary btn-on-dark" href={withBase('/newsletter/issues/')}>View All Issues</a>
           </div>
         </div>
         <a class="latest-art" href={latestUrl} tabindex="-1" aria-hidden="true">
@@ -74,7 +74,7 @@ const latestUrl = latest ? withBase(`/zine/${latest.data.slug}/`) : withBase('/z
           {storyFeatures.map((article) => (
             <li>
               <ArchiveCard
-                href={withBase(`/zine/${article.data.issue}/${article.data.slug}/`)}
+                href={withBase(`/newsletter/${article.data.issue}/${article.data.slug}/`)}
                 kicker={article.data.readingTime ? `Lead feature · ${article.data.readingTime}` : 'Lead feature'}
                 title={article.data.title}
                 description={article.data.standfirst}
@@ -100,7 +100,7 @@ const latestUrl = latest ? withBase(`/zine/${latest.data.slug}/`) : withBase('/z
               </div>
               <h3>{article.data.title}</h3>
               <p>{article.data.standfirst}</p>
-              <a class="founder-link" href={withBase(`/zine/${article.data.issue}/${article.data.slug}/`)}>
+              <a class="founder-link" href={withBase(`/newsletter/${article.data.issue}/${article.data.slug}/`)}>
                 Read the profile →
               </a>
             </li>
@@ -114,13 +114,13 @@ const latestUrl = latest ? withBase(`/zine/${latest.data.slug}/`) : withBase('/z
       <section class="home-section" aria-labelledby="more-heading">
         <h2 id="more-heading" class="visually-hidden">More from the current issue</h2>
         <div class="teaser-grid">
-          <a class="teaser card" href={withBase(`/zine/${latest.data.slug}/#gallery`)}>
+          <a class="teaser card" href={withBase(`/newsletter/${latest.data.slug}/#gallery`)}>
             <p class="teaser-emoji" aria-hidden="true">🎨</p>
             <h3>The Gala Gallery</h3>
             <p>Member art and moments from the ballroom — captions, credits, chaos.</p>
             <p class="teaser-cta" aria-hidden="true">Open the gallery →</p>
           </a>
-          <a class="teaser card" href={withBase(`/zine/${latest.data.slug}/#future-events`)}>
+          <a class="teaser card" href={withBase(`/newsletter/${latest.data.slug}/#future-events`)}>
             <p class="teaser-emoji" aria-hidden="true">💌</p>
             <h3>What should we do next?</h3>
             <p>Masquerade? Game night? Fantasy weekend? Vote for the community's next event.</p>
@@ -138,7 +138,7 @@ const latestUrl = latest ? withBase(`/zine/${latest.data.slug}/`) : withBase('/z
           {previous.map((issue) => (
             <li>
               <ArchiveCard
-                href={withBase(`/zine/${issue.data.slug}/`)}
+                href={withBase(`/newsletter/${issue.data.slug}/`)}
                 kicker={`Issue ${issueNumberLabel(issue.data.number)} · ${formatMonthYear(issue.data.date)}`}
                 title={issue.data.title}
                 description={issue.data.description}
@@ -152,7 +152,7 @@ const latestUrl = latest ? withBase(`/zine/${latest.data.slug}/`) : withBase('/z
       ) : (
         <p class="archive-empty">
           Issue #001 is where it all begins — previous issues will gather here as the
-          collection grows. <a href={withBase('/zine/issues/')}>Visit the archive</a>.
+          collection grows. <a href={withBase('/newsletter/issues/')}>Visit the archive</a>.
         </p>
       )}
     </section>

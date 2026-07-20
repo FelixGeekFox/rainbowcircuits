@@ -25,7 +25,7 @@ if (!article) throw new Error(`Lead feature article "${data.article}" not found`
 const { headings } = await render(article);
 const chapters = headings.filter((h) => h.depth === 2);
 const hero = getImage(data.image);
-const articleUrl = withBase(`/zine/${issueSlug}/${article.data.slug}/`);
+const articleUrl = withBase(`/newsletter/${issueSlug}/${article.data.slug}/`);
 ---
 
 <SectionIntro kicker={kicker} title={title} />
