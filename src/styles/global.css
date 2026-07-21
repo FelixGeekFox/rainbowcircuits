@@ -6,47 +6,51 @@
    ────────────────────────────────────────────────────────────── */
 
 :root {
-  /* brand palette */
-  --cream: #fdf6f0;
-  --paper: #fdf6f0;
-  --paper-warm: #f9ecdf;
-  --pink-soft: #f9dde8;
-  --lavender: #e8d5f5;
-  --mint: #d4f0e8;
-  --peach: #fde8d8;
-  --rose: #d9647f;
-  --rose-soft: #e8829a;
-  --violet: #8a5fbe;
-  --violet-soft: #9b72c8;
-  --teal: #2f9377;
-  --teal-soft: #5bbfa0;
-  --gold: #b97e17;
-  --gold-soft: #e8a830;
-  --coral: #e0755a;
-  --cyan: #4d9fc4;
+  /* brand palette — matched to the Rainbow Circuits logo
+     (deep navy wordmark, royal-blue Pip, green Puddle, clean rainbow) */
+  --navy: #0a2c5c;          /* primary brand / wordmark */
+  --navy-soft: #123f78;
+  --blue: #0a5ca6;          /* royal blue (Pip) */
+  --cream: #f7f8fb;         /* legacy alias → now clean near-white */
+  --paper: #f7f8fb;
+  --paper-warm: #eef1f8;
+  --pink-soft: #fbe1ea;
+  --lavender: #e5e3f6;
+  --mint: #d6f0e0;
+  --peach: #fdeadb;
+  --rose: #d83f5f;
+  --rose-soft: #e8718a;
+  --violet: #6b40b8;
+  --violet-soft: #8b62d4;
+  --teal: #1f9a55;          /* green, echoing Puddle */
+  --teal-soft: #38b56c;
+  --gold: #cf9310;
+  --gold-soft: #f2be1e;
+  --coral: #ec6f37;
+  --cyan: #2b8fd4;
 
-  /* twilight (issue covers & full-width breaks) */
-  --twilight: #2c2140;
-  --twilight-deep: #221936;
-  --twilight-soft: #3a2d54;
-  --on-twilight: #f6effa;
-  --on-twilight-soft: #cfc0e2;
+  /* twilight (issue covers & full-width breaks) — deep navy now */
+  --twilight: #0c2346;
+  --twilight-deep: #071a37;
+  --twilight-soft: #143b66;
+  --on-twilight: #f2f6fc;
+  --on-twilight-soft: #b7c8e2;
 
   /* text */
-  --text: #3d2b45;
-  --text-light: #6f5480;
+  --text: #14233f;          /* deep navy slate */
+  --text-light: #566079;
   --white: #ffffff;
 
   /* type */
-  --font-display: 'Fraunces', Georgia, serif;
+  --font-display: 'Poppins', system-ui, sans-serif;
   --font-body: 'Nunito', system-ui, sans-serif;
-  --font-ui: 'Quicksand', system-ui, sans-serif;
+  --font-ui: 'Poppins', system-ui, sans-serif;
 
   /* shape & shadow */
   --card-radius: 20px;
-  --card-shadow: 0 4px 24px rgba(120, 80, 160, 0.10);
-  --card-shadow-hover: 0 8px 32px rgba(120, 80, 160, 0.16);
-  --card-border: 1.5px solid rgba(155, 114, 200, 0.14);
+  --card-shadow: 0 4px 24px rgba(20, 40, 90, 0.10);
+  --card-shadow-hover: 0 8px 32px rgba(20, 40, 90, 0.16);
+  --card-border: 1.5px solid rgba(60, 90, 150, 0.14);
 
   /* layout */
   --measure: 42rem;        /* comfortable line length for long-form copy */
@@ -55,7 +59,7 @@
 
   /* rainbow gradient — used sparingly (progress line, small rules) */
   --circuit-rainbow: linear-gradient(90deg,
-    #d9647f 0%, #e0755a 20%, #b97e17 40%, #2f9377 60%, #4d9fc4 80%, #8a5fbe 100%);
+    #e63b2e 0%, #f2882c 20%, #f5c218 40%, #1f9a55 60%, #2b8fd4 80%, #6b40b8 100%);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -101,7 +105,7 @@ h1, h2, h3, h4 {
 p { text-wrap: pretty; }
 
 a {
-  color: var(--violet);
+  color: var(--blue);
   text-decoration-thickness: 1.5px;
   text-underline-offset: 0.2em;
 }
@@ -110,7 +114,7 @@ a:hover { color: var(--rose); }
 ::selection { background: var(--lavender); color: var(--text); }
 
 :focus-visible {
-  outline: 3px solid var(--violet);
+  outline: 3px solid var(--blue);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -171,15 +175,15 @@ button {
 .btn:active { transform: translateY(0); }
 
 .btn-primary {
-  background: linear-gradient(120deg, var(--violet), var(--rose));
+  background: linear-gradient(120deg, var(--navy), var(--blue));
   color: var(--white);
-  box-shadow: 0 4px 18px rgba(138, 95, 190, 0.35);
+  box-shadow: 0 4px 18px rgba(10, 44, 92, 0.35);
 }
-.btn-primary:hover { color: var(--white); box-shadow: 0 6px 24px rgba(138, 95, 190, 0.45); }
+.btn-primary:hover { color: var(--white); box-shadow: 0 6px 24px rgba(10, 44, 92, 0.45); }
 
 .btn-secondary {
   background: transparent;
-  color: var(--violet);
+  color: var(--navy);
   border-color: currentColor;
 }
 .btn-secondary:hover { color: var(--rose); }

@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import banner from '../assets/brand/banner.png';
+import logo from '../assets/brand/logo.jpg';
 import { SITE, withBase } from '../lib/site';
 ---
 
@@ -13,15 +13,15 @@ import { SITE, withBase } from '../lib/site';
   <div class="landing container">
     <div class="landing-banner">
       <Image
-        src={banner}
-        alt="Rainbow Circuits banner: Pip, a sparrow with rainbow wings, and a friendly robot with Puddle the frog on its head hold a hand-painted banner reading Rainbow Circuits, surrounded by watercolour flowers, hearts, and circuit lines."
-        widths={[640, 1000, 1600]}
-        sizes="(min-width: 72rem) 66rem, 92vw"
+        src={logo}
+        alt="Rainbow Circuits logo: a navy sparrow (Pip) in flight beside a green frog (Puddle) with a rainbow arcing off his back into circuit traces, next to the words Rainbow Circuits."
+        widths={[640, 1000, 1600, 2000]}
+        sizes="(min-width: 72rem) 60rem, 96vw"
         loading="eager"
         fetchpriority="high"
       />
     </div>
-    <h1>Welcome to Rainbow Circuits</h1>
+    <h1 class="visually-hidden">Welcome to Rainbow Circuits</h1>
     <p class="landing-tagline">{SITE.tagline}</p>
     <div class="landing-actions">
       <a class="btn btn-primary" href={withBase('/newsletter/')}>Read the Newsletter</a>
@@ -39,20 +39,13 @@ import { SITE, withBase } from '../lib/site';
     padding-top: 2.5rem;
     max-width: 62rem;
   }
-  .landing-banner {
-    border-radius: var(--card-radius);
-    overflow: hidden;
-    box-shadow: var(--card-shadow);
-  }
-  .landing-banner :global(img) { width: 100%; height: auto; }
-  .landing h1 {
-    margin-top: 2.5rem;
-    font-size: clamp(2.2rem, 6vw, 3.4rem);
-  }
+  /* The logo carries its own light background, so it presents as a clean
+     masthead rather than a framed card. */
+  .landing-banner :global(img) { width: 100%; height: auto; display: block; }
   .landing-tagline {
-    margin: 1rem auto 0;
+    margin: 1.5rem auto 0;
     max-width: 46ch;
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     color: var(--text-light);
   }
   .landing-actions {
