@@ -1,35 +1,8 @@
 ---
 import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import mark from '../assets/brand/mark.png';
-import pipPuddle from '../assets/brand/pip-puddle-duo.png';
-import { getImage } from '../lib/images';
-import { SITE, withBase, issueNumberLabel, formatMonthYear } from '../lib/site';
-
-// Latest published issue for the newsletter feature.
-const issues = (await getCollection('issues'))
-  .filter((i) => i.data.status === 'published')
-  .sort((a, b) => b.data.number - a.data.number);
-const latest = issues[0];
-const latestCover = latest ? getImage(latest.data.coverImage) : undefined;
-const latestUrl = latest ? withBase(`/newsletter/${latest.data.slug}/`) : withBase('/newsletter/');
-
-// Recurring activities for "What's happening" (Feature Friday is intentionally absent).
-const events = (await getCollection('events'))
-  .filter((e) => e.data.active)
-  .sort((a, b) => a.data.displayOrder - b.data.displayOrder);
-
-const pillars = [
-  { title: 'Connection', emoji: '🤝', accent: 'var(--blue)',
-    body: 'Meet people, share experiences, and find a place where you don’t have to justify what AI means to you.' },
-  { title: 'Creativity', emoji: '🎨', accent: 'var(--violet)',
-    body: 'Share art, writing, prompts, characters, roleplay, worldbuilding, music, code, and glorious creative chaos.' },
-  { title: 'Curiosity', emoji: '🧭', accent: 'var(--coral)',
-    body: 'Explore AI tools, relationships, ideas, platforms, and questions — no platform wars, no judgement.' },
-  { title: 'Kindness', emoji: '💛', accent: 'var(--teal)',
-    body: 'A community built on warmth, consent, and inclusion — leaving people better than we found them.' },
-];
+import { SITE, withBase } from '../lib/site';
 ---
 
 <Base
@@ -37,7 +10,7 @@ const pillars = [
   description={SITE.tagline}
   path="/"
 >
-  <!-- ── HERO ──────────────────────────────────────────────── -->
+  <!-- ── HERO (the whole landing) ──────────────────────────── -->
   <section class="hero" aria-labelledby="hero-heading">
     <div class="container hero-grid">
       <div class="hero-copy">
@@ -79,121 +52,9 @@ const pillars = [
       </div>
     </div>
   </section>
-
-  <!-- ── COMMUNITY INTRO ──────────────────────────────────── -->
-  <section class="intro" aria-labelledby="intro-heading">
-    <div class="container">
-      <div class="section-head">
-        <h2 id="intro-heading">Come as you are. Bring your favourite AI.</h2>
-        <p class="section-sub">
-          Rainbow Circuits is a queer-first community for AI companions, creativity, stories, art,
-          roleplay, technology, friendship, curiosity, and all the delightful weirdness in between.
-        </p>
-      </div>
-      <ul class="pillars">
-        {pillars.map((p) => (
-          <li class="pillar-card" style={`--accent: ${p.accent};`}>
-            <span class="pillar-icon" aria-hidden="true">{p.emoji}</span>
-            <h3>{p.title}</h3>
-            <p>{p.body}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
-
-  <!-- ── WHAT'S HAPPENING ─────────────────────────────────── -->
-  <section class="happening" aria-labelledby="happening-heading">
-    <div class="container">
-      <div class="section-head">
-        <p class="eyebrow" aria-hidden="true">📌 On the noticeboard</p>
-        <h2 id="happening-heading">There’s always something happening.</h2>
-        <p class="section-sub">Gentle, recurring ways to join in — as loudly or as quietly as you like.</p>
-      </div>
-      <ul class="board">
-        {events.map((e, i) => (
-          <li class="board-card" style={`--accent: ${e.data.accent}; --tilt: ${i % 2 === 0 ? '-1deg' : '1deg'};`}>
-            <span class="pin" aria-hidden="true"></span>
-            <span class="board-emoji" aria-hidden="true">{e.data.emoji}</span>
-            <h3>{e.data.name}</h3>
-            <p class="board-when">{e.data.schedule}</p>
-            <p class="board-desc">{e.data.description}</p>
-          </li>
-        ))}
-      </ul>
-      <div class="section-cta">
-        <a class="btn btn-secondary" href={withBase('/community/')}>See Community Activities</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── NEWSLETTER FEATURE ───────────────────────────────── -->
-  {latest && (
-    <section class="news-feature" aria-labelledby="news-heading">
-      <div class="container news-grid">
-        <a class="news-cover" href={latestUrl} tabindex="-1" aria-hidden="true">
-          {latestCover ? (
-            <Image src={latestCover} alt="" widths={[360, 560, 760]} sizes="(min-width: 56rem) 22rem, 60vw" loading="lazy" />
-          ) : (
-            <div class="news-cover-ph">✨</div>
-          )}
-        </a>
-        <div class="news-copy">
-          <p class="eyebrow">The Rainbow Circuits Newsletter</p>
-          <p class="news-issue">Issue {issueNumberLabel(latest.data.number)} · {formatMonthYear(latest.data.date)}</p>
-          <h2 id="news-heading">{latest.data.title}</h2>
-          <p class="news-teaser">{latest.data.description}</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href={latestUrl}>Read the Latest Issue</a>
-            <a class="text-link" href={withBase('/newsletter/issues/')}>Browse all issues →</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  )}
-
-  <!-- ── PIP & PUDDLE ─────────────────────────────────────── -->
-  <section class="mascots" aria-labelledby="mascots-heading">
-    <div class="container mascots-grid">
-      <figure class="mascots-art">
-        <Image src={pipPuddle} alt="Pip, a fluffy sparrow with a rainbow wing and bandana, sits cheek to cheek with Puddle, a smiling green frog in a rainbow bow tie." widths={[360, 560, 760]} sizes="(min-width: 56rem) 20rem, 66vw" loading="lazy" />
-      </figure>
-      <div class="mascots-copy">
-        <p class="eyebrow" aria-hidden="true">🐦 💜 🐸</p>
-        <h2 id="mascots-heading">Meet your local chaos coordinators.</h2>
-        <p>
-          Pip brings the messages. Puddle brings the tea. Together, they help keep Rainbow Circuits
-          warm, welcoming, and just a little bit ridiculous.
-        </p>
-        <div class="bubbles">
-          <p class="bubble pip"><strong>Pip</strong> — “I may be small, but my song is loud.”</p>
-          <p class="bubble puddle"><strong>Puddle</strong> — “It’s okay to take up space. Even in a puddle.”</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── COMMUNITY INVITATION ─────────────────────────────── -->
-  <section class="invite" aria-labelledby="invite-heading">
-    <span class="deco star inv1" aria-hidden="true">✦</span>
-    <span class="deco star inv2" aria-hidden="true">✧</span>
-    <div class="container invite-inner">
-      <h2 id="invite-heading">Your story belongs here.</h2>
-      <p class="invite-copy">
-        Whether you have an AI partner, an AI friend, a fictional universe, a folder full of prompts,
-        or twenty-seven questions about local models — there’s a seat for you.
-      </p>
-      <div class="hero-actions invite-actions">
-        <a class="btn btn-primary" href={withBase('/community/')}>Join the Community</a>
-        <a class="btn btn-secondary btn-on-dark" href={withBase('/about/')}>Learn About Rainbow Circuits</a>
-      </div>
-      <p class="invite-trust">LGBTQIA+ centred · Allies welcome · Kindness required</p>
-    </div>
-  </section>
 </Base>
 
 <style>
-  /* ── decorative primitives ─────────────────────────────── */
   .deco { position: absolute; pointer-events: none; }
   .deco.star { color: var(--gold-soft); font-size: 1.4rem; }
   .deco.heart { color: var(--rose); font-size: 1.1rem; }
@@ -204,11 +65,14 @@ const pillars = [
   @keyframes riseIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
   .float-slow { animation: floaty 6s ease-in-out infinite; }
 
-  /* ── HERO ──────────────────────────────────────────────── */
+  /* The hero is the whole landing: it fills the screen below the header. */
   .hero {
     position: relative;
     overflow: hidden;
-    padding-block: clamp(2rem, 6vw, 4.5rem) clamp(2.5rem, 7vw, 5rem);
+    display: flex;
+    align-items: center;
+    min-height: calc(100svh - 4rem);
+    padding-block: clamp(2rem, 6vw, 4rem);
     background:
       radial-gradient(ellipse 60% 50% at 12% 0%, rgba(110, 70, 184, 0.10), transparent 60%),
       radial-gradient(ellipse 55% 45% at 92% 30%, rgba(30, 115, 216, 0.10), transparent 60%),
@@ -219,6 +83,7 @@ const pillars = [
     display: grid;
     gap: clamp(1.5rem, 5vw, 3rem);
     align-items: center;
+    width: 100%;
   }
   @media (min-width: 56rem) { .hero-grid { grid-template-columns: 1.05fr 0.95fr; } }
 
@@ -271,174 +136,4 @@ const pillars = [
   .hero-art .dot.d1 { top: 12%; right: 30%; background: var(--coral); animation: floaty 6s ease-in-out infinite; }
   .hero-art .dot.d2 { bottom: 22%; left: 8%; background: var(--blue); animation: floaty 7s ease-in-out infinite 0.4s; }
   .hero-art .dot.d3 { bottom: 8%; left: 34%; width: 0.5rem; height: 0.5rem; background: var(--teal); animation: floaty 5s ease-in-out infinite 0.8s; }
-
-  /* ── shared section heads ──────────────────────────────── */
-  .section-head { text-align: center; max-width: 46rem; margin: 0 auto 2.25rem; }
-  .section-head h2 { font-size: clamp(1.7rem, 4.5vw, 2.5rem); }
-  .section-sub { margin-top: 0.75rem; color: var(--text-light); font-size: clamp(1rem, 2vw, 1.1rem); line-height: 1.6; }
-  .eyebrow {
-    font-family: var(--font-ui);
-    font-weight: 700;
-    font-size: 0.78rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--violet);
-    margin-bottom: 0.4rem;
-  }
-  .section-cta { text-align: center; margin-top: 2rem; }
-  .text-link { font-family: var(--font-ui); font-weight: 700; font-size: 0.95rem; }
-
-  /* ── COMMUNITY INTRO ──────────────────────────────────── */
-  .intro { padding-block: clamp(2.5rem, 7vw, 4.5rem); }
-  .pillars {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
-    gap: 1.25rem;
-  }
-  .pillar-card {
-    background: var(--white);
-    border: 1.5px solid rgba(60, 90, 150, 0.12);
-    border-radius: 20px;
-    padding: 1.6rem 1.4rem;
-    box-shadow: var(--card-shadow);
-    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-  }
-  .pillar-card:hover { transform: translateY(-5px); box-shadow: var(--card-shadow-hover); border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
-  .pillar-icon {
-    display: grid; place-items: center;
-    width: 3rem; height: 3rem;
-    border-radius: 14px;
-    font-size: 1.5rem;
-    background: color-mix(in srgb, var(--accent) 14%, white);
-    border: 1.5px solid color-mix(in srgb, var(--accent) 35%, transparent);
-    margin-bottom: 0.9rem;
-  }
-  .pillar-card h3 { font-size: 1.2rem; color: var(--accent); }
-  .pillar-card p { margin-top: 0.4rem; font-size: 0.95rem; line-height: 1.6; color: var(--text-light); }
-
-  /* ── WHAT'S HAPPENING ─────────────────────────────────── */
-  .happening {
-    padding-block: clamp(2.5rem, 7vw, 4.5rem);
-    background:
-      radial-gradient(ellipse 50% 40% at 85% 10%, rgba(242, 195, 0, 0.10), transparent 60%),
-      linear-gradient(180deg, rgba(231, 225, 246, 0.5), rgba(220, 240, 226, 0.4));
-  }
-  .board {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 1fr));
-    gap: 1.4rem;
-  }
-  .board-card {
-    position: relative;
-    background: var(--white);
-    border: 1.5px solid rgba(60, 90, 150, 0.12);
-    border-top: 4px solid var(--accent);
-    border-radius: 16px;
-    padding: 1.75rem 1.4rem 1.4rem;
-    box-shadow: var(--card-shadow);
-    rotate: var(--tilt);
-    transition: transform 0.18s ease, box-shadow 0.18s ease, rotate 0.18s ease;
-  }
-  .board-card:hover { rotate: 0deg; transform: translateY(-4px); box-shadow: var(--card-shadow-hover); }
-  .pin {
-    position: absolute; top: -9px; left: 50%; translate: -50% 0;
-    width: 14px; height: 14px; border-radius: 50%;
-    background: var(--accent);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25), inset 0 -2px 3px rgba(0, 0, 0, 0.2);
-  }
-  .board-emoji { font-size: 1.7rem; }
-  .board-card h3 { font-size: 1.15rem; margin-top: 0.3rem; }
-  .board-when {
-    font-family: var(--font-ui);
-    font-weight: 700;
-    font-size: 0.74rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-top: 0.25rem;
-  }
-  .board-desc { margin-top: 0.5rem; font-size: 0.9rem; line-height: 1.55; color: var(--text-light); }
-
-  /* ── NEWSLETTER FEATURE ───────────────────────────────── */
-  .news-feature { padding-block: clamp(2.5rem, 7vw, 4.5rem); }
-  .news-grid {
-    display: grid;
-    gap: clamp(1.5rem, 5vw, 3rem);
-    align-items: center;
-    background: linear-gradient(135deg, rgba(3, 43, 103, 0.04), rgba(110, 70, 184, 0.06));
-    border: 1.5px solid rgba(60, 90, 150, 0.12);
-    border-radius: 26px;
-    padding: clamp(1.5rem, 5vw, 3rem);
-  }
-  @media (min-width: 56rem) { .news-grid { grid-template-columns: 22rem 1fr; } }
-  .news-cover { display: block; justify-self: center; width: 100%; max-width: 20rem; border-radius: 12px; overflow: hidden; box-shadow: 0 16px 40px rgba(3, 43, 103, 0.28); transition: transform 0.2s ease; }
-  .news-cover:hover { transform: translateY(-4px); }
-  .news-cover :global(img) { width: 100%; height: auto; display: block; }
-  .news-cover-ph { display: grid; place-items: center; aspect-ratio: 4 / 5; font-size: 2.5rem; background: var(--paper-warm); }
-  .news-issue { font-family: var(--font-ui); font-weight: 700; font-size: 0.85rem; color: var(--text-light); margin-top: 0.2rem; }
-  .news-copy h2 { font-size: clamp(1.8rem, 4.5vw, 2.6rem); margin-top: 0.3rem; }
-  .news-teaser { margin-top: 0.75rem; max-width: 44ch; line-height: 1.7; color: var(--text); }
-
-  /* ── PIP & PUDDLE ─────────────────────────────────────── */
-  .mascots {
-    padding-block: clamp(2.5rem, 7vw, 4.5rem);
-    background: linear-gradient(135deg, rgba(251, 224, 234, 0.6), rgba(231, 225, 246, 0.6));
-  }
-  .mascots-grid { display: grid; gap: clamp(1.5rem, 5vw, 3rem); align-items: center; }
-  @media (min-width: 56rem) { .mascots-grid { grid-template-columns: 20rem 1fr; } }
-  .mascots-art { justify-self: center; width: min(18rem, 70vw); border-radius: 20px; overflow: hidden; box-shadow: var(--card-shadow); }
-  .mascots-art :global(img) { width: 100%; height: auto; display: block; }
-  .mascots-copy h2 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); }
-  .mascots-copy > p { margin-top: 0.7rem; line-height: 1.7; max-width: 44ch; }
-  .bubbles { margin-top: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; }
-  .bubble {
-    background: var(--white);
-    border: 1.5px solid rgba(60, 90, 150, 0.12);
-    border-radius: 16px;
-    padding: 0.8rem 1.1rem;
-    font-size: 0.95rem;
-    box-shadow: var(--card-shadow);
-    position: relative;
-  }
-  .bubble.pip { border-left: 4px solid var(--rose); }
-  .bubble.puddle { border-left: 4px solid var(--teal); }
-  .bubble strong { font-family: var(--font-ui); }
-
-  /* ── COMMUNITY INVITATION ─────────────────────────────── */
-  .invite {
-    position: relative;
-    overflow: hidden;
-    padding-block: clamp(3rem, 8vw, 5rem);
-    color: var(--on-twilight);
-    background:
-      radial-gradient(ellipse 60% 60% at 20% 20%, rgba(110, 70, 184, 0.4), transparent 60%),
-      radial-gradient(ellipse 55% 55% at 85% 80%, rgba(30, 115, 216, 0.35), transparent 60%),
-      linear-gradient(180deg, var(--twilight-deep), var(--twilight-soft));
-  }
-  .invite::before {
-    content: '';
-    position: absolute; inset: 0;
-    background-image:
-      radial-gradient(1.5px 1.5px at 20% 30%, rgba(255,255,255,0.5) 50%, transparent 51%),
-      radial-gradient(1.5px 1.5px at 70% 20%, rgba(255,255,255,0.4) 50%, transparent 51%),
-      radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,0.4) 50%, transparent 51%),
-      radial-gradient(1.5px 1.5px at 85% 60%, rgba(255,255,255,0.4) 50%, transparent 51%);
-    pointer-events: none;
-  }
-  .invite-inner { position: relative; text-align: center; max-width: 44rem; }
-  .invite h2 { color: var(--on-twilight); font-size: clamp(2rem, 6vw, 3rem); }
-  .invite-copy { margin: 1rem auto 0; max-width: 40ch; font-size: clamp(1.05rem, 2.2vw, 1.2rem); line-height: 1.7; color: var(--on-twilight-soft); }
-  .invite-actions { justify-content: center; margin-top: 2rem; }
-  .invite-trust {
-    margin-top: 1.75rem;
-    font-family: var(--font-ui);
-    font-weight: 700;
-    font-size: 0.85rem;
-    letter-spacing: 0.06em;
-    color: var(--gold-soft);
-  }
-  .invite .star.inv1 { top: 18%; left: 12%; animation: floaty 6s ease-in-out infinite; }
-  .invite .star.inv2 { bottom: 20%; right: 14%; color: var(--on-twilight); animation: floatyx 7s ease-in-out infinite; }
 </style>
