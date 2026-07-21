@@ -1,0 +1,152 @@
+---
+import Base from '../layouts/Base.astro';
+import { withBase } from '../lib/site';
+import {
+  RESOURCES_INTRO,
+  EMERGENCY_CALLOUT,
+  RESOURCE_GROUPS,
+  COMMUNITY_NOTE,
+} from '../data/resources';
+---
+
+<Base
+  title="Support & Wellbeing — Rainbow Circuits"
+  description="Support and wellbeing resources for the Rainbow Circuits community — crisis lines, LGBTQIA+ support, and mental-health services."
+  path="/resources/"
+>
+  <div class="resources container">
+    <header class="res-header">
+      <p class="kicker">You’re not alone</p>
+      <h1>Support &amp; Wellbeing</h1>
+      <p class="res-intro">{RESOURCES_INTRO}</p>
+    </header>
+
+    <aside class="emergency" role="note" aria-label={EMERGENCY_CALLOUT.title}>
+      <p class="emergency-title"><span aria-hidden="true">🚨</span> {EMERGENCY_CALLOUT.title}</p>
+      <p>{EMERGENCY_CALLOUT.body}</p>
+    </aside>
+
+    {RESOURCE_GROUPS.map((group) => (
+      <section class="res-group" aria-labelledby={`grp-${group.title.replace(/\s+/g, '-').toLowerCase()}`}>
+        <h2 id={`grp-${group.title.replace(/\s+/g, '-').toLowerCase()}`}>
+          <span class="res-emoji" aria-hidden="true">{group.emoji}</span> {group.title}
+        </h2>
+        {group.blurb && <p class="res-blurb">{group.blurb}</p>}
+        <ul class="res-list">
+          {group.resources.map((r) => (
+            <li class:list={['res-card', { placeholder: r.placeholder }]}>
+              {r.url ? (
+                <a class="res-name" href={r.url} rel="noopener">
+                  {r.name}
+                  <span class="res-arrow" aria-hidden="true">↗</span>
+                </a>
+              ) : (
+                <p class="res-name">{r.name}</p>
+              )}
+              {r.region && <p class="res-region">{r.region}</p>}
+              <p class="res-desc">{r.description}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+
+    <p class="community-note">{COMMUNITY_NOTE}</p>
+
+    <div class="res-back">
+      <a class="btn btn-secondary" href={withBase('/newsletter/')}>← Back to the Newsletter</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .resources { padding-block: 3rem 1rem; max-width: 52rem; }
+  .res-header { text-align: center; margin-bottom: 2rem; }
+  .res-header h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-top: 0.3rem; }
+  .res-intro {
+    color: var(--text);
+    max-width: 44rem;
+    margin: 1rem auto 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .emergency {
+    background: linear-gradient(135deg, #fff4e6, #fde8d8);
+    border: 2px solid var(--gold-soft);
+    border-radius: var(--card-radius);
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 2.5rem;
+    box-shadow: var(--card-shadow);
+  }
+  .emergency-title {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+  .emergency p:last-child { color: var(--text); line-height: 1.6; }
+
+  .res-group { margin-bottom: 2.5rem; }
+  .res-group h2 { font-size: 1.5rem; }
+  .res-emoji { font-size: 1.2em; }
+  .res-blurb { color: var(--text-light); margin: 0.4rem 0 1.1rem; }
+
+  .res-list {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .res-card {
+    background: var(--white);
+    border: var(--card-border);
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    padding: 1.25rem 1.5rem;
+    border-left: 4px solid var(--violet);
+  }
+  .res-card.placeholder {
+    background: transparent;
+    border: 2px dashed rgba(155, 114, 200, 0.5);
+    box-shadow: none;
+  }
+  .res-name {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.35rem;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--violet);
+    text-decoration: none;
+  }
+  a.res-name:hover { color: var(--rose); text-decoration: underline; }
+  .res-arrow { font-size: 0.8em; }
+  .res-card.placeholder .res-name { color: var(--text-light); }
+  .res-region {
+    display: inline-block;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-light);
+    background: var(--paper-warm);
+    border-radius: 999px;
+    padding: 0.1rem 0.6rem;
+    margin: 0.4rem 0;
+  }
+  .res-desc { color: var(--text); line-height: 1.6; font-size: 0.96rem; margin-top: 0.3rem; }
+
+  .community-note {
+    background: linear-gradient(135deg, var(--lavender), var(--pink-soft));
+    border-radius: var(--card-radius);
+    padding: 1.5rem 1.75rem;
+    text-align: center;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  .res-back { text-align: center; }
+</style>
