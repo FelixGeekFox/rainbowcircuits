@@ -3,6 +3,8 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { SITE, withBase } from '../lib/site';
 import mark from '../assets/brand/mark.png';
+import pipPuddle from '../assets/brand/pip-puddle-duo.png';
+import arcFlag from '../assets/brand/arc-flag.png';
 
 const pillars = [
   {
@@ -62,13 +64,26 @@ const values = ['Warm', 'Inclusive', 'Creative', 'Curious', 'Playful'];
     </section>
 
     <section class="about-block mascots">
-      <h2>Meet Pip &amp; Puddle</h2>
-      <p>
-        Our mascots are small hearts with big feelings. <strong>Pip</strong>, the sparrow,
-        carries messages, art, and good vibes across the community. <strong>Puddle</strong>,
-        the frog, keeps the calm corners and reminds everyone it’s okay to take up space —
-        even in a puddle. Together they’re proof that everyone belongs here, exactly as they are.
-      </p>
+      <div class="mascots-inner">
+        <figure class="mascots-figure">
+          <Image
+            src={pipPuddle}
+            alt="Pip, a fluffy sparrow with a rainbow wing and rainbow bandana, sits cheek to cheek with Puddle, a smiling green frog in a rainbow bow tie, both glowing softly against a warm dark background."
+            widths={[360, 560, 760]}
+            sizes="(min-width: 44rem) 18rem, 70vw"
+            loading="lazy"
+          />
+        </figure>
+        <div class="mascots-copy">
+          <h2>Meet Pip &amp; Puddle</h2>
+          <p>
+            Our mascots are small hearts with big feelings. <strong>Pip</strong>, the sparrow,
+            carries messages, art, and good vibes across the community. <strong>Puddle</strong>,
+            the frog, keeps the calm corners and reminds everyone it’s okay to take up space —
+            even in a puddle. Together they’re proof that everyone belongs here, exactly as they are.
+          </p>
+        </div>
+      </div>
     </section>
 
     <section class="about-block flag-block">
@@ -81,6 +96,15 @@ const values = ['Warm', 'Inclusive', 'Creative', 'Curious', 'Playful'];
       <a class="btn btn-secondary flag-link" href="https://felixgeekfox.github.io/arc-flag/" rel="noopener">
         Explore the ARC flag →
       </a>
+      <figure class="flag-figure">
+        <Image
+          src={arcFlag}
+          alt="A young man in a navy tee bearing the teal circuit-heart emblem rests a hand on his chest by a night city window, beside a “Thank You” panel: “To everyone who submitted, voted, and supported this incredible community. Your creativity, passion, and love made this possible.”"
+          widths={[560, 900, 1448]}
+          sizes="(min-width: 48rem) 40rem, 92vw"
+          loading="lazy"
+        />
+      </figure>
     </section>
 
     <section class="about-cta">
@@ -144,7 +168,39 @@ const values = ['Warm', 'Inclusive', 'Creative', 'Curious', 'Playful'];
     border-radius: 999px;
     padding: 0.3rem 0.9rem;
   }
-  .mascots { background: linear-gradient(135deg, var(--lavender), var(--pink-soft)); border-radius: var(--card-radius); padding: 2rem 1.75rem; }
+  .mascots {
+    background: linear-gradient(135deg, var(--lavender), var(--pink-soft));
+    border-radius: var(--card-radius);
+    padding: 2rem 1.75rem;
+    max-width: 48rem;
+  }
+  .mascots-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .mascots-figure {
+    flex-shrink: 0;
+    width: min(15rem, 60vw);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+  }
+  .mascots-figure :global(img) { width: 100%; height: auto; display: block; }
+  .mascots-copy h2 { margin-bottom: 0.6rem; }
+  @media (min-width: 44rem) {
+    .mascots-inner { flex-direction: row; align-items: center; }
+    .mascots { text-align: left; }
+  }
+
+  .flag-figure {
+    margin-top: 1.75rem;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
+  }
+  .flag-figure :global(img) { width: 100%; height: auto; display: block; }
   .flag-block {
     background: linear-gradient(135deg, var(--twilight-deep), var(--twilight-soft));
     border-radius: var(--card-radius);

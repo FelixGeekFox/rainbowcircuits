@@ -229,16 +229,14 @@ const latestUrl = latest ? withBase(`/newsletter/${latest.data.slug}/`) : withBa
   }
   .latest-art {
     display: block;
-    border-radius: 24px;
+    border-radius: 14px;
     overflow: hidden;
-    border: 3px solid rgba(246, 239, 250, 0.25);
-    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
-    rotate: -1.2deg;
-    max-width: 30rem;
+    box-shadow: 0 16px 44px rgba(0, 0, 0, 0.4);
+    max-width: 24rem;
     justify-self: center;
     width: 100%;
   }
-  .latest-art :global(img) { width: 100%; height: auto; }
+  .latest-art :global(img) { width: 100%; height: auto; display: block; }
 
   .home-section { padding-top: 3.5rem; }
   .home-heading {

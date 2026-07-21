@@ -10,6 +10,7 @@ interface Props {
 const { onDark = false } = Astro.props;
 
 const links = [
+  { href: withBase('/'), label: 'Home' },
   { href: withBase('/newsletter/'), label: 'Newsletter' },
   { href: withBase('/resources/'), label: 'Support' },
   { href: SITE.communityUrl, label: 'Community', external: true },
@@ -154,7 +155,7 @@ const links = [
     font-weight: 600;
     font-size: 1rem;
     text-decoration: none;
-    color: var(--text);
+    color: var(--navy);
     padding: 0.55rem 0.25rem;
     border-bottom: 1px solid rgba(60, 90, 150, 0.1);
   }
@@ -195,10 +196,11 @@ const links = [
     }
     .header-links a {
       font-size: 0.95rem;
-      color: var(--text-light);
+      color: var(--navy);
       padding: 0;
       border-bottom: none;
     }
+    .header-links a:hover { color: var(--blue); }
     .on-dark .header-links a { color: var(--on-twilight-soft); }
     .contact-btn { align-self: auto; margin-top: 0; }
   }

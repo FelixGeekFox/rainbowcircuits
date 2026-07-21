@@ -1,7 +1,8 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import lockup from '../assets/brand/lockup.png';
+import heroBanner from '../assets/brand/hero-banner.png';
+import mark from '../assets/brand/mark.png';
 import { SITE, withBase } from '../lib/site';
 ---
 
@@ -10,19 +11,28 @@ import { SITE, withBase } from '../lib/site';
   description={SITE.tagline}
   path="/"
 >
-  <div class="landing container">
-    <div class="landing-banner">
+  <section class="hero">
+    <div class="container">
+      <!-- Wide designed banner for larger screens (text is part of the art). -->
       <Image
-        src={lockup}
-        alt="Rainbow Circuits — a navy sparrow (Pip) in flight beside a green frog (Puddle) with a rainbow arcing off his back into circuit traces, above the tagline: AI Connection, Queer Joy, Endless Stories."
-        widths={[640, 1000, 1600, 2200]}
-        sizes="(min-width: 72rem) 58rem, 96vw"
+        class="hero-art"
+        src={heroBanner}
+        alt=""
+        widths={[900, 1400, 2172]}
+        sizes="(min-width: 64rem) 60rem, 96vw"
         loading="eager"
         fetchpriority="high"
       />
+      <!-- Readable text hero for small screens (and the page's real heading). -->
+      <div class="hero-text">
+        <Image src={mark} class="hero-mark" width={200} height={200} alt="" loading="eager" />
+        <h1>AI Connection. Queer Joy. Endless Stories.</h1>
+        <p>{SITE.tagline}</p>
+      </div>
     </div>
-    <h1 class="visually-hidden">Rainbow Circuits — {SITE.strapline}</h1>
-    <p class="landing-tagline">{SITE.tagline}</p>
+  </section>
+
+  <div class="landing container">
     <div class="landing-actions">
       <a class="btn btn-primary" href={withBase('/newsletter/')}>Read the Newsletter</a>
       <a class="btn btn-secondary" href={SITE.communityUrl} rel="noopener">Join the community</a>
@@ -34,20 +44,44 @@ import { SITE, withBase } from '../lib/site';
 </Base>
 
 <style>
-  .landing {
-    text-align: center;
-    padding-top: 2.5rem;
+  .hero { padding-top: 1.5rem; }
+  /* The banner is a finished hero design; it sits directly on the page
+     (no card frame) so it reads as part of the page, not a pasted image. */
+  .hero-art {
+    display: none;
+    width: 100%;
     max-width: 62rem;
+    height: auto;
+    margin-inline: auto;
   }
-  /* The logo carries its own light background, so it presents as a clean
-     masthead rather than a framed card. */
-  .landing-banner :global(img) { width: 100%; height: auto; display: block; }
-  .landing-tagline {
-    margin: 1.5rem auto 0;
-    max-width: 46ch;
-    font-size: 1.2rem;
+  .hero-text { text-align: center; }
+  .hero-mark { width: clamp(6rem, 22vw, 8.5rem); height: auto; margin: 0 auto 1.25rem; object-fit: contain; }
+  .hero-text h1 {
+    font-size: clamp(1.9rem, 8vw, 2.6rem);
+    line-height: 1.12;
+    max-width: 16ch;
+    margin-inline: auto;
+  }
+  .hero-text p {
+    margin: 1rem auto 0;
+    max-width: 42ch;
+    font-size: 1.08rem;
+    line-height: 1.7;
     color: var(--text-light);
   }
+
+  @media (min-width: 46rem) {
+    .hero-art { display: block; }
+    /* keep the heading/mission in the DOM for SEO + screen readers */
+    .hero-text {
+      position: absolute;
+      width: 1px; height: 1px;
+      margin: -1px; padding: 0; overflow: hidden;
+      clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+    }
+  }
+
+  .landing { text-align: center; max-width: 62rem; padding-top: 0.5rem; }
   .landing-actions {
     margin-top: 2rem;
     display: flex;
