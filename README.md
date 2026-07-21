@@ -65,17 +65,17 @@ grep -rn "to be added\|required\]\|\[TBC\]\|placeholder" src/content/
 Member gallery submissions must have consent + credit recorded before
 `placeholder: true` is removed.
 
-## Connecting the feedback form
+## The feedback form
 
-The "What Should We Do Next?" form needs a form backend (static hosting has
-no server). The simplest option:
+The "What Should We Do Next?" form posts to **Formspree** (a form backend, since
+static hosting has no server), which emails submissions to `SITE.contactEmail`.
+The endpoint lives in `formEndpoint` in `src/lib/site.ts` — set it to a
+different Formspree form URL to re-point it, or `''` to disable it (the form
+then tells visitors to reach out in the community instead).
 
-1. Create a free form at [formspree.io](https://formspree.io) (no code, 50
-   submissions/month free).
-2. Put the endpoint URL into `formEndpoint` in `src/lib/site.ts`.
-
-Until then the form validates but tells visitors to share feedback in the
-community instead. Spam protection (honeypot + timing) is built in.
+Spam protection is layered: a honeypot field + minimum-submit-time check on the
+page, plus Formspree's own spam filtering. Submissions also appear in the
+Formspree dashboard.
 
 ## The locked mod page
 
