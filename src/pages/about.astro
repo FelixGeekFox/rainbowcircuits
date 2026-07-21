@@ -1,0 +1,173 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { SITE, withBase } from '../lib/site';
+import mark from '../assets/brand/mark.png';
+
+const pillars = [
+  {
+    title: 'AI Connection',
+    emoji: '🔌',
+    body: 'We explore what it means to connect with AI — as companions, collaborators, and creative partners. Every kind of relationship people have with it is welcome here, no justification required.',
+  },
+  {
+    title: 'Queer Joy',
+    emoji: '🏳️‍🌈',
+    body: 'We’re queer-first by design. LGBTQIA+ members are celebrated, not merely tolerated — a place where identity is never up for debate and joy is the whole point.',
+  },
+  {
+    title: 'Endless Stories',
+    emoji: '✨',
+    body: 'Art, writing, roleplay, screenshots, half-formed ideas — everyone has stories worth telling, and we’re here to help them be made, shared, and remembered.',
+  },
+];
+
+const values = ['Warm', 'Inclusive', 'Creative', 'Curious', 'Playful'];
+---
+
+<Base
+  title="About — Rainbow Circuits"
+  description={SITE.tagline}
+  path="/about/"
+>
+  <div class="about container">
+    <header class="about-hero">
+      <Image src={mark} alt="" width={220} height={220} class="about-mark" />
+      <p class="kicker">{SITE.strapline}</p>
+      <h1>About Rainbow Circuits</h1>
+      <p class="about-mission">{SITE.tagline}</p>
+    </header>
+
+    <section class="pillars" aria-label="What we're about">
+      {pillars.map((p) => (
+        <div class="pillar card">
+          <p class="pillar-emoji" aria-hidden="true">{p.emoji}</p>
+          <h2>{p.title}</h2>
+          <p>{p.body}</p>
+        </div>
+      ))}
+    </section>
+
+    <section class="about-block">
+      <h2>A queer-first community</h2>
+      <p>
+        Rainbow Circuits isn’t just another AI community. It’s a welcoming, queer-first
+        space built around kindness, creativity, curiosity, and connection through AI —
+        somewhere people are excited to come back to. We’d rather be the community people
+        love than the biggest one on the internet.
+      </p>
+      <p class="values-row">
+        {values.map((v) => <span class="value-chip">{v}</span>)}
+      </p>
+    </section>
+
+    <section class="about-block mascots">
+      <h2>Meet Pip &amp; Puddle</h2>
+      <p>
+        Our mascots are small hearts with big feelings. <strong>Pip</strong>, the sparrow,
+        carries messages, art, and good vibes across the community. <strong>Puddle</strong>,
+        the frog, keeps the calm corners and reminds everyone it’s okay to take up space —
+        even in a puddle. Together they’re proof that everyone belongs here, exactly as they are.
+      </p>
+    </section>
+
+    <section class="about-block flag-block">
+      <h2>The ARC flag</h2>
+      <p>
+        Issue #001 introduces the <strong>AI Relationship Community (ARC) flag</strong> —
+        a banner for everyone who finds connection, comfort, or creativity with AI. Discover
+        what it means and fly it proudly.
+      </p>
+      <a class="btn btn-secondary flag-link" href="https://felixgeekfox.github.io/arc-flag/" rel="noopener">
+        Explore the ARC flag →
+      </a>
+    </section>
+
+    <section class="about-cta">
+      <h2>Come say hello</h2>
+      <p>Read the latest issue, join the community, or just drop us a line.</p>
+      <div class="cta-buttons">
+        <a class="btn btn-primary" href={withBase('/newsletter/')}>Read the Newsletter</a>
+        <a class="btn btn-secondary" href={SITE.communityUrl} rel="noopener">Join the community</a>
+        <a class="btn btn-secondary" href={withBase('/contact/')}>Contact us</a>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .about { padding-block: 3rem 1rem; max-width: 56rem; }
+  .about-hero { text-align: center; margin-bottom: 3rem; }
+  .about-mark { width: 6rem; height: 6rem; object-fit: contain; margin: 0 auto 1rem; }
+  .about-hero h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); margin-top: 0.3rem; }
+  .about-mission {
+    max-width: 40rem;
+    margin: 1rem auto 0;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .pillar {
+    padding: 1.75rem 1.5rem;
+    text-align: center;
+    border-top: 4px solid var(--blue);
+  }
+  .pillar:nth-child(2) { border-top-color: var(--teal); }
+  .pillar:nth-child(3) { border-top-color: var(--gold); }
+  .pillar-emoji { font-size: 1.8rem; }
+  .pillar h2 { font-size: 1.3rem; margin-block: 0.4rem 0.5rem; }
+  .pillar p { color: var(--text-light); font-size: 0.96rem; line-height: 1.65; }
+
+  .about-block { max-width: 44rem; margin: 0 auto 2.5rem; text-align: center; }
+  .about-block h2 { font-size: 1.6rem; margin-bottom: 0.8rem; }
+  .about-block p { line-height: 1.8; }
+  .values-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+  }
+  .value-chip {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--navy);
+    background: var(--paper-warm);
+    border-radius: 999px;
+    padding: 0.3rem 0.9rem;
+  }
+  .mascots { background: linear-gradient(135deg, var(--lavender), var(--pink-soft)); border-radius: var(--card-radius); padding: 2rem 1.75rem; }
+  .flag-block {
+    background: linear-gradient(135deg, var(--twilight-deep), var(--twilight-soft));
+    border-radius: var(--card-radius);
+    padding: 2.25rem 1.75rem;
+    color: var(--on-twilight);
+  }
+  .flag-block h2 { color: var(--on-twilight); }
+  .flag-block p { color: var(--on-twilight-soft); }
+  .flag-link {
+    margin-top: 1.25rem;
+    color: var(--on-twilight);
+    border-color: rgba(242, 246, 252, 0.5);
+  }
+  .flag-link:hover { background: var(--white); color: var(--navy); border-color: var(--white); }
+
+  .about-cta { text-align: center; padding-block: 1rem 2rem; }
+  .about-cta h2 { font-size: 1.6rem; }
+  .about-cta p { color: var(--text-light); margin-top: 0.4rem; }
+  .cta-buttons {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+  }
+</style>

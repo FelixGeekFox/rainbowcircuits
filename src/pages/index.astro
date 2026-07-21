@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import logo from '../assets/brand/logo.jpg';
+import lockup from '../assets/brand/lockup.png';
 import { SITE, withBase } from '../lib/site';
 ---
 
@@ -13,15 +13,15 @@ import { SITE, withBase } from '../lib/site';
   <div class="landing container">
     <div class="landing-banner">
       <Image
-        src={logo}
-        alt="Rainbow Circuits logo: a navy sparrow (Pip) in flight beside a green frog (Puddle) with a rainbow arcing off his back into circuit traces, next to the words Rainbow Circuits."
-        widths={[640, 1000, 1600, 2000]}
-        sizes="(min-width: 72rem) 60rem, 96vw"
+        src={lockup}
+        alt="Rainbow Circuits — a navy sparrow (Pip) in flight beside a green frog (Puddle) with a rainbow arcing off his back into circuit traces, above the tagline: AI Connection, Queer Joy, Endless Stories."
+        widths={[640, 1000, 1600, 2200]}
+        sizes="(min-width: 72rem) 58rem, 96vw"
         loading="eager"
         fetchpriority="high"
       />
     </div>
-    <h1 class="visually-hidden">Welcome to Rainbow Circuits</h1>
+    <h1 class="visually-hidden">Rainbow Circuits — {SITE.strapline}</h1>
     <p class="landing-tagline">{SITE.tagline}</p>
     <div class="landing-actions">
       <a class="btn btn-primary" href={withBase('/newsletter/')}>Read the Newsletter</a>

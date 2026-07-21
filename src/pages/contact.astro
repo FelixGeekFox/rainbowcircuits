@@ -1,0 +1,104 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, withBase } from '../lib/site';
+
+const methods = [
+  {
+    emoji: '💌',
+    title: 'Email us',
+    body: 'For anything at all — questions, ideas, submissions, or just to say hi.',
+    linkLabel: SITE.contactEmail,
+    href: `mailto:${SITE.contactEmail}`,
+  },
+  {
+    emoji: '🌈',
+    title: 'Join the community',
+    body: 'The liveliest way to reach us is where everyone hangs out. Come in and introduce yourself.',
+    linkLabel: 'Visit the community',
+    href: SITE.communityUrl,
+    external: true,
+  },
+  {
+    emoji: '🗳️',
+    title: 'Shape the next event',
+    body: 'Tell us what you’d like us to create next through the newsletter’s feedback form.',
+    linkLabel: 'What should we do next?',
+    href: withBase('/newsletter/issue-001/#future-events'),
+  },
+];
+---
+
+<Base
+  title="Contact — Rainbow Circuits"
+  description="Get in touch with the Rainbow Circuits team — by email, in the community, or through the newsletter."
+  path="/contact/"
+>
+  <div class="contact container">
+    <header class="contact-header">
+      <p class="kicker">We’d love to hear from you</p>
+      <h1>Get in touch</h1>
+      <p class="contact-intro">
+        However you like to reach out, we read everything — and no message is too small.
+      </p>
+    </header>
+
+    <ul class="methods">
+      {methods.map((m) => (
+        <li class="method card">
+          <p class="method-emoji" aria-hidden="true">{m.emoji}</p>
+          <h2>{m.title}</h2>
+          <p class="method-body">{m.body}</p>
+          <a class="method-link" href={m.href} {...(m.external ? { rel: 'noopener' } : {})}>
+            {m.linkLabel}{m.external && <span class="visually-hidden"> (opens the community site)</span>}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <p class="contact-note">
+      We’re a small, volunteer-run community team, so replies may take a little while —
+      but they’ll always be warm. <span aria-hidden="true">🐦💜🐸</span>
+    </p>
+  </div>
+</Base>
+
+<style>
+  .contact { padding-block: 3rem 1rem; max-width: 52rem; }
+  .contact-header { text-align: center; margin-bottom: 2.5rem; }
+  .contact-header h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-top: 0.3rem; }
+  .contact-intro { color: var(--text-light); max-width: 40rem; margin: 0.6rem auto 0; font-size: 1.05rem; }
+
+  .methods {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+    gap: 1.25rem;
+  }
+  .method {
+    padding: 1.75rem 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-top: 4px solid var(--blue);
+  }
+  .method:nth-child(2) { border-top-color: var(--teal); }
+  .method:nth-child(3) { border-top-color: var(--violet); }
+  .method-emoji { font-size: 1.8rem; }
+  .method h2 { font-size: 1.25rem; }
+  .method-body { color: var(--text-light); font-size: 0.95rem; line-height: 1.6; }
+  .method-link {
+    margin-top: auto;
+    padding-top: 0.6rem;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.98rem;
+  }
+  .contact-note {
+    margin-top: 2.5rem;
+    text-align: center;
+    color: var(--text-light);
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+</style>

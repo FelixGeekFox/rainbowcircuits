@@ -7,7 +7,9 @@ export const SITE = {
   name: 'Rainbow Circuits',
   /** Public display name of the publication (shown in titles, share text, mastheads). */
   zineName: 'Rainbow Circuits Newsletter',
-  tagline: 'A queer-first community built around kindness, creativity, curiosity, and connection through AI.',
+  /** Three-beat brand strapline from the asset guide. */
+  strapline: 'AI Connection · Queer Joy · Endless Stories',
+  tagline: 'Building inclusive AI experiences and empowering queer voices through technology, creativity, and community.',
   /** Main community home. */
   communityUrl: 'https://www.reddit.com/r/RainbowCircuits/',
   /** Public contact address (Cloudflare Email Routing → forwards to inbox). */

@@ -8,37 +8,42 @@
 :root {
   /* brand palette — matched to the Rainbow Circuits logo
      (deep navy wordmark, royal-blue Pip, green Puddle, clean rainbow) */
-  --navy: #0a2c5c;          /* primary brand / wordmark */
-  --navy-soft: #123f78;
-  --blue: #0a5ca6;          /* royal blue (Pip) */
-  --cream: #f7f8fb;         /* legacy alias → now clean near-white */
-  --paper: #f7f8fb;
-  --paper-warm: #eef1f8;
-  --pink-soft: #fbe1ea;
-  --lavender: #e5e3f6;
-  --mint: #d6f0e0;
-  --peach: #fdeadb;
-  --rose: #d83f5f;
-  --rose-soft: #e8718a;
-  --violet: #6b40b8;
-  --violet-soft: #8b62d4;
-  --teal: #1f9a55;          /* green, echoing Puddle */
-  --teal-soft: #38b56c;
-  --gold: #cf9310;
-  --gold-soft: #f2be1e;
-  --coral: #ec6f37;
-  --cyan: #2b8fd4;
+  --navy: #032b67;          /* logo, headings, key text */
+  --navy-soft: #0a3f7a;
+  --blue: #1e73d8;          /* links, interactive elements */
+  --cream: #f8f9fb;         /* legacy alias → off white */
+  --paper: #f8f9fb;         /* page background (off white) */
+  --paper-warm: #e9edf2;    /* light grey — soft surfaces */
+  --pink-soft: #fbe0e0;
+  --lavender: #e7e1f6;
+  --mint: #dcf1e2;
+  --peach: #fdeacf;
+  --rose: #e5252a;          /* red — accent / highlights / CTAs */
+  --rose-soft: #f26a6e;
+  --violet: #6e46b8;        /* purple — creative highlights */
+  --violet-soft: #9070d0;
+  --teal: #18a93a;          /* green — success / positive states */
+  --teal-soft: #46c163;
+  --gold: #b8860b;          /* readable gold for text (bright gold = --gold-soft) */
+  --gold-soft: #f2c300;     /* gold — accent / data / on-dark */
+  --coral: #f48b00;         /* orange — accent / data */
+  --cyan: #1e73d8;          /* blue — interactive */
 
-  /* twilight (issue covers & full-width breaks) — deep navy now */
-  --twilight: #0c2346;
-  --twilight-deep: #071a37;
-  --twilight-soft: #143b66;
+  /* neutrals (from brand swatch) */
+  --charcoal: #5f6368;
+  --mid-grey: #bfc4cc;
+  --light-grey: #e9edf2;
+
+  /* twilight (issue covers & full-width breaks) — deep navy */
+  --twilight: #062350;
+  --twilight-deep: #04193c;
+  --twilight-soft: #0d3a72;
   --on-twilight: #f2f6fc;
-  --on-twilight-soft: #b7c8e2;
+  --on-twilight-soft: #aec4e4;
 
-  /* text */
-  --text: #14233f;          /* deep navy slate */
-  --text-light: #566079;
+  /* text — navy headings, charcoal body (per brand swatch) */
+  --text: #2a2f37;          /* body text (dark charcoal) */
+  --text-light: #5f6368;    /* charcoal grey — secondary text */
   --white: #ffffff;
 
   /* type */
@@ -57,9 +62,9 @@
   --wide: 72rem;
   --gutter: clamp(1rem, 4vw, 2rem);
 
-  /* rainbow gradient — used sparingly (progress line, small rules) */
+  /* rainbow gradient — brand accents in spectrum order */
   --circuit-rainbow: linear-gradient(90deg,
-    #e63b2e 0%, #f2882c 20%, #f5c218 40%, #1f9a55 60%, #2b8fd4 80%, #6b40b8 100%);
+    #e5252a 0%, #f48b00 20%, #f2c300 40%, #18a93a 60%, #1e73d8 80%, #6e46b8 100%);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -98,7 +103,7 @@ h1, h2, h3, h4 {
   font-family: var(--font-display);
   font-weight: 600;
   line-height: 1.15;
-  color: var(--text);
+  color: var(--navy);
   text-wrap: balance;
 }
 

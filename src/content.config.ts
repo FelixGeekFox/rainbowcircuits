@@ -34,6 +34,10 @@ const issues = defineCollection({
     /** Cover art: key into the issue's asset map (see src/lib/images.ts). */
     coverImage: z.string(),
     coverImageAlt: z.string(),
+    /** True when the cover art already includes the masthead, title and
+     *  cover lines (a finished magazine cover) — the hero then shows the
+     *  image full rather than overlaying its own text. */
+    coverImageComplete: z.boolean().default(false),
     coverLines: z.array(z.string()).default([]),
     featuredArticles: z.array(z.string()).default([]),
     /** Ordered sections rendered on the issue page. */

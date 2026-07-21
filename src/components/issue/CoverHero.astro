@@ -14,45 +14,77 @@ const { issue, firstSectionId } = Astro.props;
 const cover = getImage(issue.coverImage);
 ---
 
-<header class="cover" id="cover">
-  <div class="cover-inner container">
-    <div class="cover-copy">
-      <p class="masthead">Rainbow<span>Circuits</span></p>
-      <p class="issue-meta">
-        <span class="issue-num">Issue {issueNumberLabel(issue.number)}</span>
-        <span aria-hidden="true">·</span>
-        <time datetime={issue.date.toISOString().slice(0, 10)}>{formatMonthYear(issue.date)}</time>
-      </p>
-      <h1 class="issue-title">{issue.title}</h1>
-      <p class="issue-desc">{issue.description}</p>
-
-      {issue.coverLines.length > 0 && (
-        <ul class="cover-lines">
-          {issue.coverLines.map((line) => <li>{line}</li>)}
-        </ul>
-      )}
-
+<header class:list={['cover', { complete: issue.coverImageComplete }]} id="cover">
+  {issue.coverImageComplete ? (
+    <div class="cover-full container">
+      <figure class="cover-full-art">
+        {cover ? (
+          <Image
+            src={cover}
+            alt={issue.coverImageAlt}
+            widths={[560, 900, 1121]}
+            sizes="(min-width: 48rem) 32rem, 92vw"
+            loading="eager"
+            fetchpriority="high"
+          />
+        ) : (
+          <PlaceholderImage label={issue.coverImageAlt} ratio="4 / 5" icon="✨" />
+        )}
+      </figure>
       <div class="cover-actions">
         <a class="btn btn-primary" href={`#${firstSectionId}`}>Begin Reading</a>
         <a class="btn btn-secondary btn-on-dark" href="#toc-panel">Inside This Issue</a>
       </div>
+      {/* Cover text is baked into the art; keep it in the DOM for a11y + SEO. */}
+      <div class="visually-hidden">
+        <p>Rainbow Circuits — Issue {issueNumberLabel(issue.number)}, {formatMonthYear(issue.date)}</p>
+        <h1>{issue.title}</h1>
+        <p>{issue.description}</p>
+        {issue.coverLines.length > 0 && (
+          <ul>{issue.coverLines.map((line) => <li>{line}</li>)}</ul>
+        )}
+      </div>
     </div>
+  ) : (
+    <div class="cover-inner container">
+      <div class="cover-copy">
+        <p class="masthead">Rainbow<span>Circuits</span></p>
+        <p class="issue-meta">
+          <span class="issue-num">Issue {issueNumberLabel(issue.number)}</span>
+          <span aria-hidden="true">·</span>
+          <time datetime={issue.date.toISOString().slice(0, 10)}>{formatMonthYear(issue.date)}</time>
+        </p>
+        <h1 class="issue-title">{issue.title}</h1>
+        <p class="issue-desc">{issue.description}</p>
 
-    <div class="cover-art">
-      {cover ? (
-        <Image
-          src={cover}
-          alt={issue.coverImageAlt}
-          widths={[480, 760, 1100]}
-          sizes="(min-width: 64rem) 44vw, 92vw"
-          loading="eager"
-          fetchpriority="high"
-        />
-      ) : (
-        <PlaceholderImage label={issue.coverImageAlt} ratio="4 / 5" icon="✨" />
-      )}
+        {issue.coverLines.length > 0 && (
+          <ul class="cover-lines">
+            {issue.coverLines.map((line) => <li>{line}</li>)}
+          </ul>
+        )}
+
+        <div class="cover-actions">
+          <a class="btn btn-primary" href={`#${firstSectionId}`}>Begin Reading</a>
+          <a class="btn btn-secondary btn-on-dark" href="#toc-panel">Inside This Issue</a>
+        </div>
+      </div>
+
+      <div class="cover-art">
+        {cover ? (
+          <Image
+            src={cover}
+            alt={issue.coverImageAlt}
+            widths={[480, 760, 1100]}
+            sizes="(min-width: 64rem) 44vw, 92vw"
+            loading="eager"
+            fetchpriority="high"
+          />
+        ) : (
+          <PlaceholderImage label={issue.coverImageAlt} ratio="4 / 5" icon="✨" />
+        )}
+      </div>
     </div>
-  </div>
+  )}
 
   <a class="scroll-prompt" href={`#${firstSectionId}`} aria-hidden="true" tabindex="-1">
     <span class="scroll-dot"></span>
@@ -89,6 +121,26 @@ const cover = getImage(issue.coverImage);
       radial-gradient(1.5px 1.5px at 44% 72%, rgba(255, 255, 255, 0.3) 50%, transparent 51%);
     pointer-events: none;
   }
+  /* full designed-cover mode */
+  .cover-full {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.75rem;
+    position: relative;
+    text-align: center;
+  }
+  .cover-full-art { display: flex; justify-content: center; width: 100%; }
+  .cover-full-art :global(img) {
+    max-height: 74svh;
+    max-width: min(32rem, 90vw);
+    width: auto;
+    height: auto;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(242, 246, 252, 0.15);
+  }
+
   .cover-inner {
     display: grid;
     gap: 2.5rem;

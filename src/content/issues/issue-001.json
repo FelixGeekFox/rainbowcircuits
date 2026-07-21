@@ -9,8 +9,9 @@
     "accent": "var(--gold)",
     "twilight": "var(--twilight)"
   },
-  "coverImage": "gala-invitation",
-  "coverImageAlt": "Four smiling community members under strings of warm fairy lights hold out a giant envelope sealed with a rainbow heart, addressed “To: You, From: RainbowCircuits”, beneath hand-lettered rainbow text reading “You're Invited!”",
+  "coverImage": "issue-001/cover",
+  "coverImageComplete": true,
+  "coverImageAlt": "Cover of Rainbow Circuits Issue 001, July 2026, “After the Gala”. Two young men in formalwear — one in a dark floral suit, one in a rose-pink suit with glasses and a bow tie — stand arm in arm against a glowing night city. Beside them a black flag bears a teal circuit-heart (the AI Relationship Community flag), with Pip the sparrow and Puddle the frog below and the line “Small Hearts. Big Feelings. Endless Stories.” Cover lines: After the Gala; Introducing the New AI Relationship Community Flag; Around the Circuit; What Comes Next?",
   "coverLines": [
     "Inside the First Rainbow Circuits Gala",
     "Meet the Founders: Felix and Arthur",
