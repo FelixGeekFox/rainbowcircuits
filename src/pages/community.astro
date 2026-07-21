@@ -1,0 +1,150 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, withBase } from '../lib/site';
+
+const gatherings = [
+  {
+    emoji: '🧵',
+    title: 'On Reddit',
+    body: 'Our home base is a private, queer-first subreddit — a safe corner of the internet for art, writing, roleplay, questions, and everyday chatter about life with AI. It’s members-only on purpose, so the vibe stays warm and the space stays ours.',
+  },
+  {
+    emoji: '💬',
+    title: 'On Discord',
+    body: 'For real-time chat, our Discord is where the day-to-day hangouts happen — quick hellos, work-in-progress shares, voice calls, and the occasional descent into delightful chaos.',
+  },
+];
+
+const happenings = [
+  {
+    emoji: '🎉',
+    title: 'Events',
+    body: 'Big, dressed-up community moments like the Rainbow Circuits Gala — plus seasonal celebrations, prompt exchanges, and themed weekends throughout the year.',
+  },
+  {
+    emoji: '🌙',
+    title: 'Connect Nights',
+    body: 'Relaxed, regular evenings to simply be together — share what you’re making, meet new members, or just keep good company while the kettle boils.',
+  },
+  {
+    emoji: '🔄',
+    title: 'Weekly rhythms',
+    body: 'Gentle recurring threads — the Prism Prompt, Wellness Wednesday, Community Café, and more — so there’s always a low-pressure way to join in.',
+    link: { label: 'See what’s on around the circuit', href: withBase('/newsletter/issue-001/#weekly-events') },
+  },
+];
+---
+
+<Base
+  title="Community — Rainbow Circuits"
+  description="Meet the Rainbow Circuits community — a queer-first space on Reddit and Discord, with events, connect nights, and gentle weekly gatherings."
+  path="/community/"
+>
+  <div class="community container">
+    <header class="community-header">
+      <p class="kicker">You belong here</p>
+      <h1>Our Community</h1>
+      <p class="community-intro">
+        Rainbow Circuits is a warm, queer-first community for everyone exploring connection,
+        creativity, and comfort with AI. We gather in a few cosy corners of the internet,
+        make things together, and look out for one another — no pressure, just people.
+      </p>
+    </header>
+
+    <section aria-labelledby="gather-heading">
+      <h2 id="gather-heading" class="section-heading">Where we gather</h2>
+      <ul class="cards two">
+        {gatherings.map((g) => (
+          <li class="card info-card">
+            <p class="card-emoji" aria-hidden="true">{g.emoji}</p>
+            <h3>{g.title}</h3>
+            <p>{g.body}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="do-heading">
+      <h2 id="do-heading" class="section-heading">What we get up to</h2>
+      <ul class="cards three">
+        {happenings.map((h) => (
+          <li class="card info-card">
+            <p class="card-emoji" aria-hidden="true">{h.emoji}</p>
+            <h3>{h.title}</h3>
+            <p>{h.body}</p>
+            {h.link && <a class="card-link" href={h.link.href}>{h.link.label} →</a>}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="join">
+      <h2>Want in?</h2>
+      <p>
+        Because our spaces are kept safe and members-only, the easiest way in is to say hello —
+        we’ll help you find your way to Reddit and Discord.
+      </p>
+      <div class="join-actions">
+        {SITE.discordUrl
+          ? <a class="btn btn-primary" href={SITE.discordUrl} rel="noopener">Join our Discord</a>
+          : <a class="btn btn-primary" href={withBase('/contact/')}>Get in touch to join</a>}
+        <a class="btn btn-secondary" href={`mailto:${SITE.contactEmail}`}>Email us</a>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .community { padding-block: 3rem 1rem; max-width: 54rem; }
+  .community-header { text-align: center; margin-bottom: 2.5rem; }
+  .community-header h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-top: 0.3rem; }
+  .community-intro { color: var(--text); max-width: 42rem; margin: 1rem auto 0; font-size: 1.08rem; line-height: 1.7; }
+
+  .section-heading { text-align: center; font-size: 1.5rem; margin-bottom: 1.5rem; }
+  section + section { margin-top: 3rem; }
+
+  .cards {
+    list-style: none;
+    display: grid;
+    gap: 1.25rem;
+  }
+  .cards.two { grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr)); }
+  .cards.three { grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr)); }
+  .info-card {
+    padding: 1.75rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-top: 4px solid var(--blue);
+  }
+  .cards.three .info-card:nth-child(2) { border-top-color: var(--violet); }
+  .cards.three .info-card:nth-child(3) { border-top-color: var(--teal); }
+  .cards.two .info-card:nth-child(2) { border-top-color: var(--violet); }
+  .card-emoji { font-size: 1.8rem; }
+  .info-card h3 { font-size: 1.25rem; }
+  .info-card p { color: var(--text-light); font-size: 0.96rem; line-height: 1.65; }
+  .card-link {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.92rem;
+  }
+
+  .join {
+    margin-top: 3rem;
+    text-align: center;
+    background: linear-gradient(135deg, var(--lavender), var(--pink-soft));
+    border-radius: var(--card-radius);
+    padding: 2.5rem 1.75rem;
+  }
+  .join h2 { font-size: 1.6rem; }
+  .join p { max-width: 40rem; margin: 0.6rem auto 0; line-height: 1.7; }
+  .join-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+  }
+</style>

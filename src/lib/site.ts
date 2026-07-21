@@ -10,8 +10,13 @@ export const SITE = {
   /** Three-beat brand strapline from the asset guide. */
   strapline: 'AI Connection · Queer Joy · Endless Stories',
   tagline: 'Building inclusive AI experiences and empowering queer voices through technology, creativity, and community.',
-  /** Main community home. */
+  /** Subreddit (private — named on the community page, not linked publicly). */
   communityUrl: 'https://www.reddit.com/r/RainbowCircuits/',
+  /**
+   * Discord invite. Leave empty until there's a shareable invite — the
+   * community page then invites people to get in touch for access instead.
+   */
+  discordUrl: '',
   /** Public contact address (Cloudflare Email Routing → forwards to inbox). */
   contactEmail: 'info@rainbowcircuits.org',
   /**

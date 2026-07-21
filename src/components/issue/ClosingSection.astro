@@ -30,7 +30,7 @@ const { kicker, title, data, issueTitle, issueUrl } = Astro.props;
   )}
 
   <div class="closing-links">
-    <a class="btn btn-primary" href={SITE.communityUrl} rel="noopener">Back to the community</a>
+    <a class="btn btn-primary" href={withBase('/community/')}>Back to the community</a>
     <a class="btn btn-secondary" href={withBase('/newsletter/issues/')}>Browse the archive</a>
   </div>
 
