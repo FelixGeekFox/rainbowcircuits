@@ -13,12 +13,11 @@ export const SITE = {
   /** Public contact address (Cloudflare Email Routing → forwards to inbox). */
   contactEmail: 'info@rainbowcircuits.org',
   /**
-   * Feedback form endpoint (e.g. a Formspree form URL like
-   * "https://formspree.io/f/XXXXXXXX"). Leave empty until configured —
-   * the form will explain how to reach us instead of silently dropping
-   * submissions. See README → "Connecting the feedback form".
+   * Feedback form endpoint (Formspree). Submissions email to
+   * SITE.contactEmail; see README → "Connecting the feedback form".
+   * Set to '' to disable (the form then points people to the community).
    */
-  formEndpoint: '',
+  formEndpoint: 'https://formspree.io/f/xvzerelk',
 } as const;
 
 /** Prefix an internal path with the deployment base path. */
