@@ -10,6 +10,8 @@ export const SITE = {
   tagline: 'A queer-first community built around kindness, creativity, curiosity, and connection through AI.',
   /** Main community home. */
   communityUrl: 'https://www.reddit.com/r/RainbowCircuits/',
+  /** Public contact address (Cloudflare Email Routing → forwards to inbox). */
+  contactEmail: 'info@rainbowcircuits.org',
   /**
    * Feedback form endpoint (e.g. a Formspree form URL like
    * "https://formspree.io/f/XXXXXXXX"). Leave empty until configured —

@@ -14,6 +14,9 @@ const year = new Date().getFullYear();
       <li><a href={withBase('/newsletter/issues/')}>Issue archive</a></li>
       <li><a href={SITE.communityUrl} rel="noopener">Back to the community</a></li>
     </ul>
+    <p class="footer-contact">
+      Get in touch: <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>
+    </p>
     <p class="footer-copy">© {year} Rainbow Circuits. Made with kindness, glitter, and a small amount of harmless chaos.</p>
   </div>
 </footer>
@@ -41,5 +44,12 @@ const year = new Date().getFullYear();
     font-weight: 600;
     font-size: 0.95rem;
   }
+  .footer-contact {
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+  }
+  .footer-contact a { font-weight: 600; }
   .footer-copy { font-size: 0.85rem; color: var(--text-light); }
 </style>
