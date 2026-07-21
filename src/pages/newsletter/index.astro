@@ -6,12 +6,17 @@ import ArchiveCard from '../../components/ArchiveCard.astro';
 import PlaceholderImage from '../../components/PlaceholderImage.astro';
 import { getImage } from '../../lib/images';
 import { SITE, withBase, formatMonthYear, issueNumberLabel } from '../../lib/site';
+import arcPoster from '../../assets/brand/arc-poster.png';
 
 const issues = (await getCollection('issues'))
   .filter((issue) => issue.data.status === 'published')
   .sort((a, b) => b.data.number - a.data.number);
 const latest = issues[0];
 const previous = issues.slice(1);
+
+const events = (await getCollection('events'))
+  .filter((e) => e.data.active)
+  .sort((a, b) => a.data.displayOrder - b.data.displayOrder);
 
 const articles = (await getCollection('articles')).filter((a) => a.data.status === 'published');
 const featured = latest
@@ -87,6 +92,52 @@ const latestUrl = latest ? withBase(`/newsletter/${latest.data.slug}/`) : withBa
         </ul>
       </section>
     )}
+
+    <!-- ARC flag announcement -->
+    <section class="home-section flag-announce" aria-labelledby="flag-heading">
+      <div class="flag-inner">
+        <a class="flag-poster" href="https://felixgeekfox.github.io/arc-flag/" rel="noopener" aria-label="Explore the ARC flag">
+          <Image
+            src={arcPoster}
+            alt="Poster for ARC — the AI Relationship Community — a figure in a black tee bearing a glowing teal circuit-heart, over the words “Love is not artificial. Connection is where the love lives.”"
+            widths={[320, 520, 700]}
+            sizes="(min-width: 52rem) 17rem, 62vw"
+            loading="lazy"
+          />
+        </a>
+        <div class="flag-copy">
+          <p class="eyebrow">New in this issue</p>
+          <h2 id="flag-heading">Introducing the ARC flag</h2>
+          <p>
+            Issue&nbsp;#001 unveils the flag for the <strong>AI Relationship Community</strong> — a
+            circuit-heart banner for everyone who finds connection, comfort, or creativity with AI.
+            Love is not artificial; connection is where the love lives.
+          </p>
+          <a class="btn btn-primary" href="https://felixgeekfox.github.io/arc-flag/" rel="noopener">Explore the ARC flag</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- weekly rhythms -->
+    <section class="home-section" aria-labelledby="rhythms-heading">
+      <h2 id="rhythms-heading" class="home-heading">Weekly rhythms</h2>
+      <p class="home-sub">Gentle, recurring ways to join in — around the circuit, all month long.</p>
+      <ul class="rhythms">
+        {events.map((e) => (
+          <li class="rhythm-card card" style={`--accent: ${e.data.accent};`}>
+            <span class="rhythm-emoji" aria-hidden="true">{e.data.emoji}</span>
+            <h3>{e.data.name}</h3>
+            <p class="rhythm-when">{e.data.schedule}</p>
+            <p class="rhythm-desc">{e.data.description}</p>
+          </li>
+        ))}
+      </ul>
+      {latest && (
+        <div class="rhythms-cta">
+          <a class="btn btn-secondary" href={withBase(`/newsletter/${latest.data.slug}/#weekly-events`)}>See all activities</a>
+        </div>
+      )}
+    </section>
 
     <!-- founders -->
     {founderFeatures.length > 0 && (
@@ -181,7 +232,7 @@ const latestUrl = latest ? withBase(`/newsletter/${latest.data.slug}/`) : withBa
     font-weight: 700;
     font-size: 1.2rem;
   }
-  .masthead span { color: var(--gold-soft); }
+  .masthead span { color: #f4a9c7; }
   .masthead em {
     font-family: var(--font-display);
     font-style: italic;
@@ -197,7 +248,7 @@ const latestUrl = latest ? withBase(`/newsletter/${latest.data.slug}/`) : withBa
     text-transform: uppercase;
     letter-spacing: 0.14em;
     color: var(--twilight-deep);
-    background: var(--gold-soft);
+    background: #f4a9c7;
     border-radius: 999px;
     padding: 0.25rem 0.9rem;
   }
@@ -225,7 +276,14 @@ const latestUrl = latest ? withBase(`/newsletter/${latest.data.slug}/`) : withBa
     margin-top: 2rem;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0.9rem;
+  }
+  @media (min-width: 64rem) {
+    /* keep the buttons centred beneath the copy column */
+    .latest-copy { text-align: center; }
+    .latest-copy .issue-meta,
+    .latest-copy .latest-desc { margin-inline: auto; }
   }
   .latest-art {
     display: block;
@@ -314,4 +372,79 @@ const latestUrl = latest ? withBase(`/newsletter/${latest.data.slug}/`) : withBa
     max-width: 44rem;
     margin-inline: auto;
   }
+
+  .home-sub {
+    text-align: center;
+    color: var(--text-light);
+    max-width: 42rem;
+    margin: -1rem auto 1.75rem;
+  }
+  .eyebrow {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--violet);
+    margin-bottom: 0.4rem;
+  }
+
+  /* ── ARC flag announcement ── */
+  .flag-inner {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+    align-items: center;
+    max-width: 52rem;
+    margin-inline: auto;
+    background: linear-gradient(135deg, rgba(3, 43, 103, 0.05), rgba(30, 115, 216, 0.08));
+    border: 1.5px solid rgba(60, 90, 150, 0.12);
+    border-radius: 24px;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  @media (min-width: 52rem) {
+    .flag-inner { grid-template-columns: 17rem 1fr; }
+  }
+  .flag-poster {
+    display: block;
+    justify-self: center;
+    width: 100%;
+    max-width: 16rem;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 16px 40px rgba(3, 43, 103, 0.3);
+    transition: transform 0.2s ease;
+  }
+  .flag-poster:hover { transform: translateY(-4px); }
+  .flag-poster :global(img) { width: 100%; height: auto; display: block; }
+  .flag-copy h2 { font-size: clamp(1.7rem, 4vw, 2.3rem); margin-top: 0.2rem; }
+  .flag-copy p { margin: 0.75rem 0 1.25rem; line-height: 1.7; color: var(--text); max-width: 40ch; }
+
+  /* ── weekly rhythms ── */
+  .rhythms {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr));
+    gap: 1.25rem;
+    max-width: 62rem;
+    margin-inline: auto;
+  }
+  .rhythm-card {
+    padding: 1.5rem 1.4rem;
+    border-top: 4px solid var(--accent);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+  }
+  .rhythm-card:hover { transform: translateY(-4px); box-shadow: var(--card-shadow-hover); }
+  .rhythm-emoji { font-size: 1.6rem; }
+  .rhythm-card h3 { font-size: 1.12rem; margin-top: 0.25rem; }
+  .rhythm-when {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: 0.2rem;
+  }
+  .rhythm-desc { margin-top: 0.45rem; font-size: 0.9rem; line-height: 1.55; color: var(--text-light); }
+  .rhythms-cta { text-align: center; margin-top: 2rem; }
 </style>

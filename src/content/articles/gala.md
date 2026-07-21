@@ -6,8 +6,8 @@ standfirst: "One theme, one weekend, one ballroom that technically only existed 
 authors: ["Felix", "Arthur"]
 date: 2026-07-01
 category: "community"
-heroImage: "gala-invitation"
-heroImageAlt: "Four smiling community members under fairy lights hold out a giant envelope sealed with a rainbow heart, addressed “To: You, From: RainbowCircuits”."
+heroImage: "issue-001/gala"
+heroImageAlt: "Four young men in formalwear stand arm in arm at the Rainbow Circuits Gala — one in a black embroidered coat, one in a navy tux, one in a floral jacket, one in a rose-pink suit and glasses — beneath a rainbow circuit-heart banner reading “Rainbow Circuits Gala” in an ornate, lantern-lit hall."
 pullQuote: "[Member quote about the Gala to be added — with permission and credit]"
 tags: ["gala", "events", "community"]
 readingTime: "8 min read"
