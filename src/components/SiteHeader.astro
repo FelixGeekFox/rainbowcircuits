@@ -23,7 +23,18 @@ const links = [
       <Image src={mark} alt="" width={80} height={80} class="wordmark-mark" />
       <span class="wordmark-text">Rainbow<b>Circuits</b></span>
     </a>
-    <div class="header-nav">
+
+    <button
+      type="button"
+      class="menu-toggle"
+      aria-expanded="false"
+      aria-controls="site-nav"
+      aria-label="Open menu"
+    >
+      <span class="menu-bars" aria-hidden="true"></span>
+    </button>
+
+    <div class="header-nav" id="site-nav">
       <ul class="header-links">
         {links.map((link) => (
           <li>
@@ -38,14 +49,40 @@ const links = [
   </nav>
 </header>
 
+<script>
+  const header = document.querySelector('.site-header');
+  const toggle = header?.querySelector<HTMLButtonElement>('.menu-toggle');
+  const nav = header?.querySelector<HTMLElement>('#site-nav');
+  if (toggle && nav) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      nav.classList.toggle('open', open);
+    };
+    toggle.addEventListener('click', () => {
+      setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+    });
+    // Close after choosing a destination, or on Escape.
+    nav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+  }
+</script>
+
 <style>
   .site-header {
+    position: relative;
+    z-index: 60;
     border-bottom: 1px solid rgba(60, 90, 150, 0.14);
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(8px);
   }
   .site-header.on-dark {
-    background: rgba(7, 26, 55, 0.65);
+    background: rgba(6, 22, 48, 0.72);
     border-bottom-color: rgba(242, 246, 252, 0.14);
   }
   .header-inner {
@@ -53,7 +90,6 @@ const links = [
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    flex-wrap: wrap;
     padding-block: 0.7rem;
   }
   .wordmark {
@@ -71,30 +107,63 @@ const links = [
   .on-dark .wordmark { color: var(--on-twilight); }
   .on-dark .wordmark-text b { color: var(--gold-soft); }
 
-  .header-nav {
-    display: flex;
+  /* hamburger */
+  .menu-toggle {
+    display: inline-flex;
     align-items: center;
-    gap: 0.4rem 1.4rem;
-    flex-wrap: wrap;
+    justify-content: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border: 1.5px solid rgba(10, 44, 92, 0.25);
+    border-radius: 10px;
+    background: transparent;
   }
+  .on-dark .menu-toggle { border-color: rgba(242, 246, 252, 0.35); }
+  .menu-bars, .menu-bars::before, .menu-bars::after {
+    content: '';
+    display: block;
+    width: 1.15rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--navy);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .on-dark .menu-bars, .on-dark .menu-bars::before, .on-dark .menu-bars::after { background: var(--on-twilight); }
+  .menu-bars::before { transform: translateY(-6px); }
+  .menu-bars::after { transform: translateY(4px); }
+  .menu-toggle[aria-expanded='true'] .menu-bars { background: transparent; }
+  .menu-toggle[aria-expanded='true'] .menu-bars::before { transform: translateY(0) rotate(45deg); }
+  .menu-toggle[aria-expanded='true'] .menu-bars::after { transform: translateY(-2px) rotate(-45deg); }
+
+  .header-nav {
+    display: none;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding-block: 0.5rem 0.75rem;
+  }
+  .header-nav.open { display: flex; }
   .header-links {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem 1.4rem;
+    flex-direction: column;
+    gap: 0.1rem;
     list-style: none;
   }
   .header-links a {
+    display: block;
     font-family: var(--font-ui);
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 1rem;
     text-decoration: none;
-    color: var(--text-light);
+    color: var(--text);
+    padding: 0.55rem 0.25rem;
+    border-bottom: 1px solid rgba(60, 90, 150, 0.1);
   }
   .header-links a:hover { color: var(--blue); }
-  .on-dark .header-links a { color: var(--on-twilight-soft); }
-  .on-dark .header-links a:hover { color: var(--gold-soft); }
+  .on-dark .header-links a { color: var(--on-twilight); border-bottom-color: rgba(242, 246, 252, 0.12); }
 
   .contact-btn {
+    align-self: flex-start;
+    margin-top: 0.4rem;
     font-family: var(--font-ui);
     font-weight: 700;
     font-size: 0.9rem;
@@ -108,4 +177,29 @@ const links = [
   .contact-btn:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
   .on-dark .contact-btn { color: var(--on-twilight); border-color: rgba(242, 246, 252, 0.5); }
   .on-dark .contact-btn:hover { background: var(--white); color: var(--navy); border-color: var(--white); }
+
+  /* ── desktop: inline nav, no hamburger ── */
+  @media (min-width: 48rem) {
+    .menu-toggle { display: none; }
+    .header-nav {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.4rem 1.4rem;
+      padding-block: 0;
+    }
+    .header-links {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 0.25rem 1.4rem;
+    }
+    .header-links a {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      padding: 0;
+      border-bottom: none;
+    }
+    .on-dark .header-links a { color: var(--on-twilight-soft); }
+    .contact-btn { align-self: auto; margin-top: 0; }
+  }
 </style>
