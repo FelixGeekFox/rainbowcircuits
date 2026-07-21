@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { SITE, withBase } from '../lib/site';
-import mark from '../assets/brand/mark.png';
+import heart from '../assets/brand/heart.png';
 const year = new Date().getFullYear();
 
 const links = [
@@ -18,7 +18,7 @@ const links = [
   <div class="container footer-inner">
     <div class="footer-brand">
       <a class="footer-mark" href={withBase('/')} aria-label="Rainbow Circuits home">
-        <Image src={mark} alt="" width={72} height={72} />
+        <Image src={heart} alt="" width={72} height={72} />
       </a>
       <p class="footer-tagline">{SITE.strapline}</p>
     </div>
@@ -47,11 +47,11 @@ const links = [
   }
   .footer-inner {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem 1.5rem;
-    padding-block: 1.75rem 1rem;
+    text-align: center;
+    gap: 0.9rem;
+    padding-block: 2rem 1rem;
   }
   .footer-brand { display: flex; align-items: center; gap: 0.7rem; }
   .footer-mark { display: inline-flex; }
@@ -66,6 +66,7 @@ const links = [
   .footer-nav ul {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 0.4rem 1.2rem;
     list-style: none;
   }

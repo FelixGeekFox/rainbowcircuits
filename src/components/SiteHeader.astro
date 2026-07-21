@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { SITE, withBase } from '../lib/site';
-import mark from '../assets/brand/mark.png';
+import heart from '../assets/brand/heart.png';
 
 interface Props {
   /** Render on a twilight background (issue covers). */
@@ -21,7 +21,7 @@ const links = [
 <header class:list={['site-header', { 'on-dark': onDark }]}>
   <nav class="container header-inner" aria-label="Rainbow Circuits">
     <a class="wordmark" href={withBase('/')}>
-      <Image src={mark} alt="" width={80} height={80} class="wordmark-mark" />
+      <Image src={heart} alt="" width={80} height={80} class="wordmark-mark" />
       <span class="wordmark-text">Rainbow<b>Circuits</b></span>
     </a>
 
