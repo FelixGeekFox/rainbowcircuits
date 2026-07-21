@@ -1,62 +1,92 @@
 ---
+import { Image } from 'astro:assets';
 import { SITE, withBase } from '../lib/site';
+import mark from '../assets/brand/mark.png';
 const year = new Date().getFullYear();
+
+const links = [
+  { href: withBase('/newsletter/'), label: 'Newsletter' },
+  { href: withBase('/newsletter/issues/'), label: 'All issues' },
+  { href: withBase('/resources/'), label: 'Support' },
+  { href: withBase('/community/'), label: 'Community' },
+  { href: withBase('/about/'), label: 'About' },
+  { href: withBase('/contact/'), label: 'Contact' },
+];
 ---
 
 <footer class="site-footer">
   <div class="container footer-inner">
-    <p class="footer-mascots" aria-hidden="true">🐦 💜 🐸</p>
-    <p class="footer-line">{SITE.strapline}</p>
-    <ul class="footer-links">
-      <li><a href={withBase('/newsletter/')}>Newsletter</a></li>
-      <li><a href={withBase('/newsletter/issues/')}>All issues</a></li>
-      <li><a href={withBase('/resources/')}>Support</a></li>
-      <li><a href={withBase('/about/')}>About</a></li>
-      <li><a href={withBase('/contact/')}>Contact</a></li>
-      <li><a href={withBase('/community/')}>Community</a></li>
-    </ul>
+    <div class="footer-brand">
+      <a class="footer-mark" href={withBase('/')} aria-label="Rainbow Circuits home">
+        <Image src={mark} alt="" width={72} height={72} />
+      </a>
+      <p class="footer-tagline">{SITE.strapline}</p>
+    </div>
+
+    <nav class="footer-nav" aria-label="Footer">
+      <ul>
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+
     <p class="footer-contact">
-      Get in touch: <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>
+      <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>
     </p>
-    <p class="footer-copy">© {year} Rainbow Circuits. Made with kindness, glitter, and a small amount of harmless chaos.</p>
   </div>
+  <p class="footer-copy">© {year} Rainbow Circuits · Made with kindness, glitter, and a little harmless chaos.</p>
 </footer>
 
 <style>
   .site-footer {
     margin-top: 4rem;
     border-top: 1px solid rgba(60, 90, 150, 0.14);
-    background: linear-gradient(180deg, transparent, rgba(10, 44, 92, 0.06));
-    text-align: center;
-    padding-block: 2.5rem 2rem;
+    background:
+      radial-gradient(ellipse 60% 100% at 15% 0%, rgba(110, 70, 184, 0.06), transparent 60%),
+      radial-gradient(ellipse 50% 100% at 88% 0%, rgba(30, 115, 216, 0.06), transparent 60%),
+      linear-gradient(180deg, transparent, rgba(3, 43, 103, 0.05));
   }
-  .footer-mascots { font-size: 1.3rem; margin-bottom: 0.5rem; }
-  .footer-line {
-    font-family: var(--font-ui);
-    font-weight: 600;
-    font-size: 0.95rem;
-    letter-spacing: 0.02em;
-    color: var(--navy);
-  }
-  .footer-links {
+  .footer-inner {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
     flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
-    list-style: none;
-    margin-block: 1rem;
+    gap: 1rem 1.5rem;
+    padding-block: 1.75rem 1rem;
   }
-  .footer-links a {
+  .footer-brand { display: flex; align-items: center; gap: 0.7rem; }
+  .footer-mark { display: inline-flex; }
+  .footer-mark :global(img) { width: 2.4rem; height: 2.4rem; object-fit: contain; }
+  .footer-tagline {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--navy);
+    max-width: 16rem;
+  }
+  .footer-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.2rem;
+    list-style: none;
+  }
+  .footer-nav a {
     font-family: var(--font-ui);
     font-weight: 600;
-    font-size: 0.95rem;
-  }
-  .footer-contact {
-    font-family: var(--font-ui);
     font-size: 0.9rem;
     color: var(--text-light);
-    margin-bottom: 1rem;
+    text-decoration: none;
   }
-  .footer-contact a { font-weight: 600; }
-  .footer-copy { font-size: 0.85rem; color: var(--text-light); }
+  .footer-nav a:hover { color: var(--blue); }
+  .footer-contact a {
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .footer-copy {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-light);
+    padding: 0.5rem var(--gutter) 1.5rem;
+    border-top: 1px solid rgba(60, 90, 150, 0.08);
+  }
 </style>
