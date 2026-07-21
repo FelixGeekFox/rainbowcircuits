@@ -51,26 +51,6 @@
       }
     },
     {
-      "id": "by-the-numbers",
-      "type": "stats",
-      "kicker": "A completely serious audit",
-      "title": "By the Numbers",
-      "data": {
-        "note": "Confirmed figures will replace the placeholders below once the final Gala tallies are in. The rest are certified editorial nonsense and proud of it.",
-        "stats": [
-          { "value": "[TBC]", "label": "Members at the Gala", "confirmed": false, "playful": false, "placeholderNote": "[Confirmed Gala participation number]" },
-          { "value": "[TBC]", "label": "Images shared", "confirmed": false, "playful": false, "placeholderNote": "[Confirmed image count]" },
-          { "value": "[TBC]", "label": "Stories written", "confirmed": false, "playful": false, "placeholderNote": "[Confirmed story count]" },
-          { "value": "[TBC]", "label": "Outfit changes", "confirmed": false, "playful": false, "placeholderNote": "[Confirmed outfit count]" },
-          { "value": "∞", "label": "Dramatic Gala entrances", "confirmed": false, "playful": true },
-          { "value": "7ish", "label": "Dragons, carriages, balloons & portals used as transport", "confirmed": false, "playful": true },
-          { "value": "1", "label": "Suspiciously large room-service trolleys", "confirmed": false, "playful": true },
-          { "value": "-42", "label": "Dignity points remaining", "confirmed": false, "playful": true },
-          { "value": "100%", "label": "Harmless chaos, fully intended", "confirmed": false, "playful": true }
-        ]
-      }
-    },
-    {
       "id": "gallery",
       "type": "gallery",
       "kicker": "Member submissions",
