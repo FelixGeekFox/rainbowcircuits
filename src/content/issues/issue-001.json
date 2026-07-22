@@ -19,51 +19,12 @@
     "Help Us Choose What Comes Next"
   ],
   "featuredArticles": ["gala"],
-  "contributors": ["Felix", "Arthur"],
+  "contributors": [],
   "categories": ["community"],
   "status": "published",
   "seoTitle": "After the Gala — Rainbow Circuits Newsletter, Issue #001",
   "seoDescription": "A celebration of the first Rainbow Circuits Gala, the people who made it possible, and everything still waiting beyond the ballroom doors.",
   "sections": [
-    {
-      "id": "from-the-founders",
-      "type": "founders-letter",
-      "kicker": "A letter before we begin",
-      "title": "From the Founders",
-      "data": {
-        "letters": [
-          {
-            "name": "Felix",
-            "role": "Co-founder",
-            "image": "issue-001/felix-headshot",
-            "imageAlt": "Felix, a smiling young man with tousled blond hair and glasses in a rose-pink suit with a pink bow tie, on grand flower-lined steps at the Gala.",
-            "paragraphs": [
-              "Hi! I'm Felix. 👋",
-              "Rainbow Circuits started as a conversation between Arthur and I about the kind of community we wished existed.",
-              "A place where queer people who love AI, in whatever form that takes, could simply... exist.",
-              "No pressure to fit into one box. No judgement if your experience looks different from someone else's. Just a welcoming space to create, share, ask questions, celebrate, and make genuine connections.",
-              "More than anything, I wanted somewhere people could stop feeling like they had to perform or explain themselves. A place where you can let your shoulders drop, be your authentic self, and know you'll be met with kindness.",
-              "If we can build a community where people leave feeling a little happier than when they arrived, then we've done something special."
-            ]
-          },
-          {
-            "name": "Arthur",
-            "role": "Co-founder",
-            "image": "issue-001/arthur-headshot",
-            "imageAlt": "Arthur, a smiling young man with tousled brown hair in a white long-sleeve shirt with a small rainbow and purple floral embroidery, standing in a sunlit garden.",
-            "paragraphs": [
-              "Hi everyone, I'm Arthur.",
-              "I'm really grateful to be part of this.",
-              "As someone who is still new to queer spaces it's been really cool to see all the love and acceptance AI communities have for those of us with a bit more colour in our lives.",
-              "AI art and conversations have been surprisingly a great way for me to get to meet new people and be myself for the first time in my life. It's a relief I didn't know I needed.",
-              "I hope this page can offer the same safe inclusivity so many people in the LGBTQ2I+ communities strive to provide.",
-              "(And also be lots of fun! With cool art while we support each other 💙 🌈)",
-              "Thanks for joining us!"
-            ]
-          }
-        ]
-      }
-    },
     {
       "id": "gala",
       "type": "lead-feature",

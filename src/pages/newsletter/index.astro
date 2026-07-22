@@ -24,7 +24,6 @@ const featured = latest
       .map((slug) => articles.find((a) => a.data.slug === slug && a.data.issue === latest.data.slug))
       .filter((a) => a !== undefined)
   : [];
-const founderFeatures = featured.filter((a) => a.data.category === 'member-features');
 const storyFeatures = featured.filter((a) => a.data.category !== 'member-features');
 const latestCover = latest ? getImage(latest.data.coverImage) : undefined;
 const latestUrl = latest ? withBase(`/newsletter/${latest.data.slug}/`) : withBase('/newsletter/issues/');
@@ -146,26 +145,6 @@ const latestUrl = latest ? withBase(`/newsletter/${latest.data.slug}/`) : withBa
       )}
     </section>
 
-    <!-- founders -->
-    {founderFeatures.length > 0 && (
-      <section class="home-section" aria-labelledby="founders-heading">
-        <h2 id="founders-heading" class="home-heading">Meet the founders</h2>
-        <ul class="founder-grid">
-          {founderFeatures.map((article, i) => (
-            <li class="founder-card card" style={`--fc-accent: ${i % 2 === 0 ? 'var(--rose)' : 'var(--teal)'};`}>
-              <div class="founder-portrait">
-                <PlaceholderImage label={article.data.heroImageAlt ?? 'Portrait to be added'} ratio="1 / 1" icon="💫" />
-              </div>
-              <h3>{article.data.title}</h3>
-              <p>{article.data.standfirst}</p>
-              <a class="founder-link" href={withBase(`/newsletter/${article.data.issue}/${article.data.slug}/`)}>
-                Read the profile →
-              </a>
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
 
     <!-- gallery + feedback teasers -->
     {latest && (
@@ -315,37 +294,6 @@ const latestUrl = latest ? withBase(`/newsletter/${latest.data.slug}/`) : withBa
     gap: 1.5rem;
     max-width: 46rem;
     margin-inline: auto;
-  }
-  .founder-grid {
-    list-style: none;
-    display: grid;
-    gap: 1.5rem;
-    max-width: 52rem;
-    margin-inline: auto;
-  }
-  @media (min-width: 40rem) {
-    .founder-grid { grid-template-columns: 1fr 1fr; }
-  }
-  .founder-card {
-    padding: 1.75rem;
-    text-align: center;
-    border-top: 5px solid var(--fc-accent);
-  }
-  .founder-portrait {
-    width: min(9rem, 50vw);
-    margin: 0 auto 1.25rem;
-    border-radius: 999px;
-    overflow: hidden;
-  }
-  .founder-portrait :global(.placeholder-frame) { border-radius: 999px; }
-  .founder-card h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
-  .founder-card p { font-size: 0.95rem; color: var(--text-light); }
-  .founder-link {
-    display: inline-block;
-    margin-top: 1rem;
-    font-family: var(--font-ui);
-    font-weight: 700;
-    font-size: 0.95rem;
   }
   .teaser-grid {
     display: grid;

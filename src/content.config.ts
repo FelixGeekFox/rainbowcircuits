@@ -45,13 +45,11 @@ const issues = defineCollection({
       z.object({
         id: z.string(),
         type: z.enum([
-          'founders-letter',
           'lead-feature',
           'flag-announcement',
           'stats',
           'gallery',
           'events',
-          'founder-profile',
           'feedback',
           'mascot-corner',
           'closing',

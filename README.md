@@ -18,7 +18,7 @@ npm run build     # production build into dist/
 | What | Where |
 | --- | --- |
 | Issue metadata & section order | `src/content/issues/issue-001.json` |
-| Feature articles (Gala, Felix, Arthur) | `src/content/articles/*.md` |
+| Feature articles (e.g. the Gala) | `src/content/articles/*.{md,mdx}` |
 | Recurring events (Prism Prompt, café…) | `src/content/events/*.json` |
 | Special event weekends (the Gala) | `src/content/specials/*.json` |
 | Gala gallery submissions | `src/content/gallery/issue-001.json` |
@@ -34,8 +34,8 @@ piece out of the build, `"published"` to ship it.
 
 **Issues** are JSON. The `sections` array controls what appears on the issue
 page and in what order; each section has a `type` that maps to a component
-(`founders-letter`, `lead-feature`, `stats`, `gallery`, `events`,
-`founder-profile`, `feedback`, `mascot-corner`, `closing`).
+(`lead-feature`, `flag-announcement`, `stats`, `gallery`, `events`,
+`feedback`, `mascot-corner`, `closing`).
 
 **Adding Issue Two**: copy `issue-001.json` → `issue-002.json`, bump
 `number`/`slug`/`date`, write its articles and gallery file. The homepage,

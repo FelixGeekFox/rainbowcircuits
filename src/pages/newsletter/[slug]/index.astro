@@ -6,13 +6,11 @@ import IssueToc from '../../../components/IssueToc.astro';
 import ArchiveCard from '../../../components/ArchiveCard.astro';
 import SiteHeader from '../../../components/SiteHeader.astro';
 import CoverHero from '../../../components/issue/CoverHero.astro';
-import FoundersLetter from '../../../components/issue/FoundersLetter.astro';
 import LeadFeature from '../../../components/issue/LeadFeature.astro';
 import FlagSection from '../../../components/issue/FlagSection.astro';
 import StatsSection from '../../../components/issue/StatsSection.astro';
 import GallerySection from '../../../components/issue/GallerySection.astro';
 import EventsSection from '../../../components/issue/EventsSection.astro';
-import FounderProfileSection from '../../../components/issue/FounderProfileSection.astro';
 import FeedbackSection from '../../../components/issue/FeedbackSection.astro';
 import MascotCorner from '../../../components/issue/MascotCorner.astro';
 import ClosingSection from '../../../components/issue/ClosingSection.astro';
@@ -116,9 +114,6 @@ const structuredData = issue
                 data-section-heading-id={section.id}
               >
                 <span id={`${section.id}-heading`} class="visually-hidden">{section.title}</span>
-                {section.type === 'founders-letter' && (
-                  <FoundersLetter kicker={section.kicker} title={section.title} data={section.data} />
-                )}
                 {section.type === 'lead-feature' && (
                   <LeadFeature kicker={section.kicker} title={section.title} data={section.data} issueSlug={issue.data.slug} />
                 )}
@@ -133,9 +128,6 @@ const structuredData = issue
                 )}
                 {section.type === 'events' && (
                   <EventsSection kicker={section.kicker} title={section.title} data={section.data} />
-                )}
-                {section.type === 'founder-profile' && (
-                  <FounderProfileSection kicker={section.kicker} title={section.title} data={section.data} issueSlug={issue.data.slug} />
                 )}
                 {section.type === 'feedback' && (
                   <FeedbackSection kicker={section.kicker} title={section.title} data={section.data} />
