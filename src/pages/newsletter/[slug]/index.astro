@@ -3,7 +3,6 @@ import { getCollection } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import ProgressBar from '../../../components/ProgressBar.astro';
 import IssueToc from '../../../components/IssueToc.astro';
-import ShareRow from '../../../components/ShareRow.astro';
 import ArchiveCard from '../../../components/ArchiveCard.astro';
 import SiteHeader from '../../../components/SiteHeader.astro';
 import CoverHero from '../../../components/issue/CoverHero.astro';
@@ -153,13 +152,6 @@ const structuredData = issue
                     issueUrl={issueUrl}
                   />
                 )}
-                <div class="section-share">
-                  <ShareRow
-                    url={`${issueUrl}#${section.id}`}
-                    title={`${section.title} — ${issue.data.title}`}
-                    label="Share this section"
-                  />
-                </div>
               </section>
             ))}
 
@@ -240,12 +232,6 @@ const structuredData = issue
   .issue-section + .issue-section {
     border-top: 1px solid rgba(155, 114, 200, 0.18);
   }
-  .section-share {
-    margin-top: 2.5rem;
-    display: flex;
-    justify-content: center;
-  }
-
   .issue-pagination {
     display: grid;
     gap: 1rem;
