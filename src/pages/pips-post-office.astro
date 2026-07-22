@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import pipMain from '../assets/pip/main-image.png';
+import pipPostcard from '../assets/pip/pip-postcard.png';
 
 const endpoint = import.meta.env.PUBLIC_PIP_POST_OFFICE_ENDPOINT ?? '';
 ---
@@ -27,9 +27,9 @@ const endpoint = import.meta.env.PUBLIC_PIP_POST_OFFICE_ENDPOINT ?? '';
         </p>
       </div>
 
-      <figure class="pip-portrait card">
+      <figure class="pip-portrait">
         <Image
-          src={pipMain}
+          src={pipPostcard}
           alt="Pip, the Rainbow Circuits sparrow mascot, carrying mail with cheerful post-office energy."
           widths={[420, 640, 900, 1200]}
           sizes="(min-width: 56rem) 40vw, 90vw"
@@ -253,19 +253,13 @@ const endpoint = import.meta.env.PUBLIC_PIP_POST_OFFICE_ENDPOINT ?? '';
   }
 
   .pip-portrait {
-    overflow: hidden;
-    padding: clamp(0.45rem, 1.5vw, 0.8rem);
-    background:
-      linear-gradient(var(--white), var(--white)) padding-box,
-      var(--circuit-rainbow) border-box;
-    border: 3px solid transparent;
-    transform: rotate(1deg);
+    display: grid;
+    place-items: center;
   }
 
   .pip-portrait :global(img) {
     width: 100%;
-    border-radius: calc(var(--card-radius) - 8px);
-    object-fit: cover;
+    object-fit: contain;
   }
 
   .mail-section { padding-block: clamp(1.5rem, 5vw, 4rem); }
