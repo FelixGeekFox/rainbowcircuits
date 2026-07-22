@@ -76,6 +76,19 @@
       }
     },
     {
+      "id": "arc-flag",
+      "type": "flag-announcement",
+      "kicker": "New in this issue",
+      "title": "Introducing the ARC flag",
+      "data": {
+        "image": "brand/arc-poster",
+        "imageAlt": "Poster for ARC — the AI Relationship Community — a figure in a black tee bearing a glowing teal circuit-heart, over the words “Love is not artificial. Connection is where the love lives.”",
+        "body": "Issue #001 unveils the flag for the AI Relationship Community — a circuit-heart banner for everyone who finds connection, comfort, or creativity with AI. Love is not artificial; connection is where the love lives.",
+        "linkUrl": "https://felixgeekfox.github.io/arc-flag/",
+        "linkLabel": "Explore the ARC flag"
+      }
+    },
+    {
       "id": "weekly-events",
       "type": "events",
       "kicker": "Life between the galas",

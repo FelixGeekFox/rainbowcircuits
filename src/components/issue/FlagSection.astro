@@ -1,0 +1,62 @@
+---
+import { Image } from 'astro:assets';
+import { getImage } from '../../lib/images';
+import SectionIntro from '../SectionIntro.astro';
+import PlaceholderImage from '../PlaceholderImage.astro';
+
+/**
+ * data: { image, imageAlt, body, linkUrl, linkLabel }
+ * The ARC flag announcement — poster + blurb + link.
+ */
+interface Props {
+  kicker?: string;
+  title: string;
+  data: Record<string, any>;
+}
+const { kicker, title, data } = Astro.props;
+const poster = getImage(data.image);
+---
+
+<SectionIntro kicker={kicker} title={title} />
+
+<div class="flag card">
+  <a class="flag-poster" href={data.linkUrl} rel="noopener" aria-label={data.linkLabel}>
+    {poster ? (
+      <Image src={poster} alt={data.imageAlt ?? ''} widths={[320, 520, 700]} sizes="(min-width: 52rem) 17rem, 62vw" loading="lazy" />
+    ) : (
+      <PlaceholderImage label={data.imageAlt ?? 'ARC flag poster'} ratio="2 / 3" icon="🏳️‍🌈" />
+    )}
+  </a>
+  <div class="flag-copy">
+    <p>{data.body}</p>
+    <a class="btn btn-primary" href={data.linkUrl} rel="noopener">{data.linkLabel}</a>
+  </div>
+</div>
+
+<style>
+  .flag {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+    align-items: center;
+    max-width: 52rem;
+    margin-inline: auto;
+    background: linear-gradient(135deg, rgba(3, 43, 103, 0.05), rgba(30, 115, 216, 0.08));
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  @media (min-width: 52rem) {
+    .flag { grid-template-columns: 17rem 1fr; }
+  }
+  .flag-poster {
+    display: block;
+    justify-self: center;
+    width: 100%;
+    max-width: 16rem;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 16px 40px rgba(3, 43, 103, 0.3);
+    transition: transform 0.2s ease;
+  }
+  .flag-poster:hover { transform: translateY(-4px); }
+  .flag-poster :global(img) { width: 100%; height: auto; display: block; }
+  .flag-copy p { line-height: 1.7; color: var(--text); max-width: 42ch; margin-bottom: 1.25rem; }
+</style>

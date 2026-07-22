@@ -47,6 +47,7 @@ const issues = defineCollection({
         type: z.enum([
           'founders-letter',
           'lead-feature',
+          'flag-announcement',
           'stats',
           'gallery',
           'events',

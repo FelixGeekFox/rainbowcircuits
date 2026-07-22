@@ -16,7 +16,7 @@ interface Props {
 }
 const { kicker, title, data } = Astro.props;
 const letters: any[] = data.letters ?? [];
-const accents = ['var(--rose)', 'var(--teal)'];
+const accents = ['#d96a80', '#0e9b9b']; // Felix: dark salmon pink · Arthur: teal
 ---
 
 <SectionIntro kicker={kicker} title={title} />
