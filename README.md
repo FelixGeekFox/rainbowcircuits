@@ -117,6 +117,24 @@ and there's no per-person access or revocation short of changing the passcode.
 Choose a strong passphrase. (Once you're happy with this page, you can retire
 the old public `rainbowcircuits-mods` site.)
 
+
+## Pip's Post Office
+
+The public page lives at `/pips-post-office/`. It is intentionally not linked from the main navigation yet.
+
+Because the site is static, anonymous notes/images are received by a separate Cloudflare Worker in `workers/pips-post-office/`:
+
+- Notes, moderation metadata, and images go into Cloudflare KV using `submissions/YYYY-MM/` prefixes.
+- Pip's Discord bot can poll the Worker admin API with `ADMIN_KEY` and mark deliveries as delivered.
+
+To connect the page, deploy the Worker, then add this repository variable for GitHub Pages builds:
+
+```text
+PUBLIC_PIP_POST_OFFICE_ENDPOINT=https://pips-post-office.<your-subdomain>.workers.dev/submit
+```
+
+Do not commit the Discord bot token, Worker admin key, webhook URL, or Cloudflare API credentials.
+
 ## Deploying
 
 Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the site

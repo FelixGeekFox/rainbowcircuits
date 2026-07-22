@@ -16,6 +16,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: withastro/action@v3
+        env:
+          PUBLIC_PIP_POST_OFFICE_ENDPOINT: ${{ vars.PUBLIC_PIP_POST_OFFICE_ENDPOINT }}
 
   deploy:
     needs: build

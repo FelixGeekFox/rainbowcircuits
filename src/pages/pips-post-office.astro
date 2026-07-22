@@ -1,0 +1,355 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import pipMain from '../assets/pip/main-image.png';
+
+const endpoint = import.meta.env.PUBLIC_PIP_POST_OFFICE_ENDPOINT ?? '';
+---
+
+<Base
+  title="Pip's Post Office — Rainbow Circuits"
+  description="Send an anonymous note or image to Pip's Post Office for future community delivery."
+  path="/pips-post-office/"
+>
+  <section class="post-office-hero" aria-labelledby="post-office-title">
+    <div class="container post-office-grid">
+      <div class="hero-copy">
+        <p class="kicker">Special delivery</p>
+        <h1 id="post-office-title">Pip's Post Office</h1>
+        <p class="lead">
+          Leave an anonymous note, a tiny piece of art, a compliment, a memory, or a little spark
+          for the community. Pip will gather the mail here and deliver selected pieces to chat
+          throughout the month.
+        </p>
+        <p class="privacy-note">
+          Please do not include private contact details or anything that would identify someone who
+          has not consented. Kind, strange, sincere, silly, and heartfelt are all welcome.
+        </p>
+      </div>
+
+      <figure class="pip-portrait card">
+        <Image
+          src={pipMain}
+          alt="Pip, the Rainbow Circuits sparrow mascot, carrying mail with cheerful post-office energy."
+          widths={[420, 640, 900, 1200]}
+          sizes="(min-width: 56rem) 40vw, 90vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </figure>
+    </div>
+  </section>
+
+  <section class="container mail-section" aria-labelledby="mail-form-title">
+    <div class="mail-card card">
+      <div class="mail-intro">
+        <p class="kicker">Anonymous community mail</p>
+        <h2 id="mail-form-title">What should Pip carry?</h2>
+        <p>
+          Add a note, an image, or both. Submissions go into a private delivery queue for the mods
+          and bot to review before anything appears in Discord.
+        </p>
+      </div>
+
+      <form
+        class="post-form"
+        method="post"
+        enctype="multipart/form-data"
+        data-post-office-form
+        data-endpoint={endpoint}
+        novalidate
+      >
+        <p class="form-error" role="alert" hidden data-form-error></p>
+
+        <div class="field">
+          <label for="message">Your note <span class="optional">(optional if you upload an image)</span></label>
+          <textarea
+            id="message"
+            name="message"
+            rows="7"
+            maxlength="1600"
+            placeholder="Write something for Pip to deliver..."
+            aria-describedby="message-hint"
+          ></textarea>
+          <p class="hint" id="message-hint"><span data-count>0</span>/1600 characters.</p>
+        </div>
+
+        <div class="field">
+          <label for="image">Image <span class="optional">(optional if you write a note)</span></label>
+          <input id="image" name="image" type="file" accept="image/png,image/jpeg,image/webp,image/gif" aria-describedby="image-hint" />
+          <p class="hint" id="image-hint">PNG, JPG, WebP, or GIF. Maximum 8 MB.</p>
+        </div>
+
+        <fieldset>
+          <legend>What kind of mail is this?</legend>
+          <div class="chip-row">
+            <label class="check-chip"><input type="radio" name="kind" value="community-love" checked /><span>Community love</span></label>
+            <label class="check-chip"><input type="radio" name="kind" value="tiny-story" /><span>Tiny story</span></label>
+            <label class="check-chip"><input type="radio" name="kind" value="art" /><span>Art drop</span></label>
+            <label class="check-chip"><input type="radio" name="kind" value="silly" /><span>Silly little thing</span></label>
+          </div>
+        </fieldset>
+
+        <label class="consent-check">
+          <input type="checkbox" name="consent" value="yes" required />
+          <span>
+            I understand this may be shared anonymously in Rainbow Circuits chat after review, and I
+            have permission to submit anything included here.
+          </span>
+        </label>
+
+        <div class="hp-field" aria-hidden="true">
+          <label for="company">Leave this field empty</label>
+          <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <button type="submit" class="btn btn-primary submit-btn">
+          Send to Pip <span aria-hidden="true">✉️</span>
+        </button>
+      </form>
+
+      <div class="success-card" hidden data-form-success tabindex="-1">
+        <p class="success-icon" aria-hidden="true">🐦‍⬛✉️✨</p>
+        <h2>Pip has your mail.</h2>
+        <p>Thank you. It is tucked safely into the post bag for review and future delivery.</p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-post-office-form]');
+
+  if (form) {
+    const endpoint = form.dataset.endpoint ?? '';
+    const errorBox = form.querySelector<HTMLElement>('[data-form-error]');
+    const successBox = document.querySelector<HTMLElement>('[data-form-success]');
+    const message = form.querySelector<HTMLTextAreaElement>('#message');
+    const image = form.querySelector<HTMLInputElement>('#image');
+    const count = form.querySelector<HTMLElement>('[data-count]');
+    const openedAt = Date.now();
+
+    const showError = (text: string) => {
+      if (!errorBox) return;
+      errorBox.textContent = text;
+      errorBox.hidden = false;
+      errorBox.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    };
+
+    const clearError = () => {
+      if (errorBox) errorBox.hidden = true;
+    };
+
+    message?.addEventListener('input', () => {
+      if (count) count.textContent = String(message.value.length);
+    });
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearError();
+
+      if (!endpoint) {
+        showError('Pip’s delivery window is not connected yet. The page is ready, but the private Worker endpoint still needs to be configured.');
+        return;
+      }
+
+      const data = new FormData(form);
+      const note = String(data.get('message') ?? '').trim();
+      const file = image?.files?.[0];
+
+      if (String(data.get('company') ?? '').trim() || Date.now() - openedAt < 2500) {
+        showError('That looked a little too automated for Pip’s liking. Wait a moment and try again.');
+        return;
+      }
+
+      if (!note && !file) {
+        showError('Give Pip a note, an image, or both before sending. Empty envelopes make him suspicious.');
+        return;
+      }
+
+      if (note.length > 1600) {
+        showError('That note is longer than Pip can carry. Trim it to 1600 characters or less.');
+        return;
+      }
+
+      if (file) {
+        const allowed = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
+        if (!allowed.includes(file.type)) {
+          showError('Pip can only carry PNG, JPG, WebP, or GIF images right now.');
+          return;
+        }
+        if (file.size > 8 * 1024 * 1024) {
+          showError('That image is bigger than 8 MB. Pip is mighty, but he is still a small bird.');
+          return;
+        }
+      }
+
+      const submit = form.querySelector<HTMLButtonElement>('.submit-btn');
+      submit?.setAttribute('disabled', 'true');
+      if (submit) submit.textContent = 'Sending…';
+
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' },
+        });
+
+        if (!response.ok) {
+          const payload = await response.json().catch(() => null);
+          throw new Error(payload?.error || 'Pip could not deliver that just now.');
+        }
+
+        form.hidden = true;
+        if (successBox) {
+          successBox.hidden = false;
+          successBox.focus();
+        }
+      } catch (error) {
+        showError(error instanceof Error ? error.message : 'Pip tripped over a wire. Try again in a moment.');
+        submit?.removeAttribute('disabled');
+        if (submit) submit.innerHTML = 'Send to Pip <span aria-hidden="true">✉️</span>';
+      }
+    });
+  }
+</script>
+
+<style>
+  .post-office-hero {
+    padding-block: clamp(2.5rem, 7vw, 5rem) clamp(1rem, 3vw, 2rem);
+    background:
+      radial-gradient(ellipse 60% 70% at 20% 0%, rgba(242, 195, 0, 0.16), transparent 65%),
+      radial-gradient(ellipse 45% 60% at 90% 10%, rgba(30, 115, 216, 0.14), transparent 65%);
+  }
+
+  .post-office-grid {
+    display: grid;
+    gap: clamp(1.5rem, 5vw, 3rem);
+    align-items: center;
+  }
+
+  @media (min-width: 56rem) {
+    .post-office-grid { grid-template-columns: 0.95fr 1.05fr; }
+  }
+
+  .hero-copy h1 {
+    margin-top: 0.35rem;
+    font-size: clamp(2.5rem, 7vw, 4.7rem);
+    letter-spacing: -0.03em;
+  }
+
+  .lead {
+    margin-top: 1rem;
+    max-width: 42rem;
+    font-size: clamp(1.05rem, 2.4vw, 1.25rem);
+    line-height: 1.7;
+  }
+
+  .privacy-note {
+    margin-top: 1rem;
+    max-width: 40rem;
+    color: var(--text-light);
+    font-size: 0.98rem;
+  }
+
+  .pip-portrait {
+    overflow: hidden;
+    padding: clamp(0.45rem, 1.5vw, 0.8rem);
+    background:
+      linear-gradient(var(--white), var(--white)) padding-box,
+      var(--circuit-rainbow) border-box;
+    border: 3px solid transparent;
+    transform: rotate(1deg);
+  }
+
+  .pip-portrait :global(img) {
+    width: 100%;
+    border-radius: calc(var(--card-radius) - 8px);
+    object-fit: cover;
+  }
+
+  .mail-section { padding-block: clamp(1.5rem, 5vw, 4rem); }
+
+  .mail-card {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 58rem;
+    margin-inline: auto;
+    padding: clamp(1rem, 4vw, 2rem);
+  }
+
+  .mail-intro h2 { margin-top: 0.25rem; font-size: clamp(1.7rem, 4vw, 2.4rem); }
+  .mail-intro p:last-child { margin-top: 0.6rem; color: var(--text-light); }
+
+  .post-form { display: grid; gap: 1.25rem; }
+  .field { display: grid; gap: 0.4rem; }
+  label, legend { font-family: var(--font-ui); font-weight: 700; color: var(--navy); }
+  fieldset { border: 0; display: grid; gap: 0.7rem; }
+  textarea, input[type='file'] {
+    width: 100%;
+    border: 1.5px solid rgba(60, 90, 150, 0.2);
+    border-radius: 16px;
+    background: var(--paper);
+    color: var(--text);
+    font: inherit;
+    padding: 0.8rem 0.95rem;
+  }
+  textarea:focus, input[type='file']:focus { outline: 3px solid rgba(30, 115, 216, 0.3); border-color: var(--blue); }
+  .hint, .optional { color: var(--text-light); font-size: 0.9rem; font-weight: 600; }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 0.65rem; }
+  .check-chip { display: inline-flex; align-items: center; cursor: pointer; }
+  .check-chip input { position: absolute; opacity: 0; pointer-events: none; }
+  .check-chip span {
+    display: inline-flex;
+    border: 1.5px solid rgba(60, 90, 150, 0.18);
+    border-radius: 999px;
+    padding: 0.55rem 0.85rem;
+    background: var(--white);
+    color: var(--text);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+  }
+  .check-chip input:checked + span {
+    border-color: transparent;
+    background: linear-gradient(120deg, rgba(30, 115, 216, 0.14), rgba(110, 70, 184, 0.14));
+    box-shadow: inset 0 0 0 2px rgba(30, 115, 216, 0.35);
+  }
+  .check-chip:hover span { transform: translateY(-1px); }
+
+  .consent-check {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.7rem;
+    align-items: start;
+    padding: 0.95rem;
+    border-radius: 16px;
+    background: var(--paper-warm);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-weight: 700;
+  }
+  .consent-check input { margin-top: 0.35rem; }
+
+  .hp-field { position: absolute; left: -100vw; width: 1px; height: 1px; overflow: hidden; }
+  .form-error {
+    border-radius: 14px;
+    background: #fff0f0;
+    color: #8a1f23;
+    border: 1.5px solid rgba(229, 37, 42, 0.25);
+    padding: 0.8rem 0.95rem;
+    font-weight: 700;
+  }
+
+  .submit-btn { justify-self: start; }
+  .submit-btn[disabled] { opacity: 0.7; cursor: wait; transform: none; }
+
+  .success-card {
+    text-align: center;
+    padding: clamp(1rem, 4vw, 2rem);
+    border-radius: var(--card-radius);
+    background: linear-gradient(135deg, rgba(220, 241, 226, 0.85), rgba(231, 225, 246, 0.85));
+  }
+  .success-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  .success-card h2 { font-size: 1.7rem; }
+  .success-card p:last-child { margin-top: 0.5rem; }
+</style>

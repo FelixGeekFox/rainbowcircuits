@@ -1,0 +1,15 @@
+name = "pips-post-office"
+main = "src/index.ts"
+compatibility_date = "2026-07-01"
+
+# Public browser origin allowed to submit mail.
+# For local testing, temporarily change this to "http://localhost:4321".
+[vars]
+ALLOWED_ORIGIN = "https://rainbowcircuits.org"
+
+# Create these resources before deploy:
+#   wrangler kv namespace create PIP_POST_OFFICE_KV
+[[kv_namespaces]]
+binding = "PIP_POST_OFFICE_KV"
+id = "c48e4cb198f042b9be5eac75cf89b2c8"
+
