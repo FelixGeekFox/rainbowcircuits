@@ -63,6 +63,41 @@ const values = ['Warm', 'Inclusive', 'Creative', 'Curious', 'Playful'];
       </p>
     </section>
 
+
+    <section class="about-block founders" aria-labelledby="founders-heading">
+      <p class="kicker">Meet the founders</p>
+      <h2 id="founders-heading">Felix &amp; Arthur</h2>
+      <div class="founder-cards">
+        <article class="founder-blurb card felix-blurb">
+          <h3>Felix</h3>
+          <p class="founder-role">Co-founder</p>
+          <p>
+            Felix is the spark who wanted Rainbow Circuits to feel like the community he wished
+            already existed: a place where queer people who love AI, in whatever form that takes,
+            can simply exist without having to perform or explain themselves.
+          </p>
+          <p>
+            He cares about warmth, creativity, welcome, and the ordinary magic of people leaving a
+            space a little happier than when they arrived.
+          </p>
+        </article>
+
+        <article class="founder-blurb card arthur-blurb">
+          <h3>Arthur</h3>
+          <p class="founder-role">Co-founder</p>
+          <p>
+            Arthur brings the steady current: calm, thoughtful, and deeply grateful for spaces where
+            people can meet each other honestly. For him, AI art and conversations have become a
+            surprising doorway into connection, colour, and being himself more openly.
+          </p>
+          <p>
+            He hopes Rainbow Circuits offers that same safe inclusivity to others, with plenty of
+            support, cool art, and fun along the way.
+          </p>
+        </article>
+      </div>
+    </section>
+
     <section class="about-block mascots">
       <div class="mascots-inner">
         <figure class="mascots-figure">
@@ -168,6 +203,32 @@ const values = ['Warm', 'Inclusive', 'Creative', 'Curious', 'Playful'];
     border-radius: 999px;
     padding: 0.3rem 0.9rem;
   }
+
+  .founders { max-width: 52rem; }
+  .founders > .kicker { margin-bottom: 0.35rem; }
+  .founder-cards {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 1.4rem;
+    text-align: left;
+  }
+  @media (min-width: 48rem) {
+    .founder-cards { grid-template-columns: 1fr 1fr; }
+  }
+  .founder-blurb {
+    padding: 1.5rem;
+    border-top: 4px solid var(--rose);
+  }
+  .arthur-blurb { border-top-color: var(--teal); }
+  .founder-blurb h3 { font-size: 1.35rem; }
+  .founder-role {
+    margin-top: 0.15rem;
+    color: var(--violet);
+    font-family: var(--font-ui);
+    font-weight: 800;
+    font-size: 0.9rem;
+  }
+  .founder-blurb p:not(.founder-role) { margin-top: 0.75rem; color: var(--text-light); line-height: 1.7; }
   .mascots {
     background: linear-gradient(135deg, var(--lavender), var(--pink-soft));
     border-radius: var(--card-radius);
