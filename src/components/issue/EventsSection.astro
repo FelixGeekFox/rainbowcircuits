@@ -50,6 +50,15 @@ const monthlies = events.filter((e) => e.data.frequency === 'monthly');
         )}
       </li>
     ))}
+    <li class="event-card card event-upcoming" style="--event-accent: var(--rose);">
+      <p class="event-emoji" aria-hidden="true">🎉</p>
+      <h3>Community Events</h3>
+      <p class="event-schedule">Seasonal &amp; special</p>
+      <p class="event-desc">
+        Galas, seasonal celebrations, and special weekends. Whenever something bigger is on
+        the horizon, it’ll appear right here.
+      </p>
+    </li>
   </ul>
 
   {monthlies.length > 0 && (
@@ -96,6 +105,7 @@ const monthlies = events.filter((e) => e.data.frequency === 'monthly');
     flex-direction: column;
     gap: 0.6rem;
   }
+  .event-upcoming { background: linear-gradient(160deg, rgba(229, 37, 42, 0.05), rgba(110, 70, 184, 0.05)); }
   .event-emoji { font-size: 1.8rem; line-height: 1; }
   .event-card h3 { font-size: 1.35rem; }
   .event-schedule {

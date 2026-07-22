@@ -1,7 +1,8 @@
 ---
 import { Image } from 'astro:assets';
 import { SITE, withBase } from '../lib/site';
-import heart from '../assets/brand/heart.png';
+import logoBlack from '../assets/brand/logo-words-black.png';
+import logoWhite from '../assets/brand/logo-words-white.png';
 
 interface Props {
   /** Render on a twilight background (issue covers). */
@@ -21,8 +22,7 @@ const links = [
 <header class:list={['site-header', { 'on-dark': onDark }]}>
   <nav class="container header-inner" aria-label="Rainbow Circuits">
     <a class="wordmark" href={withBase('/')}>
-      <Image src={heart} alt="" width={80} height={80} class="wordmark-mark" />
-      <span class="wordmark-text">Rainbow<b>Circuits</b></span>
+      <Image src={onDark ? logoWhite : logoBlack} alt="Rainbow Circuits" widths={[280, 460, 700]} sizes="15rem" class="wordmark-logo" />
     </a>
 
     <button
@@ -96,17 +96,14 @@ const links = [
   .wordmark {
     display: inline-flex;
     align-items: center;
-    gap: 0.55rem;
-    font-family: var(--font-ui);
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--navy);
     text-decoration: none;
   }
-  .wordmark-mark { width: 2.3rem; height: 2.3rem; object-fit: contain; }
-  .wordmark-text b { color: var(--blue); }
-  .on-dark .wordmark { color: var(--on-twilight); }
-  .on-dark .wordmark-text b { color: var(--gold-soft); }
+  .wordmark-logo {
+    height: clamp(1.35rem, 4.5vw, 1.7rem);
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+  }
 
   /* hamburger */
   .menu-toggle {
