@@ -201,6 +201,25 @@ const structuredData = {
   .article-body { padding-top: 2.5rem; }
   .article-body :global(.prose h2) { scroll-margin-top: 2rem; }
 
+  /* The article prose is full-width so embedded components (the gallery,
+     feature images) can be wider than the text; text stays at a readable
+     measure and centred. */
+  .article-body :global(.prose) { max-width: none; }
+  .article-body :global(.prose > :where(p, h2, h3, h4, ul, ol, blockquote)) {
+    max-width: var(--measure);
+    margin-inline: auto;
+  }
+  .article-body :global(.prose) :global(.article-figure) {
+    display: block;
+    width: 100%;
+    max-width: 46rem;
+    height: auto;
+    margin: 2.25rem auto;
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+  }
+  .article-body :global(.prose) :global(.gallery) { margin-block: 2.5rem; }
+
   .profile-extras {
     max-width: var(--measure);
     margin: 3rem auto 0;

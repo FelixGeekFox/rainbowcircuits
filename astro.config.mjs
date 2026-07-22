@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import mdx from '@astrojs/mdx';
 
 // Hosted on GitHub Pages at the custom domain https://rainbowcircuits.org
 // (see public/CNAME). At a custom domain the site is served from the root,
@@ -9,6 +10,7 @@ export default defineConfig({
   site: 'https://rainbowcircuits.org',
   base: '/',
   trailingSlash: 'ignore',
+  integrations: [mdx()],
   devToolbar: { enabled: false },
   vite: {
     server: { fs: { strict: false } },

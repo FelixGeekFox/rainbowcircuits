@@ -1,11 +1,13 @@
 ---
+import { Image } from 'astro:assets';
+import { getImage } from '../../lib/images';
 import SectionIntro from '../SectionIntro.astro';
-import PullQuote from '../PullQuote.astro';
 import PlaceholderImage from '../PlaceholderImage.astro';
 
 /**
- * data: { signatories: string[], pullQuote?: string, body: string[],
- *         placeholder?: boolean }
+ * data: { letters: { name, role?, image, imageAlt, paragraphs[] }[] }
+ * Each founder gets a headshot and their own signed letter; the layout
+ * alternates the portrait side so the two letters feel like a pair.
  */
 interface Props {
   kicker?: string;
@@ -13,73 +15,86 @@ interface Props {
   data: Record<string, any>;
 }
 const { kicker, title, data } = Astro.props;
-const signatories: string[] = data.signatories ?? [];
+const letters: any[] = data.letters ?? [];
 ---
 
 <SectionIntro kicker={kicker} title={title} />
 
-<div class="letter card">
-  <div class="letter-portraits">
-    {signatories.map((name) => (
-      <div class="portrait">
-        <PlaceholderImage label={`Portrait of ${name} to be added`} ratio="1 / 1" icon="💜" />
-      </div>
-    ))}
-  </div>
-
-  <div class="letter-body prose">
-    {(data.body ?? []).map((paragraph: string) => <p>{paragraph}</p>)}
-  </div>
-
-  {data.pullQuote && <PullQuote quote={data.pullQuote} accent="var(--rose)" />}
-
-  <p class="signatures" aria-label={`Signed, ${signatories.join(' and ')}`}>
-    {signatories.map((name, i) => (
-      <>
-        <span class="signature">{name}</span>
-        {i < signatories.length - 1 && <span class="amp" aria-hidden="true"> & </span>}
-      </>
-    ))}
-  </p>
-  <p class="signature-caption">Founders, Rainbow Circuits</p>
+<div class="letters">
+  {letters.map((letter, i) => {
+    const portrait = getImage(letter.image);
+    return (
+      <article class:list={['letter card', { flip: i % 2 === 1 }]}>
+        <figure class="letter-portrait">
+          {portrait ? (
+            <Image
+              src={portrait}
+              alt={letter.imageAlt ?? `Portrait of ${letter.name}`}
+              widths={[220, 360, 520]}
+              sizes="(min-width: 44rem) 14rem, 60vw"
+              loading="lazy"
+            />
+          ) : (
+            <PlaceholderImage label={`Portrait of ${letter.name} to be added`} ratio="4 / 5" icon="💜" />
+          )}
+        </figure>
+        <div class="letter-body">
+          {letter.role && <p class="letter-role">{letter.role}</p>}
+          <div class="prose">
+            {letter.paragraphs.map((p: string) => <p>{p}</p>)}
+          </div>
+          <p class="signature">{letter.name}</p>
+        </div>
+      </article>
+    );
+  })}
 </div>
 
 <style>
-  .letter {
-    max-width: 46rem;
+  .letters {
+    max-width: 52rem;
     margin-inline: auto;
-    padding: clamp(1.75rem, 5vw, 3.25rem);
-    background:
-      linear-gradient(160deg, rgba(253, 240, 248, 0.9), rgba(237, 224, 248, 0.9));
-  }
-  .letter-portraits {
     display: flex;
-    justify-content: center;
-    gap: 1.25rem;
-    margin-bottom: 2rem;
+    flex-direction: column;
+    gap: 1.75rem;
   }
-  .portrait {
-    width: min(7.5rem, 34vw);
-    border-radius: 999px;
+  .letter {
+    display: grid;
+    gap: clamp(1.25rem, 4vw, 2.25rem);
+    align-items: center;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    background: linear-gradient(160deg, rgba(253, 240, 248, 0.9), rgba(231, 225, 246, 0.9));
+  }
+  @media (min-width: 44rem) {
+    .letter { grid-template-columns: 13rem 1fr; }
+    .letter.flip .letter-portrait { order: 2; }
+  }
+  .letter-portrait {
+    width: 100%;
+    max-width: 13rem;
+    justify-self: center;
+    border-radius: 18px;
     overflow: hidden;
+    box-shadow: var(--card-shadow);
   }
-  .portrait :global(.placeholder-frame) { border-radius: 999px; }
-  .letter-body { font-size: 1.08rem; }
-  .signatures {
-    margin-top: 2.25rem;
-    text-align: center;
+  .letter-portrait :global(img) { width: 100%; height: auto; display: block; }
+  .letter-role {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 0.6rem;
+  }
+  .letter-body .prose { max-width: none; }
+  .letter-body .prose > * + * { margin-top: 0.8em; }
+  .letter-body .prose p { line-height: 1.75; }
+  .signature {
+    margin-top: 1.1rem;
     font-family: var(--font-display);
     font-style: italic;
-    font-size: 2rem;
+    font-size: 1.7rem;
     color: var(--violet);
-  }
-  .amp { color: var(--rose-soft); font-size: 1.4rem; }
-  .signature-caption {
-    text-align: center;
-    font-family: var(--font-ui);
-    font-weight: 600;
-    font-size: 0.85rem;
-    color: var(--text-light);
-    margin-top: 0.25rem;
   }
 </style>

@@ -118,10 +118,10 @@ const latestUrl = latest ? withBase(`/newsletter/${latest.data.slug}/`) : withBa
       </div>
     </section>
 
-    <!-- weekly rhythms -->
+    <!-- community rhythms -->
     <section class="home-section" aria-labelledby="rhythms-heading">
-      <h2 id="rhythms-heading" class="home-heading">Weekly rhythms</h2>
-      <p class="home-sub">Gentle, recurring ways to join in — around the circuit, all month long.</p>
+      <h2 id="rhythms-heading" class="home-heading">Around the circuit</h2>
+      <p class="home-sub">Gentle, recurring ways to join in — every week, every month, and every so often.</p>
       <ul class="rhythms">
         {events.map((e) => (
           <li class="rhythm-card card" style={`--accent: ${e.data.accent};`}>
@@ -131,6 +131,12 @@ const latestUrl = latest ? withBase(`/newsletter/${latest.data.slug}/`) : withBa
             <p class="rhythm-desc">{e.data.description}</p>
           </li>
         ))}
+        <li class="rhythm-card card rhythm-upcoming" style="--accent: var(--rose);">
+          <span class="rhythm-emoji" aria-hidden="true">🎉</span>
+          <h3>Community Events</h3>
+          <p class="rhythm-when">Seasonal &amp; special</p>
+          <p class="rhythm-desc">Galas, seasonal celebrations, and special weekends. Whenever something bigger is on the horizon, it’ll appear right here.</p>
+        </li>
       </ul>
       {latest && (
         <div class="rhythms-cta">
@@ -434,6 +440,7 @@ const latestUrl = latest ? withBase(`/newsletter/${latest.data.slug}/`) : withBa
     transition: transform 0.16s ease, box-shadow 0.16s ease;
   }
   .rhythm-card:hover { transform: translateY(-4px); box-shadow: var(--card-shadow-hover); }
+  .rhythm-upcoming { background: linear-gradient(160deg, rgba(229, 37, 42, 0.05), rgba(110, 70, 184, 0.05)); }
   .rhythm-emoji { font-size: 1.6rem; }
   .rhythm-card h3 { font-size: 1.12rem; margin-top: 0.25rem; }
   .rhythm-when {
