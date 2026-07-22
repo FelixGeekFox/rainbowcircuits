@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import pipPostcard from '../assets/pip/pip-postcard.png';
+import pipBanner from '../assets/pip/pip-banner.png';
 
 const endpoint = import.meta.env.PUBLIC_PIP_POST_OFFICE_ENDPOINT ?? '';
 ---
@@ -15,7 +16,16 @@ const endpoint = import.meta.env.PUBLIC_PIP_POST_OFFICE_ENDPOINT ?? '';
     <div class="container post-office-grid">
       <div class="hero-copy">
         <p class="kicker">Special delivery</p>
-        <h1 id="post-office-title">Pip's Post Office</h1>
+        <h1 id="post-office-title" class="visually-hidden">Pip's Post Office</h1>
+        <Image
+          class="pip-banner"
+          src={pipBanner}
+          alt="Pip's Post Office"
+          widths={[420, 700, 1000, 1400]}
+          sizes="(min-width: 56rem) 38rem, 90vw"
+          loading="eager"
+          fetchpriority="high"
+        />
         <p class="lead">
           Leave an anonymous note, a tiny piece of art, a compliment, a memory, or a little spark
           for the community. Pip will gather the mail here and deliver selected pieces to chat
@@ -232,11 +242,12 @@ const endpoint = import.meta.env.PUBLIC_PIP_POST_OFFICE_ENDPOINT ?? '';
     .post-office-grid { grid-template-columns: 0.95fr 1.05fr; }
   }
 
-  .hero-copy h1 {
-    margin-top: 0.35rem;
-    font-size: clamp(2.5rem, 7vw, 4.7rem);
-    letter-spacing: -0.03em;
+  .pip-banner {
+    width: min(100%, 38rem);
+    margin-top: 0.45rem;
+    height: auto;
   }
+
 
   .lead {
     margin-top: 1rem;
