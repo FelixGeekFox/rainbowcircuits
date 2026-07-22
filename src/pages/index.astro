@@ -23,7 +23,7 @@ import { SITE, withBase } from '../lib/site';
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href={withBase('/community/')}>Explore the Community</a>
-          <a class="btn btn-secondary" href={withBase('/newsletter/')}>Read the Newsletter</a>
+          <a class="btn btn-teal" href={withBase('/newsletter/')}>Read the Newsletter</a>
           <a class="btn btn-pink about-button" href={withBase('/about/')}>About Rainbow Circuits</a>
         </div>
         <p class="hero-note"><span aria-hidden="true">✨</span> No AI partner required. Curiosity is enough.</p>
@@ -120,6 +120,12 @@ import { SITE, withBase } from '../lib/site';
     color: var(--text);
   }
   .hero-actions { margin-top: 1.75rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem; align-items: center; }
+  .btn-teal {
+    background: linear-gradient(120deg, var(--teal), var(--teal-soft));
+    color: var(--white);
+    box-shadow: 0 4px 18px rgba(24, 169, 58, 0.25);
+  }
+  .btn-teal:hover { color: var(--white); box-shadow: 0 6px 24px rgba(24, 169, 58, 0.35); }
   .btn-pink {
     background: linear-gradient(120deg, var(--rose-soft), #f48fb1);
     color: var(--white);
