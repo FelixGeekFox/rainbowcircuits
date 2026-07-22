@@ -13,11 +13,13 @@ interface Props {
   imageAlt?: string;
   /** Extra line, e.g. the issue's main feature. */
   detail?: string;
+  /** Accent for the kicker + CTA link. */
+  accent?: string;
 }
-const { href, kicker, title, description, cta = 'Read more', image, imageAlt = '', detail } = Astro.props;
+const { href, kicker, title, description, cta = 'Read more', image, imageAlt = '', detail, accent = 'var(--rose)' } = Astro.props;
 ---
 
-<article class="archive-card card">
+<article class="archive-card card" style={`--card-accent: ${accent};`}>
   {image ? (
     <a href={href} tabindex="-1" aria-hidden="true" class="archive-art">
       <Image src={image} alt="" widths={[400, 640]} sizes="(min-width: 40rem) 14rem, 92vw" loading="lazy" />
@@ -32,7 +34,7 @@ const { href, kicker, title, description, cta = 'Read more', image, imageAlt = '
     <h3><a href={href}>{title}</a></h3>
     {detail && <p class="archive-detail">{detail}</p>}
     <p class="archive-desc">{description}</p>
-    <p class="archive-cta" aria-hidden="true">{cta} →</p>
+    <a class="archive-cta" href={href}>{cta} <span aria-hidden="true">→</span></a>
   </div>
 </article>
 
@@ -50,6 +52,7 @@ const { href, kicker, title, description, cta = 'Read more', image, imageAlt = '
   .archive-art :global(img) { width: 100%; height: 100%; object-fit: cover; }
   .archive-art :global(.placeholder-frame) { height: 100%; border-radius: 0; border: none; }
   .archive-body { padding: 1.5rem 1.75rem; display: flex; flex-direction: column; gap: 0.4rem; }
+  .archive-body .kicker { color: var(--card-accent); }
   .archive-body h3 { font-size: 1.45rem; }
   .archive-body h3 a { color: var(--text); text-decoration: none; }
   .archive-body h3 a:hover { color: var(--violet); }
@@ -63,9 +66,12 @@ const { href, kicker, title, description, cta = 'Read more', image, imageAlt = '
   .archive-cta {
     margin-top: auto;
     padding-top: 0.5rem;
+    align-self: flex-start;
     font-family: var(--font-ui);
     font-weight: 700;
     font-size: 0.9rem;
-    color: var(--rose);
+    color: var(--card-accent);
+    text-decoration: none;
   }
+  .archive-cta:hover { color: var(--card-accent); text-decoration: underline; }
 </style>
