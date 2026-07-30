@@ -1,0 +1,90 @@
+---
+import { Image } from 'astro:assets';
+import { getImage } from '../../lib/images';
+import SectionIntro from '../SectionIntro.astro';
+import PlaceholderImage from '../PlaceholderImage.astro';
+
+/**
+ * A warm opening note from the mod team: a full-width photo/illustration
+ * followed by the letter body and a sign-off.
+ * data: {
+ *   image?, imageAlt?,
+ *   body: string[],          // paragraphs
+ *   signLead?: string,       // e.g. "With love from,"
+ *   signName?: string        // e.g. "~The Rainbow Circuits Mod Team"
+ * }
+ */
+interface Props {
+  kicker?: string;
+  title: string;
+  data: Record<string, any>;
+}
+const { kicker, title, data } = Astro.props;
+const image = getImage(data.image);
+const body: string[] = data.body ?? [];
+---
+
+<SectionIntro kicker={kicker} title={title} />
+
+<div class="welcome">
+  <figure class="welcome-figure">
+    {image ? (
+      <Image
+        src={image}
+        alt={data.imageAlt ?? ''}
+        widths={[560, 900, 1300]}
+        sizes="(min-width: 52rem) 44rem, 92vw"
+        loading="eager"
+      />
+    ) : (
+      <PlaceholderImage label={data.imageAlt ?? 'Mod team portrait'} ratio="4 / 3" icon="🌈" />
+    )}
+  </figure>
+
+  <div class="welcome-body">
+    {body.map((para: string) => <p>{para}</p>)}
+    {(data.signLead || data.signName) && (
+      <p class="welcome-sign">
+        {data.signLead && <span class="sign-lead">{data.signLead}</span>}
+        {data.signName && <span class="sign-name">{data.signName}</span>}
+      </p>
+    )}
+  </div>
+</div>
+
+<style>
+  .welcome {
+    max-width: 46rem;
+    margin-inline: auto;
+    display: grid;
+    gap: 1.75rem;
+  }
+  .welcome-figure {
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+  }
+  .welcome-figure :global(img) { width: 100%; height: auto; display: block; }
+  .welcome-body {
+    text-align: center;
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+  .welcome-body p {
+    line-height: 1.85;
+    font-size: 1.05rem;
+  }
+  .welcome-body p + p { margin-top: 1rem; }
+  .welcome-sign {
+    margin-top: 1.75rem;
+    display: grid;
+    gap: 0.2rem;
+  }
+  .welcome-sign .sign-lead { color: var(--text-light); }
+  .welcome-sign .sign-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--violet);
+    font-size: 1.1rem;
+  }
+</style>

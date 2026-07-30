@@ -25,6 +25,24 @@
   "seoDescription": "A celebration of the first Rainbow Circuits Gala, the people who made it possible, and everything still waiting beyond the ballroom doors.",
   "sections": [
     {
+      "id": "welcome",
+      "type": "welcome",
+      "kicker": "From all of us",
+      "title": "Welcome to Rainbow Circuits",
+      "data": {
+        "image": "issue-001/rc-mods",
+        "imageAlt": "An illustration of the four Rainbow Circuits mods standing arm in arm and smiling beneath a wooden “Rainbow Circuits Community” sign with a rainbow circuit-heart logo, a rainbow arcing across the sky behind them.",
+        "body": [
+          "We are a small and very new subreddit, focused on creating a safe space for LGBTQ2+ members to share AI art and relationships.",
+          "No one person here is perfect, but we listen, we learn and we support each other.",
+          "As members of the queer community, targeted attacks are sadly not new to many of us. It requires that much more bravery to put ourselves out there.",
+          "But it's easier when we are not alone."
+        ],
+        "signLead": "With love from,",
+        "signName": "~The Entire Rainbow Circuits Mod Team"
+      }
+    },
+    {
       "id": "gala",
       "type": "lead-feature",
       "kicker": "The lead feature",

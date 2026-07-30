@@ -6,6 +6,7 @@ import IssueToc from '../../../components/IssueToc.astro';
 import ArchiveCard from '../../../components/ArchiveCard.astro';
 import SiteHeader from '../../../components/SiteHeader.astro';
 import CoverHero from '../../../components/issue/CoverHero.astro';
+import WelcomeLetter from '../../../components/issue/WelcomeLetter.astro';
 import LeadFeature from '../../../components/issue/LeadFeature.astro';
 import StatsSection from '../../../components/issue/StatsSection.astro';
 import GallerySection from '../../../components/issue/GallerySection.astro';
@@ -114,6 +115,9 @@ const structuredData = issue
                 data-section-heading-id={section.id}
               >
                 <span id={`${section.id}-heading`} class="visually-hidden">{section.title}</span>
+                {section.type === 'welcome' && (
+                  <WelcomeLetter kicker={section.kicker} title={section.title} data={section.data} />
+                )}
                 {section.type === 'lead-feature' && (
                   <LeadFeature kicker={section.kicker} title={section.title} data={section.data} issueSlug={issue.data.slug} />
                 )}
