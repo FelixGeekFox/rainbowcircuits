@@ -36,28 +36,20 @@
       }
     },
     {
-      "id": "weekly-events",
-      "type": "events",
-      "kicker": "Life between the galas",
-      "title": "Around the Circuit",
+      "id": "gala-gallery",
+      "type": "gallery",
+      "kicker": "Member submissions",
+      "title": "The Gala Gallery",
       "data": {
-        "intro": "The Gala may be over, but the circuit never really sleeps. Here's what happens around here every week — and every month — with absolutely no pressure to do more than wave."
+        "gallery": "issue-001",
+        "intro": "A few favourites the community shared after the Gala — dances, balconies, and quiet corners of the resort. Tap any image to see it larger."
       }
     },
     {
-      "id": "future-events",
-      "type": "feedback",
-      "kicker": "Your turn",
-      "title": "What Should We Do Next?",
-      "data": {
-        "intro": "The first Gala showed us what can happen when this community is given a theme, a little encouragement, and absolutely no adult supervision. Now we want to know what you would like us to create next."
-      }
-    },
-    {
-      "id": "pip-and-puddle",
+      "id": "pride-paws-and-claws",
       "type": "mascot-corner",
       "kicker": "A recurring department of questionable importance",
-      "title": "Pip & Puddle's Corner",
+      "title": "Pride Paws & Claws",
       "data": {
         "announceImage": "issue-001/pounce-penelope",
         "announceAlt": "Illustration introducing two new Rainbow Circuits mascots: Pounce, a curious purple panther cub, and Penelope, a soft grey chinchilla, side by side.",
@@ -99,6 +91,24 @@
             "icon": "🔍"
           }
         ]
+      }
+    },
+    {
+      "id": "weekly-events",
+      "type": "events",
+      "kicker": "Life between the galas",
+      "title": "Around the Circuit",
+      "data": {
+        "intro": "The Gala may be over, but the circuit never really sleeps. Here's what happens around here every week — and every month — with absolutely no pressure to do more than wave."
+      }
+    },
+    {
+      "id": "future-events",
+      "type": "feedback",
+      "kicker": "Your turn",
+      "title": "What Should We Do Next?",
+      "data": {
+        "intro": "The first Gala showed us what can happen when this community is given a theme, a little encouragement, and absolutely no adult supervision. Now we want to know what you would like us to create next."
       }
     },
     {
