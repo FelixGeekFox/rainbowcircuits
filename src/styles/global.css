@@ -1,8 +1,8 @@
 /* ──────────────────────────────────────────────────────────────
    Rainbow Circuits — design tokens & base styles
    Palette and fonts extend the existing brand (moderator guide):
-   cream paper, watercolour pastels, Quicksand + Nunito, with
-   Fraunces added as the newsletter's editorial display face.
+   cream paper, watercolour pastels, soft rounded Quicksand for
+   display/UI and Nunito for body, with muted plum/mauve headings.
    ────────────────────────────────────────────────────────────── */
 
 :root {
@@ -46,10 +46,15 @@
   --text-light: #5f6368;    /* charcoal grey — secondary text */
   --white: #ffffff;
 
-  /* type */
-  --font-display: 'Poppins', system-ui, sans-serif;
+  /* type — Quicksand is a soft, rounded display face; Nunito for body */
+  --font-display: 'Quicksand', system-ui, sans-serif;
   --font-body: 'Nunito', system-ui, sans-serif;
-  --font-ui: 'Poppins', system-ui, sans-serif;
+  --font-ui: 'Quicksand', system-ui, sans-serif;
+
+  /* softer heading colours — muted plum + dusty mauve, warmer than the
+     hard navy/red used for buttons and covers */
+  --heading: #453a5e;       /* soft plum-ink — section titles */
+  --subheading: #8a4f77;    /* dusty plum-rose — kickers / eyebrows */
 
   /* shape & shadow */
   --card-radius: 20px;
@@ -102,8 +107,8 @@ img, svg, video { max-width: 100%; height: auto; display: block; }
 h1, h2, h3, h4 {
   font-family: var(--font-display);
   font-weight: 600;
-  line-height: 1.15;
-  color: var(--navy);
+  line-height: 1.2;
+  color: var(--heading);
   text-wrap: balance;
 }
 
@@ -200,9 +205,9 @@ button {
   font-family: var(--font-ui);
   font-weight: 700;
   font-size: 0.8rem;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--rose);
+  color: var(--subheading);
 }
 
 .card {
