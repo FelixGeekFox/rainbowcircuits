@@ -5,7 +5,7 @@
   "description": "A quiet monthly thread with no agenda and no pressure to perform or disclose. Sit by the pond. Say something, or don't. The frog understands.",
   "frequency": "monthly",
   "schedule": "Monthly",
-  "active": true,
+  "active": false,
   "pausesForSpecialEvents": false,
   "participationIdeas": [
     "A single emoji",

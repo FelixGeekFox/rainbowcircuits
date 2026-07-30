@@ -5,7 +5,7 @@
   "description": "A monthly space for kind notes, letters, postcards, encouragement, and messages from the heart — delivered by a very determined sparrow.",
   "frequency": "monthly",
   "schedule": "Monthly",
-  "active": true,
+  "active": false,
   "pausesForSpecialEvents": false,
   "participationIdeas": [
     "A note of encouragement",
