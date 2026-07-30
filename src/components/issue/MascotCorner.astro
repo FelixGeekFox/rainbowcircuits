@@ -16,9 +16,33 @@ interface Props {
 }
 const { kicker, title, data } = Astro.props;
 const comic = getImage(data.comicImage);
+const announce = getImage(data.announceImage);
 ---
 
 <SectionIntro kicker={kicker} title={title} />
+
+{(announce || data.announceTitle) && (
+  <div class="mascot-announce card">
+    <figure class="announce-figure">
+      {announce ? (
+        <Image
+          src={announce}
+          alt={data.announceAlt ?? ''}
+          widths={[420, 680, 940]}
+          sizes="(min-width: 56rem) 22rem, 80vw"
+          loading="lazy"
+        />
+      ) : (
+        <PlaceholderImage label={data.announceAlt ?? 'New mascots to be revealed'} ratio="4 / 5" icon="🐾" />
+      )}
+    </figure>
+    <div class="announce-copy">
+      <p class="eyebrow">New faces</p>
+      {data.announceTitle && <h3>{data.announceTitle}</h3>}
+      {(data.announceBody ?? []).map((para: string) => <p>{para}</p>)}
+    </div>
+  </div>
+)}
 
 <div class="corner">
   {data.lostAndFound && (
@@ -55,6 +79,36 @@ const comic = getImage(data.comicImage);
 </div>
 
 <style>
+  .mascot-announce {
+    display: grid;
+    gap: 1.5rem;
+    align-items: center;
+    max-width: 62rem;
+    margin: 0 auto 1.75rem;
+    padding: 1.75rem;
+    background: linear-gradient(135deg, var(--lavender), var(--pink-soft));
+  }
+  @media (min-width: 56rem) {
+    .mascot-announce { grid-template-columns: 22rem 1fr; }
+  }
+  .announce-figure {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+  }
+  .announce-figure :global(img) { width: 100%; height: auto; display: block; }
+  .announce-copy .eyebrow {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--violet);
+  }
+  .announce-copy h3 { font-size: clamp(1.5rem, 3.5vw, 2rem); margin: 0.3rem 0 0.75rem; }
+  .announce-copy p { line-height: 1.75; }
+  .announce-copy p + p { margin-top: 0.75rem; }
+
   .corner {
     display: grid;
     gap: 1.5rem;

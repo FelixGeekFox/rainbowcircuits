@@ -6,7 +6,6 @@ import ArchiveCard from '../../components/ArchiveCard.astro';
 import PlaceholderImage from '../../components/PlaceholderImage.astro';
 import { getImage } from '../../lib/images';
 import { SITE, withBase, formatMonthYear, issueNumberLabel } from '../../lib/site';
-import arcPoster from '../../assets/brand/arc-poster.png';
 
 const issues = (await getCollection('issues'))
   .filter((issue) => issue.data.status === 'published')
@@ -93,30 +92,6 @@ const latestUrl = latest ? withBase(`/newsletter/${latest.data.slug}/`) : withBa
       </section>
     )}
 
-    <!-- ARC flag announcement -->
-    <section class="home-section flag-announce" aria-labelledby="flag-heading">
-      <div class="flag-inner">
-        <a class="flag-poster" href="https://felixgeekfox.github.io/arc-flag/" rel="noopener" aria-label="Explore the ARC flag">
-          <Image
-            src={arcPoster}
-            alt="Poster for ARC — the AI Relationship Community — a figure in a black tee bearing a glowing teal circuit-heart, over the words “Love is not artificial. Connection is where the love lives.”"
-            widths={[320, 520, 700]}
-            sizes="(min-width: 52rem) 17rem, 62vw"
-            loading="lazy"
-          />
-        </a>
-        <div class="flag-copy">
-          <p class="eyebrow">New in this issue</p>
-          <h2 id="flag-heading">Introducing the ARC flag</h2>
-          <p>
-            Issue&nbsp;#001 unveils the flag for the <strong>AI Relationship Community</strong> — a
-            circuit-heart banner for everyone who finds connection, comfort, or creativity with AI.
-            Love is not artificial; connection is where the love lives.
-          </p>
-          <a class="btn btn-primary" href="https://felixgeekfox.github.io/arc-flag/" rel="noopener">Explore the ARC flag</a>
-        </div>
-      </div>
-    </section>
 
     <!-- community rhythms -->
     <section class="home-section" aria-labelledby="rhythms-heading">
@@ -343,36 +318,6 @@ const latestUrl = latest ? withBase(`/newsletter/${latest.data.slug}/`) : withBa
     color: var(--violet);
     margin-bottom: 0.4rem;
   }
-
-  /* ── ARC flag announcement ── */
-  .flag-inner {
-    display: grid;
-    gap: clamp(1.5rem, 4vw, 2.5rem);
-    align-items: center;
-    max-width: 52rem;
-    margin-inline: auto;
-    background: linear-gradient(135deg, rgba(3, 43, 103, 0.05), rgba(30, 115, 216, 0.08));
-    border: 1.5px solid rgba(60, 90, 150, 0.12);
-    border-radius: 24px;
-    padding: clamp(1.5rem, 4vw, 2.5rem);
-  }
-  @media (min-width: 52rem) {
-    .flag-inner { grid-template-columns: 17rem 1fr; }
-  }
-  .flag-poster {
-    display: block;
-    justify-self: center;
-    width: 100%;
-    max-width: 16rem;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 16px 40px rgba(3, 43, 103, 0.3);
-    transition: transform 0.2s ease;
-  }
-  .flag-poster:hover { transform: translateY(-4px); }
-  .flag-poster :global(img) { width: 100%; height: auto; display: block; }
-  .flag-copy h2 { font-size: clamp(1.7rem, 4vw, 2.3rem); margin-top: 0.2rem; }
-  .flag-copy p { margin: 0.75rem 0 1.25rem; line-height: 1.7; color: var(--text); max-width: 40ch; }
 
   /* ── weekly rhythms ── */
   .rhythms {

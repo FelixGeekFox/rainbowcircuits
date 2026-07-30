@@ -7,12 +7,12 @@ import ArchiveCard from '../../../components/ArchiveCard.astro';
 import SiteHeader from '../../../components/SiteHeader.astro';
 import CoverHero from '../../../components/issue/CoverHero.astro';
 import LeadFeature from '../../../components/issue/LeadFeature.astro';
-import FlagSection from '../../../components/issue/FlagSection.astro';
 import StatsSection from '../../../components/issue/StatsSection.astro';
 import GallerySection from '../../../components/issue/GallerySection.astro';
 import EventsSection from '../../../components/issue/EventsSection.astro';
 import FeedbackSection from '../../../components/issue/FeedbackSection.astro';
 import MascotCorner from '../../../components/issue/MascotCorner.astro';
+import PuzzlesSection from '../../../components/issue/PuzzlesSection.astro';
 import ClosingSection from '../../../components/issue/ClosingSection.astro';
 import { CATEGORIES } from '../../../data/categories';
 import { SITE, withBase, formatMonthYear, issueNumberLabel } from '../../../lib/site';
@@ -117,9 +117,6 @@ const structuredData = issue
                 {section.type === 'lead-feature' && (
                   <LeadFeature kicker={section.kicker} title={section.title} data={section.data} issueSlug={issue.data.slug} />
                 )}
-                {section.type === 'flag-announcement' && (
-                  <FlagSection kicker={section.kicker} title={section.title} data={section.data} />
-                )}
                 {section.type === 'stats' && (
                   <StatsSection kicker={section.kicker} title={section.title} data={section.data} />
                 )}
@@ -134,6 +131,9 @@ const structuredData = issue
                 )}
                 {section.type === 'mascot-corner' && (
                   <MascotCorner kicker={section.kicker} title={section.title} data={section.data} />
+                )}
+                {section.type === 'puzzles' && (
+                  <PuzzlesSection kicker={section.kicker} title={section.title} data={section.data} />
                 )}
                 {section.type === 'closing' && (
                   <ClosingSection

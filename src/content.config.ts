@@ -46,12 +46,12 @@ const issues = defineCollection({
         id: z.string(),
         type: z.enum([
           'lead-feature',
-          'flag-announcement',
           'stats',
           'gallery',
           'events',
           'feedback',
           'mascot-corner',
+          'puzzles',
           'closing',
         ]),
         title: z.string(),

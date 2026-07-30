@@ -11,10 +11,9 @@
   },
   "coverImage": "issue-001/cover",
   "coverImageComplete": true,
-  "coverImageAlt": "Cover of Rainbow Circuits Issue 001, July 2026, “After the Gala”. Two young men in formalwear — one in a dark floral suit, one in a rose-pink suit with glasses and a bow tie — stand arm in arm against a glowing night city. Beside them a black flag bears a teal circuit-heart (the AI Relationship Community flag), with Pip the sparrow and Puddle the frog below and the line “Small Hearts. Big Feelings. Endless Stories.” Cover lines: After the Gala; Introducing the New AI Relationship Community Flag; Around the Circuit; What Comes Next?",
+  "coverImageAlt": "Cover of Rainbow Circuits Issue 001, July 2026, “After the Gala”. Two young men in formalwear — one in a dark floral suit, one in a rose-pink suit with glasses and a bow tie — stand arm in arm against a glowing night city, with Pip the sparrow and Puddle the frog below and the line “Small Hearts. Big Feelings. Endless Stories.” Cover lines: After the Gala; Around the Circuit; What Comes Next?",
   "coverLines": [
     "Inside the First Rainbow Circuits Gala",
-    "Meet the Founders: Felix and Arthur",
     "Around the Circuit",
     "Help Us Choose What Comes Next"
   ],
@@ -34,19 +33,6 @@
         "article": "gala",
         "image": "issue-001/gala",
         "imageAlt": "Four young men in formalwear stand arm in arm at the Rainbow Circuits Gala beneath a rainbow circuit-heart banner reading “Rainbow Circuits Gala,” in an ornate, lantern-lit hall."
-      }
-    },
-    {
-      "id": "arc-flag",
-      "type": "flag-announcement",
-      "kicker": "New in this issue",
-      "title": "Introducing the ARC flag",
-      "data": {
-        "image": "brand/arc-poster",
-        "imageAlt": "Poster for ARC — the AI Relationship Community — a figure in a black tee bearing a glowing teal circuit-heart, over the words “Love is not artificial. Connection is where the love lives.”",
-        "body": "Issue #001 unveils the flag for the AI Relationship Community — a circuit-heart banner for everyone who finds connection, comfort, or creativity with AI. Love is not artificial; connection is where the love lives.",
-        "linkUrl": "https://felixgeekfox.github.io/arc-flag/",
-        "linkLabel": "Explore the ARC flag"
       }
     },
     {
@@ -73,6 +59,13 @@
       "kicker": "A recurring department of questionable importance",
       "title": "Pip & Puddle's Corner",
       "data": {
+        "announceImage": "issue-001/pounce-penelope",
+        "announceAlt": "Illustration introducing two new Rainbow Circuits mascots: Pounce, a curious purple panther cub, and Penelope, a soft grey chinchilla, side by side.",
+        "announceTitle": "Say hello to Pounce & Penelope",
+        "announceBody": [
+          "Pip and Puddle are making room on the lilypad, because the family is growing. Meet Pounce, a curious little panther with a nose for adventure and a talent for finding trouble, and Penelope, a gentle chinchilla who keeps the cosy corners warm and reminds everyone to slow down and snack.",
+          "You'll be seeing a lot more of these two around the community — in comics, corners, and quite possibly a puzzle or two. Be nice to them; they're new here."
+        ],
         "lostAndFound": [
           "One iridescent bow tie",
           "Three non-matching glass slippers",
@@ -83,6 +76,29 @@
         "comicImage": "how-they-met",
         "comicAlt": "A watercolour comic titled “How They Met — Pip & Puddle”: Pip the sparrow is told he doesn't belong, flies into the rain, and shelters by a lilypad clubhouse — until Puddle the frog appears and shares a cookie, and the rain doesn't feel so lonely anymore.",
         "comicCaption": "From the archives: how a soggy sparrow and a frog with a cookie started all of this."
+      }
+    },
+    {
+      "id": "pounces-puzzles",
+      "type": "puzzles",
+      "kicker": "Games & mischief",
+      "title": "Pounce's Puzzles",
+      "data": {
+        "intro": "Pounce insists on hiding things and Penelope insists we make them into puzzles. Grab a pen (or your keenest eyes) and settle in — solutions will turn up in a future issue, or in the community if you can't wait.",
+        "puzzles": [
+          {
+            "kind": "wordsearch",
+            "title": "The Gala Wordsearch",
+            "blurb": "Find every word Pounce scattered across the ballroom floor — from “chandelier” to “fish fountain.” Coming soon to this space.",
+            "icon": "🔤"
+          },
+          {
+            "kind": "image-search",
+            "title": "Where's Penelope?",
+            "blurb": "One shy chinchilla is hiding somewhere in a very busy scene. Can you spot her — and everything else Pounce tucked away? Coming soon to this space.",
+            "icon": "🔍"
+          }
+        ]
       }
     },
     {

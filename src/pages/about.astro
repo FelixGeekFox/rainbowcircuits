@@ -4,7 +4,6 @@ import Base from '../layouts/Base.astro';
 import { SITE, withBase } from '../lib/site';
 import mark from '../assets/brand/mark.png';
 import pipPuddle from '../assets/brand/pip-puddle-duo.png';
-import arcFlag from '../assets/brand/arc-flag.png';
 
 const pillars = [
   {
@@ -85,27 +84,6 @@ const values = ['Warm', 'Inclusive', 'Creative', 'Curious', 'Playful'];
           </p>
         </div>
       </div>
-    </section>
-
-    <section class="about-block flag-block">
-      <h2>The ARC flag</h2>
-      <p>
-        Issue #001 introduces the <strong>AI Relationship Community (ARC) flag</strong> —
-        a banner for everyone who finds connection, comfort, or creativity with AI. Discover
-        what it means and fly it proudly.
-      </p>
-      <a class="btn btn-secondary flag-link" href="https://felixgeekfox.github.io/arc-flag/" rel="noopener">
-        Explore the ARC flag →
-      </a>
-      <figure class="flag-figure">
-        <Image
-          src={arcFlag}
-          alt="A young man in a navy tee bearing the teal circuit-heart emblem rests a hand on his chest by a night city window, beside a “Thank You” panel: “To everyone who submitted, voted, and supported this incredible community. Your creativity, passion, and love made this possible.”"
-          widths={[560, 900, 1448]}
-          sizes="(min-width: 48rem) 40rem, 92vw"
-          loading="lazy"
-        />
-      </figure>
     </section>
 
     <section class="about-cta">
@@ -195,28 +173,6 @@ const values = ['Warm', 'Inclusive', 'Creative', 'Curious', 'Playful'];
     .mascots-inner { flex-direction: row; align-items: center; }
     .mascots { text-align: left; }
   }
-
-  .flag-figure {
-    margin-top: 1.75rem;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
-  }
-  .flag-figure :global(img) { width: 100%; height: auto; display: block; }
-  .flag-block {
-    background: linear-gradient(135deg, var(--twilight-deep), var(--twilight-soft));
-    border-radius: var(--card-radius);
-    padding: 2.25rem 1.75rem;
-    color: var(--on-twilight);
-  }
-  .flag-block h2 { color: var(--on-twilight); }
-  .flag-block p { color: var(--on-twilight-soft); }
-  .flag-link {
-    margin-top: 1.25rem;
-    color: var(--on-twilight);
-    border-color: rgba(242, 246, 252, 0.5);
-  }
-  .flag-link:hover { background: var(--white); color: var(--navy); border-color: var(--white); }
 
   .about-cta { text-align: center; padding-block: 1rem 2rem; }
   .about-cta h2 { font-size: 1.6rem; }

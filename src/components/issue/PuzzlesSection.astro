@@ -1,0 +1,89 @@
+---
+import { Image } from 'astro:assets';
+import { getImage } from '../../lib/images';
+import SectionIntro from '../SectionIntro.astro';
+import PlaceholderImage from '../PlaceholderImage.astro';
+
+/**
+ * Pounce's Puzzles — a recurring games department.
+ * Each puzzle in `data.puzzles[]` is:
+ *   { kind: 'wordsearch' | 'image-search', title, blurb?,
+ *     image?, imageAlt?, icon? }
+ * When `image` is omitted a labelled placeholder frame reserves the space,
+ * so an issue can ship the section before the puzzle art is finished.
+ */
+interface Puzzle {
+  kind?: string;
+  title: string;
+  blurb?: string;
+  image?: string;
+  imageAlt?: string;
+  icon?: string;
+}
+interface Props {
+  kicker?: string;
+  title: string;
+  data: Record<string, any>;
+}
+const { kicker, title, data } = Astro.props;
+const puzzles: Puzzle[] = data.puzzles ?? [];
+---
+
+<SectionIntro kicker={kicker} title={title} />
+
+{data.intro && <p class="puzzles-intro">{data.intro}</p>}
+
+<div class="puzzles">
+  {puzzles.map((puzzle) => {
+    const img = getImage(puzzle.image);
+    return (
+      <figure class="puzzle card">
+        <div class="puzzle-art">
+          {img ? (
+            <Image
+              src={img}
+              alt={puzzle.imageAlt ?? ''}
+              widths={[520, 820, 1200]}
+              sizes="(min-width: 52rem) 30rem, 92vw"
+              loading="lazy"
+            />
+          ) : (
+            <PlaceholderImage
+              label={puzzle.imageAlt ?? `${puzzle.title} — coming soon`}
+              ratio="1 / 1"
+              icon={puzzle.icon ?? '🧩'}
+            />
+          )}
+        </div>
+        <figcaption>
+          <h3>{puzzle.title}</h3>
+          {puzzle.blurb && <p>{puzzle.blurb}</p>}
+        </figcaption>
+      </figure>
+    );
+  })}
+</div>
+
+<style>
+  .puzzles-intro {
+    max-width: 44rem;
+    margin: 0 auto 2rem;
+    text-align: center;
+    line-height: 1.75;
+    color: var(--text-light);
+  }
+  .puzzles {
+    display: grid;
+    gap: 1.75rem;
+    max-width: 62rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 52rem) {
+    .puzzles { grid-template-columns: 1fr 1fr; }
+  }
+  .puzzle { overflow: hidden; display: flex; flex-direction: column; }
+  .puzzle-art :global(img) { width: 100%; height: auto; display: block; }
+  .puzzle figcaption { padding: 1.25rem 1.5rem 1.5rem; }
+  .puzzle figcaption h3 { font-size: 1.35rem; margin-bottom: 0.4rem; }
+  .puzzle figcaption p { font-size: 0.96rem; line-height: 1.65; color: var(--text-light); }
+</style>
