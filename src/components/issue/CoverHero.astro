@@ -33,7 +33,7 @@ const cover = getImage(issue.coverImage);
       </figure>
       <div class="cover-actions">
         <a class="btn btn-primary" href={`#${firstSectionId}`}>Begin Reading</a>
-        <a class="btn btn-secondary btn-on-dark" href="#toc-panel">Inside This Issue</a>
+        <a class="btn btn-secondary" href="#toc-panel">Inside This Issue</a>
       </div>
       {/* Cover text is baked into the art; keep it in the DOM for a11y + SEO. */}
       <div class="visually-hidden">
@@ -121,6 +121,19 @@ const cover = getImage(issue.coverImage);
       radial-gradient(1.5px 1.5px at 44% 72%, rgba(255, 255, 255, 0.3) 50%, transparent 51%);
     pointer-events: none;
   }
+  /* pastel backdrop for finished (complete) covers like Issue #001 */
+  .cover.complete {
+    color: var(--text);
+    background:
+      radial-gradient(ellipse at 18% 12%, rgba(253, 234, 207, 0.85) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 18%, rgba(231, 225, 246, 0.85) 0%, transparent 55%),
+      radial-gradient(ellipse at 70% 92%, rgba(220, 241, 226, 0.7) 0%, transparent 55%),
+      linear-gradient(165deg, #fdeacf 0%, #fbe0e0 38%, #e7e1f6 78%, #dcf1e2 100%);
+  }
+  .cover.complete::before { display: none; }
+  .cover.complete .scroll-prompt { border-color: rgba(69, 58, 94, 0.35); }
+  .cover.complete .scroll-dot { background: var(--violet-soft); }
+
   /* full designed-cover mode */
   .cover-full {
     display: flex;
@@ -137,7 +150,7 @@ const cover = getImage(issue.coverImage);
     width: auto;
     height: auto;
     border-radius: 12px;
-    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 18px 50px rgba(120, 96, 150, 0.32);
   }
 
   .cover-inner {

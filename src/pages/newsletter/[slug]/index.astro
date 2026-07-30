@@ -96,7 +96,7 @@ const structuredData = issue
     <>
       <ProgressBar />
       <div class="issue-chrome">
-        <SiteHeader onDark />
+        <SiteHeader onDark={!issue.data.coverImageComplete} />
       </div>
       <article class="issue">
         <CoverHero issue={issue.data} firstSectionId={sections[0]?.id ?? 'cover'} />
