@@ -57,16 +57,19 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
     resources: [
       {
         name: 'ILGA World',
+        url: 'https://ilga.org',
         description:
           'A worldwide federation of LGBTQIA+ organisations providing reliable information about LGBTQIA+ rights, laws, advocacy, and community organisations across more than 170 countries. Its database allows users to explore legal protections and restrictions by country.',
       },
       {
         name: 'Rainbow Railroad',
+        url: 'https://www.rainbowrailroad.org',
         description:
           'Supports LGBTQI+ people facing persecution because of their sexual orientation, gender identity, gender expression, or sex characteristics. People at risk can submit a request for assistance through the organisation’s website.',
       },
       {
         name: 'LGBT National Help Center Online Chat',
+        url: 'https://www.lgbthotline.org',
         description:
           'Provides confidential peer support, affirmation, and referrals. Telephone services primarily cover the United States and Canada, while online chat can be accessed internationally.',
       },
@@ -84,11 +87,13 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
     resources: [
       {
         name: 'Trans Lifeline Canada',
+        url: 'https://translifeline.org',
         description: 'Peer support run by and for trans and questioning people.',
         contacts: [{ label: 'Phone', value: '877-330-6366' }],
       },
       {
         name: 'Kids Help Phone',
+        url: 'https://kidshelpphone.ca',
         description:
           'Free, confidential mental health and crisis support for young people throughout Canada. Support is available by phone, live chat, online message, and text.',
         contacts: [
@@ -98,16 +103,19 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
       },
       {
         name: 'LGBT YouthLine',
+        url: 'https://www.youthline.ca',
         description:
           'Free and anonymous peer support, information, and referrals for 2SLGBTQ+ people aged 29 and under in Ontario. Text and chat support are provided by trained 2SLGBTQ+ peers.',
       },
       {
         name: 'pflag Canada',
+        url: 'https://pflagcanada.ca',
         description:
           'Peer support, education, resources, and community groups for 2SLGBTQIA+ people, families, caregivers, friends, and allies. Local and virtual chapters are available across Canada.',
       },
       {
         name: 'LGBT National Help Center',
+        url: 'https://www.lgbthotline.org',
         description:
           'Confidential peer support and referrals for LGBTQIA+ people of all ages in the United States and Canada.',
         contacts: [
@@ -124,6 +132,7 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
     resources: [
       {
         name: 'The Trevor Project',
+        url: 'https://www.thetrevorproject.org',
         description: 'Free, confidential, 24/7 crisis support for LGBTQ+ young people.',
         contacts: [
           { label: 'Phone', value: '1-866-488-7386' },
@@ -133,11 +142,13 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
       },
       {
         name: 'Trans Lifeline US',
+        url: 'https://translifeline.org',
         description: 'Peer support run by and for trans and questioning people.',
         contacts: [{ label: 'Phone', value: '877-565-8860' }],
       },
       {
         name: 'LGBT National Help Center',
+        url: 'https://www.lgbthotline.org',
         description:
           'Confidential peer support, community connections, information, and referrals for LGBTQIA+ people of all ages.',
         contacts: [
@@ -147,11 +158,13 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
       },
       {
         name: 'LGBT National Youth Talkline',
+        url: 'https://www.lgbthotline.org',
         description:
           'Peer support for LGBTQIA+ young people dealing with identity, coming out, relationships, bullying, school, family, sexual health, or emotional distress.',
       },
       {
         name: 'LGBT National Senior Hotline',
+        url: 'https://www.lgbthotline.org',
         description:
           'Confidential peer support and referrals for LGBTQIA+ older adults and people seeking support around ageing, identity, isolation, or discrimination.',
       },
@@ -165,6 +178,7 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
     resources: [
       {
         name: 'OutLine Aotearoa',
+        url: 'https://outline.org.nz',
         description:
           'Free, confidential rainbow peer support provided by trained LGBTQIA+ volunteers. Counselling and additional trans and nonbinary support services are also available.',
         contacts: [{ label: 'Phone', value: '0800 688 5463' }],
@@ -173,16 +187,19 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
       },
       {
         name: 'RainbowYOUTH',
+        url: 'https://ry.org.nz',
         description:
           'Support, information, advocacy, resources, and community connection for queer, gender-diverse, takatāpui, and intersex young people, as well as their friends and whānau.',
       },
       {
         name: 'InsideOUT Kōaro',
+        url: 'https://insideout.org.nz',
         description:
           'A national organisation supporting rainbow and takatāpui young people. It provides resources for young people, whānau, schools, workplaces, healthcare professionals, and community groups.',
       },
       {
         name: 'Gender Minorities Aotearoa',
+        url: 'https://genderminorities.com',
         description:
           'A nationwide organisation run by and for transgender people. It offers information, advocacy, peer support, healthcare navigation, and counselling for trans people and their whānau.',
       },
@@ -200,6 +217,7 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
       },
       {
         name: 'FELGTBI+ Línea Arcoíris',
+        url: 'https://felgtbi.org',
         description:
           'An anonymous, confidential, and free information and referral service for LGBTQIA+ people, young people, and families. It can assist with hate crimes, discrimination, sexual health, HIV and STI information, asylum, documentation, and other LGBTQIA+ concerns.',
         contacts: [
@@ -209,6 +227,7 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
       },
       {
         name: 'FELGTBI+ Resource Centre',
+        url: 'https://felgtbi.org',
         description:
           'A collection of Spanish-language educational resources, research, guides, videos, and information covering LGBTQIA+ inclusion, rights, health, families, and discrimination.',
       },
@@ -220,6 +239,7 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
     resources: [
       {
         name: 'QLife',
+        url: 'https://qlife.org.au',
         description:
           'Free and anonymous LGBTQIA+ peer support and referrals by telephone and webchat. QLife supports LGBTQIA+ people as well as friends, family members, teachers, and others seeking guidance.',
         contacts: [{ label: 'Phone', value: '1800 184 527' }],
@@ -227,6 +247,7 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
       },
       {
         name: 'Rainbow Door',
+        url: 'https://www.rainbowdoor.org.au',
         description:
           'A free specialist helpline for LGBTQIA+ people, their friends, families, and professionals. It provides support, information, and referrals relating to mental health, relationships, family violence, homelessness, alcohol and other drugs, sexual health, and social connection. Interpreter and Auslan support are available.',
         contacts: [
@@ -236,6 +257,7 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
       },
       {
         name: 'Transcend Australia',
+        url: 'https://transcend.org.au',
         description:
           'Support, information, advocacy, and resources for trans, gender-diverse, and nonbinary children, young people, and their families. Resources are also available for schools, healthcare professionals, and allies.',
       },
