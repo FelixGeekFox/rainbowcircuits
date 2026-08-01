@@ -49,6 +49,9 @@ const happenings = [
         creativity, and comfort with AI. We gather in a few cosy corners of the internet,
         make things together, and look out for one another — no pressure, just people.
       </p>
+      <p class="community-rules-link">
+        New here? <a href={withBase('/community/rules/')}>Read our community rules →</a>
+      </p>
     </header>
 
     <section aria-labelledby="gather-heading">
@@ -88,6 +91,7 @@ const happenings = [
         {SITE.discordUrl
           ? <a class="btn btn-primary" href={SITE.discordUrl} rel="noopener">Join our Discord</a>
           : <a class="btn btn-primary" href="https://www.reddit.com/message/compose?to=r/RainbowCircuits" target="_blank" rel="noopener noreferrer">Get in touch to join</a>}
+        <a class="btn btn-secondary" href={withBase('/community/rules/')}>Read our rules</a>
         <a class="btn btn-secondary" href={`mailto:${SITE.contactEmail}`}>Email us</a>
       </div>
     </section>
@@ -99,6 +103,7 @@ const happenings = [
   .community-header { text-align: center; margin-bottom: 2.5rem; }
   .community-header h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-top: 0.3rem; }
   .community-intro { color: var(--text); max-width: 42rem; margin: 1rem auto 0; font-size: 1.08rem; line-height: 1.7; }
+  .community-rules-link { margin-top: 1rem; font-family: var(--font-ui); font-weight: 700; font-size: 0.95rem; }
 
   .section-heading { text-align: center; font-size: 1.5rem; margin-bottom: 1.5rem; }
   section + section { margin-top: 3rem; }

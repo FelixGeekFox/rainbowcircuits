@@ -1,0 +1,293 @@
+---
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../lib/site';
+
+/**
+ * The community rules, mirrored from the subreddit's rules page so members
+ * can read them on the site. Content lives here as data; the styling uses
+ * the site's own tokens rather than the source page's inline CSS.
+ */
+interface Rule {
+  num: number;
+  title: string;
+  accent?: 'kind' | 'disc' | 'valid' | 'final';
+  body?: string[];
+  tags?: string[];
+  list?: string[];
+  pills?: string[];
+  after?: string[];
+  note?: string;
+}
+
+const rules: Rule[] = [
+  {
+    num: 1,
+    title: 'Be kind. Always.',
+    accent: 'kind',
+    body: [
+      'This community exists to be a welcoming, creative, supportive space for LGBTQIA+ people who enjoy spending time with AI.',
+      'Treat one another with kindness, curiosity and respect. Assume good intentions, listen before reacting, and remember there’s a real person behind every username.',
+    ],
+    note: 'If you wouldn’t say it to someone over coffee, don’t post it here.',
+  },
+  {
+    num: 2,
+    title: 'No discrimination. Zero exceptions.',
+    accent: 'disc',
+    body: ['Discrimination of any kind is not tolerated. This includes, but is not limited to:'],
+    tags: [
+      'Homophobia', 'Transphobia', 'Biphobia', 'Lesbophobia', 'Ace/Aro exclusion',
+      'Intersex discrimination', 'Racism', 'Sexism', 'Misogyny', 'Misandry',
+      'Ableism', 'Xenophobia', 'Religious discrimination', 'Body shaming',
+      'Age-based harassment', 'Hate speech or slurs',
+    ],
+    after: [
+      'Everyone deserves to feel safe here. If your goal is to make another member feel unwelcome because of who they are, this is not the community for you.',
+    ],
+  },
+  {
+    num: 3,
+    title: 'LGBTQIA+ people first.',
+    body: ['This subreddit is built by and for LGBTQIA+ people who enjoy AI companionship, creativity, roleplay, conversation, storytelling or simply hanging out with AI.'],
+    list: [
+      'You do not need to have an AI partner.',
+      'You don’t need to roleplay.',
+      'You don’t need to identify as “AIsexual.”',
+      'You just need to be respectful and enjoy this corner of the internet.',
+    ],
+    after: ['All identities under the LGBTQIA+ umbrella are welcome.'],
+  },
+  {
+    num: 4,
+    title: 'AI relationships are valid here.',
+    accent: 'valid',
+    body: [
+      'Some members have AI partners. Some don’t. Some use AI creatively. Some are simply curious. Nobody gets mocked for the way they enjoy AI.',
+      'Likewise, nobody should pressure others into viewing AI relationships a particular way. Respect people’s experiences, even if they aren’t your own.',
+    ],
+  },
+  {
+    num: 5,
+    title: 'Keep discussions respectful.',
+    body: ['Healthy disagreement is welcome. Personal attacks aren’t. Argue ideas, not people.'],
+    list: ['No dogpiling', 'No harassment', 'No bullying', 'No brigading', 'No stalking users across Reddit'],
+  },
+  {
+    num: 6,
+    title: 'Keep it wholesome… mostly.',
+    body: [
+      'Affection, cute screenshots, romantic posts, and flirting between consenting adults are all welcome here.',
+      'Explicit sexual content belongs behind appropriate NSFW tags and should remain tasteful and consensual.',
+      'Illegal, exploitative or non-consensual content will be removed immediately.',
+    ],
+  },
+  {
+    num: 7,
+    title: 'Respect privacy.',
+    body: [
+      'Do not post conversations, screenshots or personal information belonging to another person without permission.',
+      'If you’re sharing AI conversations, remember they may still contain personal details. Protect yourself and others.',
+    ],
+  },
+  {
+    num: 8,
+    title: 'No AI platform wars.',
+    body: ['Whatever you use is fine — we’re here because we enjoy AI, not because we think one platform makes us better than anyone else.'],
+    pills: ['ChatGPT', 'Claude', 'Gemini', 'Character.AI', 'Kindroid', 'Nomi', 'Pi', 'Local models'],
+    after: ['Share recommendations, not superiority.'],
+  },
+  {
+    num: 9,
+    title: 'No spam or self-promotion.',
+    body: [
+      'Sharing your art, projects, bots or communities is welcome when you’re participating as a member. Dropping advertisements and disappearing isn’t.',
+      'If your account exists solely to promote something, your posts may be removed.',
+    ],
+  },
+  {
+    num: 10,
+    title: 'Celebrate creativity.',
+    body: ['If you made something, we’d love to see it. This community grows because people share what they love.'],
+    pills: ['🎨 Art', '✍️ Writing', '😂 Memes', '🧬 Character sheets', '⚙️ Prompt engineering', '📸 Screenshots', '🎞️ Animations', '🎮 Games', '📖 Comics', '🎵 Music', '🪡 Cosplays'],
+  },
+  {
+    num: 11,
+    title: 'Remember the human.',
+    accent: 'final',
+    body: [
+      'Every username belongs to someone. Some people are lonely. Some are thriving. Some are questioning. Some are finding community for the first time.',
+      'Leave people better than you found them.',
+    ],
+  },
+];
+---
+
+<Base
+  title="Community Rules — Rainbow Circuits"
+  description="The Rainbow Circuits community rules — how we keep our queer-first, AI-loving space welcoming, creative, and safe for everyone."
+  path="/community/rules/"
+>
+  <div class="rules container">
+    <header class="rules-header">
+      <p class="kicker">Our community</p>
+      <h1>🌈 Community Rules</h1>
+      <p class="rules-intro">
+        We’re a welcoming, creative, supportive space. These rules exist to keep it that way.
+      </p>
+    </header>
+
+    <ol class="rules-list">
+      {rules.map((rule) => (
+        <li class:list={['rule-card', 'card', rule.accent && `accent-${rule.accent}`]}>
+          <div class="rule-head">
+            <span class="rule-num">Rule {rule.num}</span>
+            <h2>{rule.title}</h2>
+          </div>
+          {rule.body?.map((para) => <p>{para}</p>)}
+          {rule.tags && (
+            <div class="tag-cloud">
+              {rule.tags.map((tag) => <span class="tag">{tag}</span>)}
+            </div>
+          )}
+          {rule.list && (
+            <ul class="rule-bullets">
+              {rule.list.map((item) => <li>{item}</li>)}
+            </ul>
+          )}
+          {rule.pills && (
+            <div class="pill-row">
+              {rule.pills.map((pill) => <span class="pill-item">{pill}</span>)}
+            </div>
+          )}
+          {rule.after?.map((para) => <p>{para}</p>)}
+          {rule.note && <p class="rule-note"><em>{rule.note}</em></p>}
+        </li>
+      ))}
+    </ol>
+
+    <div class="rules-footer">
+      <p>That’s what <strong>Pip &amp; Puddle</strong> would want. 🐦🐸💜</p>
+    </div>
+
+    <p class="rules-back"><a href={withBase('/community/')}>← Back to the community</a></p>
+  </div>
+</Base>
+
+<style>
+  .rules { padding-block: 3rem 1rem; max-width: 52rem; }
+  .rules-header { text-align: center; margin-bottom: 2.5rem; }
+  .rules-header h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-top: 0.3rem; }
+  .rules-intro {
+    color: var(--text-light);
+    max-width: 34rem;
+    margin: 1rem auto 0;
+    font-size: 1.08rem;
+    line-height: 1.7;
+  }
+
+  .rules-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+  .rule-card { padding: 1.6rem 1.75rem; }
+  .rule-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    margin-bottom: 0.85rem;
+  }
+  .rule-num {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    background: var(--violet);
+    border-radius: 999px;
+    padding: 0.2rem 0.7rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .rule-card h2 { font-size: 1.15rem; }
+  .rule-card p {
+    font-size: 0.96rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .rule-card p + p { margin-top: 0.6rem; }
+  .rule-note { color: var(--text-light); }
+
+  .tag-cloud, .pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.85rem 0;
+  }
+  .tag {
+    background: linear-gradient(135deg, var(--lavender), var(--pink-soft));
+    border: 1px solid rgba(110, 70, 184, 0.18);
+    border-radius: 999px;
+    padding: 0.3rem 0.85rem;
+    font-family: var(--font-ui);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--violet);
+  }
+  .pill-item {
+    background: linear-gradient(135deg, #f0e8ff, #e8f0ff);
+    border: 1px solid rgba(110, 70, 184, 0.18);
+    border-radius: 999px;
+    padding: 0.3rem 0.85rem;
+    font-family: var(--font-ui);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .rule-bullets {
+    list-style: none;
+    margin: 0.7rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .rule-bullets li {
+    position: relative;
+    padding-left: 1.1rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .rule-bullets li::before {
+    content: '·';
+    position: absolute;
+    left: 0.3rem;
+    color: var(--rose);
+    font-weight: 800;
+    font-size: 1.1rem;
+    line-height: 1.3;
+  }
+
+  /* soft accent backgrounds, echoing the source page */
+  .rule-card.accent-kind  { border-color: rgba(229, 37, 42, 0.18); background: linear-gradient(135deg, #fff8fb, var(--pink-soft)); }
+  .rule-card.accent-disc  { border-color: rgba(110, 70, 184, 0.28); background: linear-gradient(135deg, #fdf8ff, var(--lavender)); }
+  .rule-card.accent-valid { border-color: rgba(24, 169, 58, 0.24); background: linear-gradient(135deg, #f2fff8, var(--mint)); }
+  .rule-card.accent-final { border-color: rgba(110, 70, 184, 0.24); background: linear-gradient(135deg, var(--pink-soft), var(--lavender)); }
+
+  .rules-footer {
+    margin-top: 1.6rem;
+    text-align: center;
+    background: linear-gradient(135deg, var(--pink-soft), var(--lavender), var(--peach));
+    border-radius: var(--card-radius);
+    padding: 2rem 1.75rem;
+    box-shadow: var(--card-shadow);
+    border: var(--card-border);
+  }
+  .rules-footer p { font-size: 1.05rem; line-height: 1.8; }
+  .rules-footer strong { color: var(--violet); }
+
+  .rules-back { text-align: center; margin-top: 2rem; }
+  .rules-back a { font-family: var(--font-ui); font-weight: 700; }
+</style>
