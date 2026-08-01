@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import { withBase } from '../lib/site';
+import FeedbackForm from '../components/FeedbackForm.astro';
+---
+
+<Base
+  title="What Should We Do Next? — Rainbow Circuits"
+  description="Tell us what Rainbow Circuits should create next — event ideas, formats, and whether you'd like to help host. Anonymous and low-pressure."
+  path="/feedback/"
+>
+  <div class="feedback-page container">
+    <header class="feedback-header">
+      <p class="kicker">Your turn</p>
+      <h1>What Should We Do Next?</h1>
+      <p class="feedback-lead">
+        The first Gala showed us what can happen when this community is given a theme, a little
+        encouragement, and absolutely no adult supervision. Now we want to know what you would
+        like us to create next. No identifying details are required — anonymous feedback is
+        completely fine.
+      </p>
+    </header>
+
+    <FeedbackForm />
+
+    <p class="feedback-back"><a href={withBase('/newsletter/issue-001/')}>← Back to the newsletter</a></p>
+  </div>
+</Base>
+
+<style>
+  .feedback-page { padding-block: 3rem 1rem; max-width: 52rem; }
+  .feedback-header { text-align: center; margin-bottom: 2.25rem; }
+  .feedback-header h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-top: 0.3rem; }
+  .feedback-lead {
+    color: var(--text-light);
+    max-width: 40rem;
+    margin: 1rem auto 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+  .feedback-back { text-align: center; margin-top: 2rem; }
+  .feedback-back a { font-family: var(--font-ui); font-weight: 700; }
+</style>
