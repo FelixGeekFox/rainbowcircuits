@@ -1,0 +1,150 @@
+---
+import { Image } from 'astro:assets';
+import { getImage } from '../../lib/images';
+import SectionIntro from '../SectionIntro.astro';
+import PlaceholderImage from '../PlaceholderImage.astro';
+
+/**
+ * A spotlight for a one-off community celebration: poster image beside an
+ * invitation, an optional cross-timezone schedule, and a link out to the
+ * official campaign.
+ * data: {
+ *   image?, imageAlt?,
+ *   link?, linkLabel?,
+ *   heading?, body: string[], tagline?,
+ *   schedule?: { city: string, time: string }[],
+ *   footnote?
+ * }
+ */
+interface Props {
+  kicker?: string;
+  title: string;
+  data: Record<string, any>;
+}
+const { kicker, title, data } = Astro.props;
+const image = getImage(data.image);
+const body: string[] = data.body ?? [];
+const schedule: { city: string; time: string }[] = data.schedule ?? [];
+---
+
+<SectionIntro kicker={kicker} title={title} />
+
+<div class="event">
+  <figure class="event-figure">
+    {image ? (
+      <Image
+        src={image}
+        alt={data.imageAlt ?? ''}
+        widths={[420, 680, 940]}
+        sizes="(min-width: 56rem) 22rem, 80vw"
+        loading="lazy"
+      />
+    ) : (
+      <PlaceholderImage label={data.imageAlt ?? 'Event poster'} ratio="3 / 4" icon="💜" />
+    )}
+  </figure>
+
+  <div class="event-copy">
+    {data.heading && <h3 class="event-heading">{data.heading}</h3>}
+    {body.map((para: string) => <p>{para}</p>)}
+    {data.tagline && <p class="event-tagline">{data.tagline}</p>}
+
+    {schedule.length > 0 && (
+      <div class="event-schedule">
+        <p class="schedule-label">Starts at</p>
+        <ul>
+          {schedule.map((row) => (
+            <li>
+              <span class="sched-city">{row.city}</span>
+              <span class="sched-time">{row.time}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {data.footnote && <p class="event-footnote">{data.footnote}</p>}
+
+    {data.link && (
+      <a class="btn btn-primary event-cta" href={data.link} rel="noopener" target="_blank">
+        {data.linkLabel ?? 'Learn more'}
+      </a>
+    )}
+  </div>
+</div>
+
+<style>
+  .event {
+    max-width: 62rem;
+    margin-inline: auto;
+    display: grid;
+    gap: 1.75rem;
+    align-items: start;
+  }
+  @media (min-width: 56rem) {
+    .event { grid-template-columns: 22rem 1fr; gap: 2.5rem; }
+  }
+  .event-figure {
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    justify-self: center;
+    width: 100%;
+    max-width: 24rem;
+  }
+  .event-figure :global(img) { width: 100%; height: auto; display: block; }
+
+  .event-heading {
+    font-size: clamp(1.35rem, 3.2vw, 1.75rem);
+    color: var(--violet);
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+  .event-copy p { line-height: 1.75; }
+  .event-copy p + p { margin-top: 0.75rem; }
+  .event-tagline {
+    margin-top: 1rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--violet);
+  }
+
+  .event-schedule {
+    margin-top: 1.5rem;
+    background: linear-gradient(135deg, var(--lavender), var(--pink-soft));
+    border-radius: 16px;
+    padding: 1.1rem 1.3rem;
+  }
+  .schedule-label {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--subheading);
+    margin-bottom: 0.6rem;
+  }
+  .event-schedule ul {
+    list-style: none;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .event-schedule li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: 0.95rem;
+  }
+  .sched-city { font-family: var(--font-ui); font-weight: 700; color: var(--text); }
+  .sched-time { color: var(--text-light); font-variant-numeric: tabular-nums; }
+
+  .event-footnote {
+    margin-top: 1rem;
+    font-size: 0.92rem;
+    color: var(--text-light);
+    font-style: italic;
+  }
+  .event-cta { margin-top: 1.5rem; }
+</style>

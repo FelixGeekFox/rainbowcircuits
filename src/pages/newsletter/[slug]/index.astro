@@ -14,6 +14,7 @@ import EventsSection from '../../../components/issue/EventsSection.astro';
 import FeedbackSection from '../../../components/issue/FeedbackSection.astro';
 import MascotCorner from '../../../components/issue/MascotCorner.astro';
 import PuzzlesSection from '../../../components/issue/PuzzlesSection.astro';
+import SpecialEvent from '../../../components/issue/SpecialEvent.astro';
 import ClosingSection from '../../../components/issue/ClosingSection.astro';
 import { CATEGORIES } from '../../../data/categories';
 import { SITE, withBase, formatMonthYear, issueNumberLabel } from '../../../lib/site';
@@ -138,6 +139,9 @@ const structuredData = issue
                 )}
                 {section.type === 'puzzles' && (
                   <PuzzlesSection kicker={section.kicker} title={section.title} data={section.data} />
+                )}
+                {section.type === 'special-event' && (
+                  <SpecialEvent kicker={section.kicker} title={section.title} data={section.data} />
                 )}
                 {section.type === 'closing' && (
                   <ClosingSection

@@ -53,6 +53,7 @@ const issues = defineCollection({
           'feedback',
           'mascot-corner',
           'puzzles',
+          'special-event',
           'closing',
         ]),
         title: z.string(),

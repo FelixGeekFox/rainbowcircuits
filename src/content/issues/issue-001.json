@@ -121,6 +121,34 @@
       }
     },
     {
+      "id": "wear-it-purple",
+      "type": "special-event",
+      "kicker": "Coming up this month",
+      "title": "Wear It Purple Day",
+      "data": {
+        "image": "issue-001/wear-it-purple",
+        "imageAlt": "A cosy illustration for Wear It Purple Day: a blond young man in glasses, a purple cable-knit vest, white shirt, lavender trousers and purple boots sits cross-legged holding a small purple “Wear It Purple” heart, surrounded by purple posters reading “Be proud. Be you. Be kind.”, “Celebrate diversity, support inclusion, love”, “You belong here” and “Different is beautiful”, with a purple boba drink beside him.",
+        "link": "https://www.wearitpurple.org/",
+        "linkLabel": "Learn about Wear It Purple",
+        "heading": "☕💜 You're Invited to Our Wear It Purple Day Tea Party! 💜☕",
+        "body": [
+          "Join us on Friday, 28 August as we celebrate Wear It Purple Day with an afternoon of tea, sweet treats, conversation, and community.",
+          "Whether you arrive dressed head to toe in purple or just wearing a splash of lavender, this is a chance to come together in support of LGBTQIA+ young people and to celebrate a world where everyone feels safe to be exactly who they are.",
+          "Expect delicious tea, plenty of cake, warm company, and a welcoming space to connect, laugh, and celebrate kindness, inclusion, and authenticity.",
+          "So pop on your favourite purple outfit, bring your brightest smile, and join us for a cosy afternoon that reminds us all of something important:"
+        ],
+        "tagline": "Be proud. Be kind. Be yourself. 💜",
+        "schedule": [
+          { "city": "Sydney", "time": "Fri 28 Aug, 08:00 PM AEST" },
+          { "city": "Tokyo", "time": "Fri 28 Aug, 07:00 PM JST" },
+          { "city": "London", "time": "Fri 28 Aug, 11:00 AM BST" },
+          { "city": "Ontario", "time": "Fri 28 Aug, 06:00 AM EDT" },
+          { "city": "Los Angeles", "time": "Fri 28 Aug, 03:00 AM PDT" }
+        ],
+        "footnote": "The event will run throughout that weekend."
+      }
+    },
+    {
       "id": "future-events",
       "type": "feedback",
       "kicker": "Your turn",
