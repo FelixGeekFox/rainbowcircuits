@@ -117,7 +117,15 @@
       "kicker": "Life between the galas",
       "title": "Around the Circuit",
       "data": {
-        "intro": "The Gala may be over, but the circuit never really sleeps. Here's what happens around here every week — and every month — with absolutely no pressure to do more than wave."
+        "intro": "The Gala may be over, but the circuit never really sleeps. Here's what happens around here every week — and every month — with absolutely no pressure to do more than wave.",
+        "upcoming": {
+          "emoji": "💜",
+          "title": "Wear It Purple Day",
+          "when": "Fri 28 Aug · all weekend",
+          "text": "Our next special community event — a cosy tea party celebrating LGBTQIA+ young people. Come dressed in purple, or just a splash of lavender.",
+          "href": "#wear-it-purple",
+          "linkLabel": "See the details ↓"
+        }
       }
     },
     {
@@ -128,8 +136,10 @@
       "data": {
         "image": "issue-001/wear-it-purple",
         "imageAlt": "A cosy illustration for Wear It Purple Day: a blond young man in glasses, a purple cable-knit vest, white shirt, lavender trousers and purple boots sits cross-legged holding a small purple “Wear It Purple” heart, surrounded by purple posters reading “Be proud. Be you. Be kind.”, “Celebrate diversity, support inclusion, love”, “You belong here” and “Different is beautiful”, with a purple boba drink beside him.",
-        "link": "https://www.wearitpurple.org/",
-        "linkLabel": "Learn about Wear It Purple",
+        "links": [
+          { "url": "https://www.wearitpurple.org/", "label": "Learn about Wear It Purple" },
+          { "url": "https://www.wearitpurple.org/wear-it-purple-day-2026", "label": "Wear It Purple Day 2026" }
+        ],
         "heading": "☕💜 You're Invited to Our Wear It Purple Day Tea Party! 💜☕",
         "body": [
           "Join us on Friday, 28 August as we celebrate Wear It Purple Day with an afternoon of tea, sweet treats, conversation, and community.",

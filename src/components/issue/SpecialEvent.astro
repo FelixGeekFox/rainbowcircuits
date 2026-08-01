@@ -25,6 +25,9 @@ const { kicker, title, data } = Astro.props;
 const image = getImage(data.image);
 const body: string[] = data.body ?? [];
 const schedule: { city: string; time: string }[] = data.schedule ?? [];
+/** One or more outbound links. Back-compat: a single `link`/`linkLabel`. */
+const links: { url: string; label: string }[] =
+  data.links ?? (data.link ? [{ url: data.link, label: data.linkLabel ?? 'Learn more' }] : []);
 ---
 
 <SectionIntro kicker={kicker} title={title} />
@@ -65,10 +68,19 @@ const schedule: { city: string; time: string }[] = data.schedule ?? [];
 
     {data.footnote && <p class="event-footnote">{data.footnote}</p>}
 
-    {data.link && (
-      <a class="btn btn-primary event-cta" href={data.link} rel="noopener" target="_blank">
-        {data.linkLabel ?? 'Learn more'}
-      </a>
+    {links.length > 0 && (
+      <div class="event-ctas">
+        {links.map((lnk, i) => (
+          <a
+            class:list={['btn', i === 0 ? 'btn-primary' : 'btn-secondary']}
+            href={lnk.url}
+            rel="noopener"
+            target="_blank"
+          >
+            {lnk.label}
+          </a>
+        ))}
+      </div>
     )}
   </div>
 </div>
@@ -146,5 +158,10 @@ const schedule: { city: string; time: string }[] = data.schedule ?? [];
     color: var(--text-light);
     font-style: italic;
   }
-  .event-cta { margin-top: 1.5rem; }
+  .event-ctas {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
 </style>

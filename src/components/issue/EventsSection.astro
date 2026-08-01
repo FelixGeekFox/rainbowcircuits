@@ -51,13 +51,18 @@ const monthlies = events.filter((e) => e.data.frequency === 'monthly');
       </li>
     ))}
     <li class="event-card card event-upcoming" style="--event-accent: var(--rose);">
-      <p class="event-emoji" aria-hidden="true">🎉</p>
-      <h3>Community Events</h3>
-      <p class="event-schedule">Seasonal &amp; special</p>
+      <p class="event-emoji" aria-hidden="true">{data.upcoming?.emoji ?? '🎉'}</p>
+      <h3>{data.upcoming?.title ?? 'Community Events'}</h3>
+      <p class="event-schedule">{data.upcoming?.when ?? 'Seasonal & special'}</p>
       <p class="event-desc">
-        Galas, seasonal celebrations, and special weekends. Whenever something bigger is on
-        the horizon, it’ll appear right here.
+        {data.upcoming?.text ??
+          'Galas, seasonal celebrations, and special weekends. Whenever something bigger is on the horizon, it’ll appear right here.'}
       </p>
+      {data.upcoming?.href && (
+        <a class="event-upcoming-link" href={data.upcoming.href}>
+          {data.upcoming.linkLabel ?? 'Learn more'}
+        </a>
+      )}
     </li>
   </ul>
 
@@ -117,6 +122,13 @@ const monthlies = events.filter((e) => e.data.frequency === 'monthly');
     color: var(--event-accent);
   }
   .event-desc { font-size: 0.96rem; color: var(--text); }
+  .event-upcoming-link {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
   .event-pause {
     font-size: 0.88rem;
     color: var(--text-light);
