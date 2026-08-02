@@ -94,19 +94,26 @@
       "kicker": "Games & mischief",
       "title": "Pounce's Puzzles",
       "data": {
-        "intro": "Pounce insists on hiding things and Penelope insists we make them into puzzles. Grab a pen (or your keenest eyes) and settle in — solutions will turn up in a future issue, or in the community if you can't wait.",
+        "intro": "Pounce insists on hiding things and Penelope insists we make them into puzzles. Tap either one to open it full size in a new tab — perfect for zooming in or printing out.",
         "puzzles": [
           {
             "kind": "wordsearch",
-            "title": "The Gala Wordsearch",
-            "blurb": "Find every word Pounce scattered across the ballroom floor — from “chandelier” to “fish fountain.” Coming soon to this space.",
-            "icon": "🔤"
+            "title": "Rainbow Circuits Word Search",
+            "blurb": "Seventeen words of Rainbow Circuits spirit — from PIP and PUDDLE to PRIDE, COMMUNITY and RAINBOW — are hidden in the grid. Tap it to open the full-size version.",
+            "image": "issue-001/puzzles/wordsearch",
+            "imageAlt": "A cosy café-themed Rainbow Circuits word search: a letter grid framed by rainbow cables, with Pip the sparrow and Puddle the frog holding drinks, and a word list including Coffee, Acceptance, Pip, Global, Love, Joy, Circuits, Puddle, Queer, Pride, Laughter, Friendship, Empathy, Family, Dancing, Community and Rainbow.",
+            "openLabel": "Open full size"
           },
           {
             "kind": "image-search",
-            "title": "Where's Penelope?",
-            "blurb": "One shy chinchilla is hiding somewhere in a very busy scene. Can you spot her — and everything else Pounce tucked away? Coming soon to this space.",
-            "icon": "🔍"
+            "title": "Can you find all of the Pond Pals?",
+            "blurb": "Pip, Puddle, Pounce, Penelope and their rainbow-wolf friend are hiding somewhere in this bustling pride-flag jungle. Tap the scene to open it full size, then reveal the key to check who you found.",
+            "image": "issue-001/puzzles/pond-pals",
+            "imageAlt": "A tall, densely detailed jungle-and-pond scene bursting with animals gathered around a Progress Pride flag, with the five Pond Pals hidden among them.",
+            "openLabel": "Open full size",
+            "keyImage": "issue-001/puzzles/pond-pals-key",
+            "keyImageAlt": "The answer key: five framed portraits of the Pond Pals to find — Penelope the chinchilla, Pip the rainbow-winged sparrow, a rainbow wolf, Pounce the bespectacled panther, and Puddle the frog with a mug.",
+            "keyLabel": "Reveal the Pond Pals key"
           }
         ]
       }

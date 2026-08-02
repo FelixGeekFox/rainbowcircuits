@@ -1,24 +1,31 @@
 ---
-import { Image } from 'astro:assets';
-import { getImage } from '../../lib/images';
+import { Image, getImage } from 'astro:assets';
+import { getImage as lookupImage } from '../../lib/images';
 import SectionIntro from '../SectionIntro.astro';
 import PlaceholderImage from '../PlaceholderImage.astro';
 
 /**
  * Pounce's Puzzles — a recurring games department.
- * Each puzzle in `data.puzzles[]` is:
- *   { kind: 'wordsearch' | 'image-search', title, blurb?,
- *     image?, imageAlt?, icon? }
- * When `image` is omitted a labelled placeholder frame reserves the space,
- * so an issue can ship the section before the puzzle art is finished.
+ * Each puzzle in `data.puzzles[]`:
+ *   { kind, title, blurb?, icon?,
+ *     image?, imageAlt?,           // the puzzle art (snapshot + full-size link)
+ *     keyImage?, keyImageAlt?, keyLabel?,   // optional collapsible answer key
+ *     openLabel? }
+ * The snapshot links to a high-resolution version that opens in a new tab,
+ * so members can zoom in or print. A labelled placeholder reserves the space
+ * when no image is set yet.
  */
 interface Puzzle {
   kind?: string;
   title: string;
   blurb?: string;
+  icon?: string;
   image?: string;
   imageAlt?: string;
-  icon?: string;
+  keyImage?: string;
+  keyImageAlt?: string;
+  keyLabel?: string;
+  openLabel?: string;
 }
 interface Props {
   kicker?: string;
@@ -27,6 +34,24 @@ interface Props {
 }
 const { kicker, title, data } = Astro.props;
 const puzzles: Puzzle[] = data.puzzles ?? [];
+
+/** Cap the "open full size" export so it's high-res but not the raw 15 MB PNG. */
+const bigVersion = async (img: import('astro').ImageMetadata) =>
+  (await getImage({ src: img, width: Math.min(img.width, 2800), format: 'webp', quality: 82 })).src;
+
+const resolved = await Promise.all(
+  puzzles.map(async (p) => {
+    const img = lookupImage(p.image);
+    const keyImg = lookupImage(p.keyImage);
+    return {
+      ...p,
+      img,
+      keyImg,
+      fullSrc: img ? await bigVersion(img) : undefined,
+      keyFullSrc: keyImg ? await bigVersion(keyImg) : undefined,
+    };
+  }),
+);
 ---
 
 <SectionIntro kicker={kicker} title={title} />
@@ -34,34 +59,47 @@ const puzzles: Puzzle[] = data.puzzles ?? [];
 {data.intro && <p class="puzzles-intro">{data.intro}</p>}
 
 <div class="puzzles">
-  {puzzles.map((puzzle) => {
-    const img = getImage(puzzle.image);
-    return (
-      <figure class="puzzle card">
-        <div class="puzzle-art">
-          {img ? (
-            <Image
-              src={img}
-              alt={puzzle.imageAlt ?? ''}
-              widths={[520, 820, 1200]}
-              sizes="(min-width: 52rem) 30rem, 92vw"
-              loading="lazy"
-            />
-          ) : (
-            <PlaceholderImage
-              label={puzzle.imageAlt ?? `${puzzle.title} — coming soon`}
-              ratio="1 / 1"
-              icon={puzzle.icon ?? '🧩'}
-            />
-          )}
-        </div>
-        <figcaption>
-          <h3>{puzzle.title}</h3>
-          {puzzle.blurb && <p>{puzzle.blurb}</p>}
-        </figcaption>
-      </figure>
-    );
-  })}
+  {resolved.map((puzzle) => (
+    <figure class="puzzle card">
+      {puzzle.img ? (
+        <a class="puzzle-open" href={puzzle.fullSrc} target="_blank" rel="noopener" aria-label={`Open “${puzzle.title}” full size in a new tab`}>
+          <Image
+            class="puzzle-thumb"
+            src={puzzle.img}
+            alt={puzzle.imageAlt ?? ''}
+            widths={[420, 720, 1040]}
+            sizes="(min-width: 52rem) 30rem, 92vw"
+            loading="lazy"
+          />
+          <span class="puzzle-open-hint">{puzzle.openLabel ?? 'Open full size'} <span aria-hidden="true">↗</span></span>
+        </a>
+      ) : (
+        <PlaceholderImage label={puzzle.imageAlt ?? `${puzzle.title} — coming soon`} ratio="1 / 1" icon={puzzle.icon ?? '🧩'} />
+      )}
+
+      <figcaption>
+        <h3>{puzzle.title}</h3>
+        {puzzle.blurb && <p>{puzzle.blurb}</p>}
+
+        {puzzle.keyImg && (
+          <details class="puzzle-key">
+            <summary>{puzzle.keyLabel ?? 'Reveal the answer key'}</summary>
+            <a class="puzzle-open key-open" href={puzzle.keyFullSrc} target="_blank" rel="noopener" aria-label="Open the answer key full size in a new tab">
+              <Image
+                class="puzzle-thumb"
+                src={puzzle.keyImg}
+                alt={puzzle.keyImageAlt ?? ''}
+                widths={[320, 520, 760]}
+                sizes="(min-width: 52rem) 22rem, 80vw"
+                loading="lazy"
+              />
+              <span class="puzzle-open-hint">Open full size <span aria-hidden="true">↗</span></span>
+            </a>
+          </details>
+        )}
+      </figcaption>
+    </figure>
+  ))}
 </div>
 
 <style>
@@ -79,11 +117,73 @@ const puzzles: Puzzle[] = data.puzzles ?? [];
     margin-inline: auto;
   }
   @media (min-width: 52rem) {
-    .puzzles { grid-template-columns: 1fr 1fr; }
+    .puzzles { grid-template-columns: 1fr 1fr; align-items: start; }
   }
   .puzzle { overflow: hidden; display: flex; flex-direction: column; }
-  .puzzle-art :global(img) { width: 100%; height: auto; display: block; }
-  .puzzle figcaption { padding: 1.25rem 1.5rem 1.5rem; }
-  .puzzle figcaption h3 { font-size: 1.35rem; margin-bottom: 0.4rem; }
+
+  /* clickable snapshot → opens full-res in a new tab */
+  .puzzle-open {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--paper-warm);
+    transition: transform 0.2s ease;
+  }
+  .puzzle-open:hover { transform: scale(1.01); }
+  .puzzle-open :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+  .puzzle-open-hint {
+    position: absolute;
+    right: 0.7rem;
+    bottom: 0.7rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: var(--white);
+    background: rgba(45, 34, 60, 0.72);
+    backdrop-filter: blur(4px);
+    border-radius: 999px;
+    padding: 0.3rem 0.7rem;
+  }
+  .puzzle-open:hover .puzzle-open-hint,
+  .puzzle-open:focus-visible .puzzle-open-hint { background: var(--violet); }
+
+  .puzzle figcaption { padding: 1.25rem 1.5rem 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .puzzle figcaption h3 { font-size: 1.35rem; }
   .puzzle figcaption p { font-size: 0.96rem; line-height: 1.65; color: var(--text-light); }
+
+  /* collapsible answer key */
+  .puzzle-key { margin-top: 0.4rem; }
+  .puzzle-key summary {
+    cursor: pointer;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--violet);
+    padding: 0.5rem 0.75rem;
+    background: var(--lavender);
+    border-radius: 999px;
+    display: inline-block;
+    list-style: none;
+    user-select: none;
+  }
+  .puzzle-key summary::-webkit-details-marker { display: none; }
+  .puzzle-key summary::before { content: '🔎 '; }
+  .puzzle-key[open] summary::before { content: '✨ '; }
+  .puzzle-key .key-open {
+    aspect-ratio: auto;
+    margin-top: 0.9rem;
+    border-radius: 14px;
+    box-shadow: var(--card-shadow);
+  }
+  .puzzle-key .key-open :global(img) { height: auto; object-fit: contain; }
 </style>
