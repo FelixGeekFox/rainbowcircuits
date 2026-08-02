@@ -126,6 +126,7 @@
       "data": {
         "intro": "The Gala may be over, but the circuit never really sleeps. Here's what happens around here every week — and every month — with absolutely no pressure to do more than wave.",
         "upcoming": {
+          "label": "Upcoming community events",
           "emoji": "💜",
           "title": "Wear It Purple Day",
           "when": "Fri 28 Aug · all weekend",

@@ -51,6 +51,7 @@ const monthlies = events.filter((e) => e.data.frequency === 'monthly');
       </li>
     ))}
     <li class="event-card card event-upcoming" style="--event-accent: var(--rose);">
+      {data.upcoming?.label && <p class="event-upcoming-label">{data.upcoming.label}</p>}
       <p class="event-emoji" aria-hidden="true">{data.upcoming?.emoji ?? '🎉'}</p>
       <h3>{data.upcoming?.title ?? 'Community Events'}</h3>
       <p class="event-schedule">{data.upcoming?.when ?? 'Seasonal & special'}</p>
@@ -122,6 +123,14 @@ const monthlies = events.filter((e) => e.data.frequency === 'monthly');
     color: var(--event-accent);
   }
   .event-desc { font-size: 0.96rem; color: var(--text); }
+  .event-upcoming-label {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--subheading);
+  }
   .event-upcoming-link {
     margin-top: auto;
     padding-top: 0.5rem;
