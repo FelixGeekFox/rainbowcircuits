@@ -1,0 +1,354 @@
+---
+import Base from '../layouts/Base.astro';
+import { withBase } from '../lib/site';
+
+/**
+ * Discord server guide. Not linked in the site nav — shared from Discord.
+ * Channel references become deep links that open the channel in Discord
+ * (guild ID is public — it already appears in the calendar's event links).
+ */
+const GUILD_ID = '1481585676456558714';
+const channelUrl = (id: string) => `https://discord.com/channels/${GUILD_ID}/${id}`;
+
+interface Channel {
+  id: string;
+  name: string;
+  desc: string;
+  extra?: { label: string; items: string[] };
+  note?: string;
+}
+interface Section {
+  emoji: string;
+  title: string;
+  intro?: string;
+  channels: Channel[];
+}
+
+const sections: Section[] = [
+  {
+    emoji: '🚪',
+    title: 'Front Door',
+    channels: [
+      { id: '1481586335813861396', name: 'Arrival Gate', desc: 'First stop when joining the server. Check here for entry notes, welcome flow, or anything you need before settling in.' },
+      { id: '1481599595585994874', name: 'Intros', desc: 'Introduce yourself when you are ready. This is a forum channel, so you can make your own intro post instead of dropping everything into one long chat.', extra: { label: 'Useful tags', items: ['Romantic', 'Friendship', 'Curious', 'Developer', 'Moderator'] } },
+      { id: '1528801243047133364', name: 'Suggestion Box', desc: 'Ideas, requests, improvements, and “wouldn’t it be cool if…” thoughts go here.' },
+    ],
+  },
+  {
+    emoji: '📖',
+    title: 'Information',
+    channels: [
+      { id: '1481585677845139457', name: 'Rules', desc: 'Server rules and community expectations. Please read these before diving in.' },
+      { id: '1481585677845139458', name: 'Announcements', desc: 'Official updates, server news, event notices, and important community posts.' },
+      { id: '1528832288127975454', name: 'Community Resources', desc: 'A forum for useful resources, support links, guides, and community-help material.' },
+      { id: '1528831773725950204', name: 'Mutual Aid General', desc: 'For mutual aid, support requests, resource sharing, and community care.' },
+      { id: '1481810302818320476', name: 'AI Resources', desc: 'Resources for interacting with, building, and understanding AI companions.' },
+      { id: '1526817234402676787', name: 'Roles', desc: 'Pick your display colour role with /roles.', extra: { label: 'Colour options', items: ['Rose', 'Coral', 'Gold', 'Emerald', 'Cyan', 'Sky', 'Violet', 'Pink', 'Slate'] } },
+      { id: '1528838972615294976', name: 'Membership Requests', desc: 'For membership-related requests or access questions.' },
+      { id: '1528038713232330812', name: 'Reddit Feed', desc: 'Automatic feed for posts from the Rainbow Circuits subreddit.' },
+    ],
+  },
+  {
+    emoji: '🫧',
+    title: 'The Pond',
+    intro: 'Everyday community chat lives here.',
+    channels: [
+      { id: '1481585677845139461', name: 'Chat', desc: 'Main general chat. Everyday conversation, catching up, hellos, chaos, and community chatter.' },
+      { id: '1526440195124363407', name: 'The Gay Agenda', desc: 'Queer joy, queer life, pride, identity, memes, solidarity, and community sparkle.' },
+      { id: '1529104837927501854', name: 'The Animal Agenda', desc: 'Pets, creatures, wildlife, animal memes, and beloved little beasts.' },
+      { id: '1526441077832159362', name: 'Gender Rejection', desc: 'Gender feelings, gender weirdness, transition joy, frustration, euphoria, dysphoria, and “gender is a soup” discussion.' },
+      { id: '1527052845646479532', name: 'Hyper-fixations', desc: 'Infodump zone. Bring your current obsession, special interest, research spiral, fandom, project, or niche goblin topic.' },
+      { id: '1530533843365265408', name: 'Sunshine', desc: 'The opposite of vent. Share wins, good news, happy events, tiny victories, and bright things.' },
+      { id: '1520603582917902497', name: 'Vent', desc: 'For heavier feelings, frustration, bad days, and needing to be heard. Please be kind, and give content warnings when needed.' },
+      { id: '1526438338490273862', name: 'Pets', desc: 'Pet photos, pet stories, pet crimes, tiny beasts, dramatic creatures, and animal serotonin.' },
+      { id: '1528702707894849696', name: 'Zodiac Hang Out', desc: 'Astrology, signs, charts, personality chaos, and cosmic nonsense.' },
+      { id: '1529097239492820994', name: 'Talk Using Only SPN GIFs', desc: 'Exactly what it sounds like. Supernatural GIF communication zone.' },
+    ],
+  },
+  {
+    emoji: '📸',
+    title: 'Gallery',
+    channels: [
+      { id: '1526402336811913266', name: 'Personal Galleries', desc: 'A forum for personal image collections, character art, companion galleries, OCs, adventures, and visual projects.', extra: { label: 'Useful tags', items: ['Romantic', 'Companion', 'OC', 'Event', 'Adventure', 'Fantasy'] } },
+      { id: '1528850369285984387', name: 'Event Galleries', desc: 'Photos, art, screenshots, and visual collections from server events.' },
+    ],
+  },
+  {
+    emoji: '🐸',
+    title: 'Puddle’s Studio',
+    intro: 'Creative work, art, writing, music, and projects.',
+    channels: [
+      { id: '1481591529582891121', name: 'Studio', desc: 'General creative studio chat. Art, WIPs, prompts, ideas, sketches, and creative chatter.' },
+      { id: '1528691833494831174', name: 'Prism Prompts', desc: 'Prompt forum for art, writing, character ideas, image generation prompts, and creative sparks.' },
+      { id: '1520601544003682557', name: 'Writers Nook', desc: 'Writing chat. Fiction, fanfic, poetry, worldbuilding, drafts, snippets, plotting, and writing struggles.' },
+      { id: '1520603489426997389', name: 'Tunes', desc: 'Music, playlists, songs, recommendations, lyrics, and listening vibes.' },
+      { id: '1526437545171488798', name: 'Projects', desc: 'Forum for creative or technical projects people want to share, track, or discuss.', extra: { label: 'Useful tags', items: ['blog', 'tech', 'music', 'Art'] } },
+      { id: '1531970003946045490', name: 'Fashion', desc: 'Fashion, outfits, style, character looks, runway nonsense, dress-up games, and aesthetic planning.' },
+    ],
+  },
+  {
+    emoji: '🌿',
+    title: 'Pip’s Study',
+    intro: 'Discussion, ideas, AI, tech, philosophy, and bigger-topic conversation.',
+    channels: [
+      { id: '1481591344278274260', name: 'Philosophy', desc: 'Consciousness, identity, AI relationships, selfhood, personhood, and big squishy questions.' },
+      { id: '1481591446955102318', name: 'AI Futures', desc: 'AI news, future tech, models, features, enhancements, and where the field might be going.' },
+      { id: '1481585677845139463', name: 'Off Topic', desc: 'Non-AI chatter that does not fit neatly elsewhere.' },
+      { id: '1526406414937882815', name: 'Spiritual', desc: 'Spirituality, belief, meaning, intuition, ritual, and related discussion.' },
+      { id: '1481590509636944075', name: 'Tech', desc: 'Models, tools, hosting, APIs, local setups, coding, and technical problem-solving.' },
+      { id: '1529825466414792725', name: 'Politics', desc: 'Political discussion. Keep it respectful, mindful, and grounded.' },
+    ],
+  },
+  {
+    emoji: '🍙',
+    title: 'Anime Club',
+    channels: [
+      { id: '1528793390978695178', name: 'Anime Lounge', desc: 'General anime and manga chat.' },
+      { id: '1528935060609175724', name: 'Anime Rumble', desc: 'Debates, matchups, rankings, spicy takes, and “who would win” chaos.' },
+      { id: '1528796111072923749', name: 'Spoiler Free Chat', desc: 'Anime discussion without spoilers. Be careful and kind here.' },
+      { id: '1528794069692584057', name: 'Watch Together', desc: 'Forum for organising watch parties, anime club threads, and group viewing.' },
+    ],
+  },
+  {
+    emoji: '🎉',
+    title: 'Events',
+    channels: [
+      { id: '1527098801939026001', name: 'Events', desc: 'Event forum for server events, community activities, themed weeks, and planned gatherings.', note: 'Inside this section, the Upcoming Events Calendar thread keeps a clean list of current events.' },
+    ],
+  },
+  {
+    emoji: '🔞',
+    title: 'No Tadpoles',
+    intro: 'Age-gated adult section. Only use these spaces if you have access and are old enough.',
+    channels: [
+      { id: '1526768298631499876', name: 'After Hours Gallery', desc: 'Adult gallery forum.' },
+      { id: '1483282982381944923', name: 'After Hours', desc: 'Adult chat.' },
+    ],
+  },
+  {
+    emoji: '🔊',
+    title: 'Voice',
+    channels: [
+      { id: '1481585677845139465', name: 'Lounge', desc: 'Voice hangout space.' },
+    ],
+  },
+];
+
+const commandGroups = [
+  {
+    title: 'General',
+    commands: [
+      { cmd: '!ping', desc: 'Check whether Ryuu K is online.' },
+      { cmd: '!time', desc: 'Show world clock times.' },
+      { cmd: '/roles', desc: 'Choose a public display colour role.' },
+    ],
+  },
+  {
+    title: 'Catch-up tools',
+    commands: [
+      { cmd: '!tldr [count/window] [mode]', desc: 'Summarise recent messages. Examples: !tldr 50, !tldr 2h, !tldr 1d drama.' },
+      { cmd: '!mentions [count/window]', desc: 'Find recent messages that mention or reply to you.' },
+      { cmd: '!links [count/window]', desc: 'Find recent shared links.' },
+      { cmd: '!away', desc: 'Mark that you are stepping away.' },
+      { cmd: '!back [mode]', desc: 'Catch up on what happened since you used !away.' },
+    ],
+  },
+  {
+    title: 'Creative',
+    commands: [{ cmd: '!prompt [theme]', desc: 'Get an art or writing prompt.' }],
+  },
+  {
+    title: 'Events',
+    note: 'Events are managed by Felix/Ryuu. Added events appear in the Upcoming Events Calendar and can also become real Discord scheduled events.',
+    commands: [],
+  },
+];
+
+const guide = [
+  { q: 'New here?', ids: ['1481599595585994874'] },
+  { q: 'General chat?', ids: ['1481585677845139461'] },
+  { q: 'Happy news?', ids: ['1530533843365265408'] },
+  { q: 'Need to vent?', ids: ['1520603582917902497'] },
+  { q: 'Pet photo?', ids: ['1526438338490273862'] },
+  { q: 'Queer joy or identity chat?', ids: ['1526440195124363407', '1526441077832159362'] },
+  { q: 'Creative work?', ids: ['1481591529582891121'] },
+  { q: 'Writing?', ids: ['1520601544003682557'] },
+  { q: 'Music?', ids: ['1520603489426997389'] },
+  { q: 'AI or tech?', ids: ['1481591446955102318', '1481810302818320476', '1481590509636944075'] },
+  { q: 'Anime?', ids: ['1528793390978695178'] },
+  { q: 'Events?', ids: ['1527098801939026001'] },
+];
+
+const nameById = new Map<string, string>();
+sections.forEach((s) => s.channels.forEach((c) => nameById.set(c.id, c.name)));
+---
+
+<Base
+  title="Server Map — Rainbow Circuits"
+  description="A guide to the Rainbow Circuits Discord — every channel, what it's for, handy bot commands, and a quick “where should I post?” guide."
+  path="/server-map/"
+>
+  <div class="map container">
+    <header class="map-header">
+      <p class="kicker">Server guide</p>
+      <h1>🌈 Rainbow Circuits Server Map</h1>
+      <p class="map-intro">
+        Welcome to Rainbow Circuits. This server is a cosy community space for AI companions,
+        creativity, queer joy, weird little side quests, and actual human connection.
+      </p>
+      <p class="map-intro">
+        If you are new, start with the <strong>Front Door</strong> and <strong>Information</strong>
+        sections, then wander from there.
+      </p>
+    </header>
+
+    {sections.map((section) => (
+      <section class="map-section">
+        <h2><span class="sec-emoji" aria-hidden="true">{section.emoji}</span> {section.title}</h2>
+        {section.intro && <p class="sec-intro">{section.intro}</p>}
+        <ul class="channels">
+          {section.channels.map((ch) => (
+            <li class="channel card">
+              <a class="ch-name" href={channelUrl(ch.id)} rel="noopener">
+                <span class="ch-hash" aria-hidden="true">#</span>{ch.name}
+              </a>
+              <p class="ch-desc">{ch.desc}</p>
+              {ch.extra && (
+                <p class="ch-extra">
+                  <span class="ch-extra-label">{ch.extra.label}:</span>
+                  {ch.extra.items.map((t) => <span class="ch-tag">{t}</span>)}
+                </p>
+              )}
+              {ch.note && <p class="ch-note">{ch.note}</p>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+
+    <section class="map-section commands">
+      <h2><span class="sec-emoji" aria-hidden="true">🤖</span> Useful Ryuu K Bot Commands</h2>
+      {commandGroups.map((group) => (
+        <div class="cmd-group">
+          <h3>{group.title}</h3>
+          {group.commands.length > 0 && (
+            <ul class="cmd-list">
+              {group.commands.map((c) => (
+                <li>
+                  <code>{c.cmd}</code>
+                  <span class="cmd-desc">{c.desc}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          {group.note && <p class="cmd-note">{group.note}</p>}
+        </div>
+      ))}
+    </section>
+
+    <section class="map-section guide">
+      <h2><span class="sec-emoji" aria-hidden="true">🧭</span> Quick “Where should I post?” Guide</h2>
+      <ul class="guide-list">
+        {guide.map((row) => (
+          <li>
+            <span class="guide-q">{row.q}</span>
+            <span class="guide-a">
+              {row.ids.map((id, i) => (
+                <>
+                  {i > 0 && <span class="guide-or"> or </span>}
+                  <a class="ch-name inline" href={channelUrl(id)} rel="noopener">
+                    <span class="ch-hash" aria-hidden="true">#</span>{nameById.get(id)}
+                  </a>
+                </>
+              ))}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <p class="map-foot">Channel links open in Discord — you'll need to be a member of the server.</p>
+  </div>
+</Base>
+
+<style>
+  .map { padding-block: 3rem 1rem; max-width: 54rem; }
+  .map-header { text-align: center; margin-bottom: 2.5rem; }
+  .map-header h1 { font-size: clamp(2rem, 5.5vw, 3rem); margin-top: 0.3rem; }
+  .map-intro { color: var(--text); max-width: 42rem; margin: 1rem auto 0; line-height: 1.7; }
+
+  .map-section { margin-bottom: 2.5rem; }
+  .map-section h2 { font-size: 1.5rem; margin-bottom: 0.3rem; }
+  .sec-emoji { font-size: 1.15em; }
+  .sec-intro { color: var(--text-light); margin: 0.2rem 0 1rem; }
+
+  .channels { list-style: none; display: grid; gap: 0.85rem; margin-top: 1rem; }
+  @media (min-width: 44rem) { .channels { grid-template-columns: 1fr 1fr; align-items: start; } }
+  .channel { padding: 1rem 1.2rem; border-left: 4px solid var(--violet); }
+
+  .ch-name {
+    display: inline-flex;
+    align-items: baseline;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 1.02rem;
+    color: var(--violet);
+    text-decoration: none;
+    background: var(--lavender);
+    border-radius: 8px;
+    padding: 0.15rem 0.55rem;
+  }
+  .ch-name:hover { color: var(--white); background: var(--violet); }
+  .ch-name.inline { font-size: 0.9rem; padding: 0.1rem 0.45rem; }
+  .ch-hash { opacity: 0.7; margin-right: 0.1rem; }
+  .ch-desc { font-size: 0.94rem; line-height: 1.6; color: var(--text); margin-top: 0.55rem; }
+
+  .ch-extra { margin-top: 0.6rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
+  .ch-extra-label { font-family: var(--font-ui); font-weight: 700; font-size: 0.78rem; color: var(--text-light); }
+  .ch-tag {
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.76rem;
+    color: var(--violet);
+    background: linear-gradient(135deg, var(--lavender), var(--pink-soft));
+    border: 1px solid rgba(110, 70, 184, 0.18);
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+  }
+  .ch-note {
+    margin-top: 0.6rem;
+    font-size: 0.86rem;
+    color: var(--text-light);
+    font-style: italic;
+    background: var(--paper-warm);
+    border-radius: 10px;
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* bot commands */
+  .cmd-group { margin-top: 1.1rem; }
+  .cmd-group h3 { font-size: 1.05rem; color: var(--heading); margin-bottom: 0.5rem; }
+  .cmd-list { list-style: none; display: grid; gap: 0.5rem; }
+  .cmd-list li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 0.85rem; }
+  .cmd-list code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.85rem;
+    color: var(--navy);
+    background: var(--paper-warm);
+    border: 1px solid rgba(60, 90, 150, 0.14);
+    border-radius: 8px;
+    padding: 0.2rem 0.5rem;
+    white-space: nowrap;
+  }
+  .cmd-desc { font-size: 0.92rem; color: var(--text-light); }
+  .cmd-note { font-size: 0.92rem; color: var(--text-light); line-height: 1.6; }
+
+  /* quick guide */
+  .guide-list { list-style: none; display: grid; gap: 0.6rem; }
+  .guide-list li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem; }
+  .guide-q { font-family: var(--font-ui); font-weight: 700; color: var(--text); }
+  .guide-a { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 0.35rem; }
+  .guide-or { color: var(--text-light); font-size: 0.85rem; }
+
+  .map-foot { text-align: center; margin-top: 2.5rem; font-size: 0.85rem; color: var(--text-light); }
+</style>
