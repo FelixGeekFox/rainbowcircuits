@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Re-sync the Discord calendar and redeploy hourly.
+  schedule:
+    - cron: '0 * * * *'
 
 permissions:
   contents: read
@@ -15,6 +18,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Sync Discord events
+        run: node scripts/fetch-discord-events.mjs
+        env:
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID }}
       - uses: withastro/action@v3
         env:
           PUBLIC_PIP_POST_OFFICE_ENDPOINT: ${{ vars.PUBLIC_PIP_POST_OFFICE_ENDPOINT }}

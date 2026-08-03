@@ -1,0 +1,350 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, withBase } from '../lib/site';
+import data from '../data/discord-events.json';
+
+/**
+ * Community calendar. Events are synced from Discord's scheduled events by
+ * scripts/fetch-discord-events.mjs (run in CI before each build), so this
+ * page stays current without a backend. Times are localised to each viewer
+ * in the browser; the server render falls back to UTC.
+ */
+const now = new Date();
+
+const events = (data.events ?? [])
+  .map((e) => ({ ...e, startDate: new Date(e.start), endDate: e.end ? new Date(e.end) : null }))
+  .filter((e) => !Number.isNaN(e.startDate.valueOf()))
+  .filter((e) => (e.endDate ?? e.startDate) >= now)
+  .sort((a, b) => a.startDate.valueOf() - b.startDate.valueOf());
+
+// ── month grids: current month through the last event's month (max 3) ──
+const startMK = now.getUTCFullYear() * 12 + now.getUTCMonth();
+let endMK = startMK;
+for (const e of events) endMK = Math.max(endMK, e.startDate.getUTCFullYear() * 12 + e.startDate.getUTCMonth());
+endMK = Math.min(endMK, startMK + 2);
+const months = [];
+for (let mk = startMK; mk <= endMK; mk++) months.push({ year: Math.floor(mk / 12), month: mk % 12 });
+
+const sameUTCDay = (a, b) =>
+  a.getUTCFullYear() === b.getUTCFullYear() && a.getUTCMonth() === b.getUTCMonth() && a.getUTCDate() === b.getUTCDate();
+
+function buildMonth(year, month) {
+  const first = new Date(Date.UTC(year, month, 1));
+  const startWeekday = (first.getUTCDay() + 6) % 7; // Monday-first
+  let cur = new Date(Date.UTC(year, month, 1 - startWeekday));
+  const weeks = [];
+  for (let w = 0; w < 6; w++) {
+    const days = [];
+    for (let d = 0; d < 7; d++) {
+      days.push({
+        day: cur.getUTCDate(),
+        dateStr: `${cur.getUTCFullYear()}-${String(cur.getUTCMonth() + 1).padStart(2, '0')}-${String(cur.getUTCDate()).padStart(2, '0')}`,
+        inMonth: cur.getUTCMonth() === month,
+        isToday: sameUTCDay(cur, now),
+      });
+      cur = new Date(Date.UTC(cur.getUTCFullYear(), cur.getUTCMonth(), cur.getUTCDate() + 1));
+    }
+    weeks.push(days);
+  }
+  while (weeks.length && weeks[weeks.length - 1].every((d) => !d.inMonth)) weeks.pop();
+  return weeks;
+}
+
+const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+const monthTitle = (year, month) =>
+  new Date(Date.UTC(year, month, 1)).toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const utcFallback = (iso) =>
+  new Date(iso).toLocaleString('en-GB', {
+    weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'UTC',
+  }) + ' UTC';
+const dayChip = (d) => ({
+  dow: d.toLocaleDateString('en-GB', { weekday: 'short', timeZone: 'UTC' }),
+  day: d.toLocaleDateString('en-GB', { day: 'numeric', timeZone: 'UTC' }),
+  mon: d.toLocaleDateString('en-GB', { month: 'short', timeZone: 'UTC' }),
+});
+---
+
+<Base
+  title="Community Calendar — Rainbow Circuits"
+  description="Upcoming Rainbow Circuits community events, synced from our Discord — cafés, celebrations, connect nights and special weekends."
+  path="/calendar/"
+>
+  <div class="cal container">
+    <header class="cal-header">
+      <p class="kicker">What's on</p>
+      <h1>Community Calendar</h1>
+      <p class="cal-intro">
+        Everything happening around the circuit, synced straight from our Discord. Times below
+        show in <strong>your</strong> local time zone.
+      </p>
+      {SITE.discordUrl && (
+        <a class="btn btn-primary" href={SITE.discordUrl} rel="noopener">Open Discord</a>
+      )}
+    </header>
+
+    {events.length === 0 ? (
+      <div class="cal-empty card">
+        <p class="cal-empty-emoji" aria-hidden="true">🗓️</p>
+        <h2>No upcoming events right now</h2>
+        <p>
+          Nothing on the calendar at the moment — new events show up here automatically as
+          soon as they're posted in the community. Pop into the community to see what's brewing.
+        </p>
+        <a class="btn btn-secondary" href={withBase('/community/')}>Visit the community</a>
+      </div>
+    ) : (
+      <>
+        <section class="cal-months" aria-label="Month view">
+          {months.map(({ year, month }) => (
+            <div class="cal-month">
+              <h2 class="cal-month-title">{monthTitle(year, month)}</h2>
+              <div class="cal-grid" role="table" aria-label={monthTitle(year, month)}>
+                <div class="cal-row cal-weekdays" role="row">
+                  {weekdays.map((w) => <span class="cal-wd" role="columnheader">{w}</span>)}
+                </div>
+                {buildMonth(year, month).map((week) => (
+                  <div class="cal-row" role="row">
+                    {week.map((cell) => (
+                      <div
+                        class:list={['cal-cell', { out: !cell.inMonth, today: cell.isToday }]}
+                        role="cell"
+                        data-date={cell.inMonth ? cell.dateStr : undefined}
+                      >
+                        <span class="cal-daynum">{cell.day}</span>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </section>
+
+        <section class="cal-list" aria-label="Upcoming events">
+          <h2 class="cal-list-title">Upcoming events</h2>
+          <ul>
+            {events.map((ev) => {
+              const chip = dayChip(ev.startDate);
+              return (
+                <li class="event-item card">
+                  <div class="event-date" aria-hidden="true">
+                    <span class="ed-dow">{chip.dow}</span>
+                    <span class="ed-day">{chip.day}</span>
+                    <span class="ed-mon">{chip.mon}</span>
+                  </div>
+                  <div class="event-main">
+                    <h3>{ev.name}</h3>
+                    <p class="event-when">
+                      <span aria-hidden="true">🕒</span>
+                      <time datetime={ev.start} data-start data-end={ev.end ?? undefined}>{utcFallback(ev.start)}</time>
+                    </p>
+                    {ev.location && <p class="event-loc"><span aria-hidden="true">📍</span> {ev.location}</p>}
+                    {ev.description && <p class="event-desc">{ev.description}</p>}
+                    <a class="event-link" href={ev.url} rel="noopener">Open in Discord <span aria-hidden="true">↗</span></a>
+                  </div>
+                  {ev.coverUrl && (
+                    <img class="event-cover" src={ev.coverUrl} alt="" loading="lazy" width="320" height="180" />
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      </>
+    )}
+
+    <p class="cal-synced">
+      Synced from Discord · last updated <time datetime={data.updatedAt} data-updated>{data.updatedAt ? utcFallback(data.updatedAt) : '—'}</time>
+    </p>
+  </div>
+
+  <script type="application/json" id="cal-events-data" set:html={JSON.stringify(events.map((e) => ({ name: e.name, start: e.start, url: e.url })))}></script>
+</Base>
+
+<script>
+  // Localise all server-rendered UTC times to the viewer's own time zone.
+  const fmtRange = (startIso: string, endIso?: string | null) => {
+    const start = new Date(startIso);
+    const dateOpts: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short' };
+    const timeOpts: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit' };
+    let out = `${start.toLocaleDateString(undefined, dateOpts)}, ${start.toLocaleTimeString(undefined, timeOpts)}`;
+    if (endIso) {
+      const end = new Date(endIso);
+      const sameDay = start.toDateString() === end.toDateString();
+      out += sameDay
+        ? ` – ${end.toLocaleTimeString(undefined, timeOpts)}`
+        : ` → ${end.toLocaleDateString(undefined, dateOpts)}, ${end.toLocaleTimeString(undefined, timeOpts)}`;
+    }
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    return tz ? `${out} (${tz})` : out;
+  };
+
+  document.querySelectorAll<HTMLTimeElement>('time[data-start]').forEach((el) => {
+    const start = el.getAttribute('datetime');
+    if (start) el.textContent = fmtRange(start, el.getAttribute('data-end'));
+  });
+
+  const updated = document.querySelector<HTMLTimeElement>('time[data-updated]');
+  if (updated?.getAttribute('datetime')) {
+    updated.textContent = new Date(updated.getAttribute('datetime')!).toLocaleString();
+  }
+
+  // Place event pills into the month grid by each viewer's LOCAL date, so the
+  // grid matches the localised times in the list below.
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const localDate = (iso: string) => {
+    const d = new Date(iso);
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  };
+  const dataNode = document.getElementById('cal-events-data');
+  if (dataNode?.textContent) {
+    const evs: { name: string; start: string; url: string }[] = JSON.parse(dataNode.textContent);
+    const byDate: Record<string, typeof evs> = {};
+    for (const e of evs) (byDate[localDate(e.start)] ??= []).push(e);
+    for (const [ds, list] of Object.entries(byDate)) {
+      const cell = document.querySelector(`.cal-cell[data-date="${ds}"]`);
+      if (!cell) continue;
+      cell.classList.add('has');
+      list.slice(0, 3).forEach((e) => {
+        const a = document.createElement('a');
+        a.className = 'cal-pill';
+        a.href = e.url;
+        a.rel = 'noopener';
+        a.title = e.name;
+        a.textContent = e.name;
+        cell.appendChild(a);
+      });
+      if (list.length > 3) {
+        const more = document.createElement('span');
+        more.className = 'cal-more';
+        more.textContent = `+${list.length - 3} more`;
+        cell.appendChild(more);
+      }
+    }
+  }
+</script>
+
+<style>
+  .cal { padding-block: 3rem 1rem; max-width: 60rem; }
+  .cal-header { text-align: center; margin-bottom: 2.25rem; }
+  .cal-header h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-top: 0.3rem; }
+  .cal-intro { color: var(--text-light); max-width: 40rem; margin: 1rem auto 0; line-height: 1.7; }
+  .cal-header .btn { margin-top: 1.25rem; }
+
+  .cal-empty { text-align: center; max-width: 34rem; margin: 0 auto; padding: 2.5rem 1.75rem; }
+  .cal-empty-emoji { font-size: 2.4rem; }
+  .cal-empty h2 { font-size: 1.4rem; margin: 0.5rem 0 0.6rem; }
+  .cal-empty p { color: var(--text-light); line-height: 1.7; }
+  .cal-empty .btn { margin-top: 1.25rem; }
+
+  /* ── month grid ── */
+  .cal-months { display: grid; gap: 2rem; }
+  .cal-month-title { font-size: 1.4rem; text-align: center; margin-bottom: 0.9rem; }
+  .cal-grid {
+    border: var(--card-border);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--white);
+    box-shadow: var(--card-shadow);
+  }
+  .cal-row { display: grid; grid-template-columns: repeat(7, 1fr); }
+  .cal-weekdays { background: var(--lavender); }
+  .cal-wd {
+    padding: 0.5rem 0.4rem;
+    text-align: center;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--violet);
+  }
+  .cal-cell {
+    min-height: 5.2rem;
+    padding: 0.35rem 0.4rem 0.5rem;
+    border-top: 1px solid rgba(110, 70, 184, 0.12);
+    border-left: 1px solid rgba(110, 70, 184, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .cal-row > .cal-cell:first-child { border-left: none; }
+  .cal-daynum { font-family: var(--font-ui); font-weight: 700; font-size: 0.8rem; color: var(--text-light); }
+  .cal-cell.out { background: var(--paper-warm); }
+  .cal-cell.out .cal-daynum { opacity: 0.45; }
+  .cal-cell.today { background: linear-gradient(180deg, rgba(242, 195, 0, 0.14), transparent); }
+  .cal-cell.today .cal-daynum {
+    color: var(--white); background: var(--violet);
+    width: 1.4rem; height: 1.4rem; border-radius: 999px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .cal-pill {
+    display: block;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.68rem;
+    line-height: 1.25;
+    color: var(--white);
+    background: linear-gradient(120deg, var(--violet), var(--violet-soft));
+    border-radius: 6px;
+    padding: 0.15rem 0.35rem;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .cal-pill:hover { color: var(--white); filter: brightness(1.08); }
+  .cal-more { font-size: 0.62rem; color: var(--text-light); font-weight: 700; }
+
+  @media (max-width: 40rem) {
+    .cal-cell { min-height: 3.6rem; padding: 0.25rem 0.28rem 0.35rem; }
+    .cal-pill { font-size: 0.58rem; padding: 0.1rem 0.25rem; }
+    .cal-wd { font-size: 0.6rem; }
+  }
+
+  /* ── upcoming list ── */
+  .cal-list { margin-top: 2.75rem; }
+  .cal-list-title { font-size: 1.5rem; text-align: center; margin-bottom: 1.25rem; }
+  .cal-list ul { list-style: none; display: grid; gap: 1rem; }
+  .event-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.1rem;
+    padding: 1.1rem 1.25rem;
+    align-items: start;
+  }
+  .event-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 3.6rem;
+    padding: 0.5rem 0.6rem;
+    border-radius: 12px;
+    background: linear-gradient(160deg, var(--lavender), var(--pink-soft));
+    line-height: 1.05;
+  }
+  .ed-dow { font-family: var(--font-ui); font-weight: 700; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--violet); }
+  .ed-day { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; color: var(--heading); }
+  .ed-mon { font-family: var(--font-ui); font-weight: 700; font-size: 0.7rem; text-transform: uppercase; color: var(--text-light); }
+  .event-main { min-width: 0; }
+  .event-main h3 { font-size: 1.2rem; }
+  .event-when, .event-loc { font-size: 0.9rem; color: var(--text-light); margin-top: 0.3rem; }
+  .event-when time { font-family: var(--font-ui); font-weight: 700; color: var(--text); }
+  .event-desc { font-size: 0.95rem; line-height: 1.6; color: var(--text); margin-top: 0.5rem; }
+  .event-link { display: inline-block; margin-top: 0.6rem; font-family: var(--font-ui); font-weight: 700; font-size: 0.9rem; }
+  .event-cover {
+    grid-column: 1 / -1;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+    margin-top: 0.4rem;
+  }
+  @media (min-width: 40rem) {
+    .event-item { grid-template-columns: auto 1fr auto; }
+    .event-cover { grid-column: auto; width: 12rem; margin-top: 0; }
+  }
+
+  .cal-synced { text-align: center; margin-top: 2.25rem; font-size: 0.82rem; color: var(--text-light); }
+</style>
