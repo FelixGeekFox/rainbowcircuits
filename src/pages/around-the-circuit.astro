@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import { withBase } from '../lib/site';
+import EventsSection from '../components/issue/EventsSection.astro';
+---
+
+<Base
+  title="Around the Circuit — Rainbow Circuits"
+  description="The weekly and monthly rhythms of the Rainbow Circuits community — gentle recurring gatherings you can join whenever you like, no pressure."
+  path="/around-the-circuit/"
+>
+  <div class="atc container">
+    <header class="atc-header">
+      <p class="kicker">Life between the galas</p>
+      <h1>Around the Circuit</h1>
+      <p class="atc-intro">
+        The big events come and go, but the circuit never really sleeps. Here's what happens
+        around here every week — with absolutely no pressure to do more than wave.
+      </p>
+    </header>
+
+    <EventsSection heading={false} title="Around the Circuit" data={{}} />
+
+    <p class="atc-back"><a href={withBase('/community/')}>← Back to the community</a></p>
+  </div>
+</Base>
+
+<style>
+  .atc { padding-block: 3rem 1rem; max-width: 62rem; }
+  .atc-header { text-align: center; margin-bottom: 2.25rem; }
+  .atc-header h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-top: 0.3rem; }
+  .atc-intro {
+    color: var(--text-light);
+    max-width: 42rem;
+    margin: 1rem auto 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+  .atc-back { text-align: center; margin-top: 2.5rem; }
+  .atc-back a { font-family: var(--font-ui); font-weight: 700; }
+</style>
