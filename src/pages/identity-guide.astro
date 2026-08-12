@@ -1,0 +1,321 @@
+---
+import Base from '../layouts/Base.astro';
+import { withBase } from '../lib/site';
+
+/**
+ * A friendly reference to pronouns and queer flags/identities. Flags are
+ * drawn in CSS from their known stripe colours (no external images), so the
+ * page is self-contained. This is an introduction, not an exhaustive or
+ * prescriptive list — language grows, and self-identification is what counts.
+ */
+type Stripe = string | [string, number];
+interface Flag {
+  name: string;
+  desc: string;
+  stripes: Stripe[];
+  overlay?: 'chevron' | 'chevron-intersex' | 'triangle' | 'intersex';
+}
+const stripeColor = (s: Stripe) => (Array.isArray(s) ? s[0] : s);
+const stripeWeight = (s: Stripe) => (Array.isArray(s) ? s[1] : 1);
+
+const RAINBOW: Stripe[] = ['#e40303', '#ff8c00', '#ffed00', '#008026', '#004dff', '#750787'];
+const CHEVRON: Stripe[] = ['#ffffff', '#ffafc8', '#74d7ee', '#613915', '#000000'];
+
+const communityFlags: Flag[] = [
+  { name: 'Rainbow Pride', stripes: RAINBOW, desc: 'The classic six-stripe pride flag: red for life, orange for healing, yellow for sunlight, green for nature, blue for harmony, and violet for spirit.' },
+  { name: 'Progress Pride', stripes: RAINBOW, overlay: 'chevron', desc: 'Daniel Quasar’s redesign adds a forward-pointing chevron — white, pink and light blue for trans people, brown and black for queer people of colour and those lost to AIDS.' },
+  { name: 'Intersex-Inclusive Progress', stripes: RAINBOW, overlay: 'chevron-intersex', desc: 'Builds on the Progress flag with Valentino Vecchietti’s intersex symbol — a purple circle on yellow — so intersex people are represented too.' },
+  { name: 'Philadelphia Pride', stripes: ['#000000', '#613915', ...RAINBOW], desc: 'Adds black and brown stripes above the rainbow to centre the experiences of queer people of colour.' },
+];
+
+const attractionFlags: Flag[] = [
+  { name: 'Lesbian', stripes: ['#d52d00', '#ff9a56', '#ffffff', '#d362a4', '#a30262'], desc: 'Women (and many nonbinary people) who are attracted to women. The sunset palette runs from deep orange to rose.' },
+  { name: 'Gay / MLM', stripes: ['#078d70', '#99e8c2', '#ffffff', '#7bade1', '#3d1a78'], desc: 'Men (and many nonbinary people) loving men — the green-to-blue flag for the achillean / MLM community.' },
+  { name: 'Bisexual', stripes: [['#d60270', 2], ['#9b4f96', 1], ['#0038a8', 2]], desc: 'Attraction to two or more genders. The purple overlap of the pink and blue represents attraction across the spectrum.' },
+  { name: 'Pansexual', stripes: ['#ff218c', '#ffd800', '#21b1ff'], desc: 'Attraction to people regardless of gender — pink, yellow and blue for all along and beyond the gender spectrum.' },
+  { name: 'Omnisexual', stripes: ['#fe9ace', '#ff53bf', '#200044', '#6760fe', '#8ea6ff'], desc: 'Attraction to all genders, where a person’s gender still plays a part in the attraction.' },
+  { name: 'Polysexual', stripes: ['#f61cb9', '#07d569', '#1c92f6'], desc: 'Attraction to many, but not necessarily all, genders.' },
+  { name: 'Asexual', stripes: ['#000000', '#a3a3a3', '#ffffff', '#800080'], desc: 'Little or no sexual attraction. Ace is a spectrum — grey-ace and demisexual sit under the same umbrella.' },
+  { name: 'Demisexual', stripes: [['#ffffff', 1], ['#8b008b', 0.5], ['#d3d3d3', 1]], overlay: 'triangle', desc: 'Sexual attraction only after a strong emotional bond has formed.' },
+  { name: 'Aromantic', stripes: ['#3da542', '#a7d379', '#ffffff', '#a9a9a9', '#000000'], desc: 'Little or no romantic attraction. Aro people can experience love and connection in many other ways.' },
+];
+
+const genderFlags: Flag[] = [
+  { name: 'Transgender', stripes: ['#5bcefa', '#f5a9b8', '#ffffff', '#f5a9b8', '#5bcefa'], desc: 'People whose gender differs from the one they were assigned at birth. Designed by Monica Helms.' },
+  { name: 'Nonbinary', stripes: ['#fcf434', '#ffffff', '#9c5cd4', '#2c2c2c'], desc: 'Genders outside the man/woman binary — yellow (outside the binary), white (many/all genders), purple (a mix), black (without gender).' },
+  { name: 'Genderqueer', stripes: ['#b57edc', '#ffffff', '#4a8123'], desc: 'Gender that troubles or moves beyond conventional categories — lavender, white and green.' },
+  { name: 'Genderfluid', stripes: ['#ff75a2', '#ffffff', '#be18d6', '#000000', '#333ebd'], desc: 'A gender that shifts and flows over time rather than staying fixed.' },
+  { name: 'Agender', stripes: ['#000000', '#b9b9b9', '#ffffff', '#b8f483', '#ffffff', '#b9b9b9', '#000000'], desc: 'Without gender, or gender-neutral. The green stripe is the inverse of purple to signal an absence of gender.' },
+  { name: 'Bigender', stripes: ['#c479a2', '#eca6cb', '#d6c7e8', '#ffffff', '#d6c7e8', '#9ac7e8', '#6d82d1'], desc: 'Having two genders, either at once or moving between them.' },
+  { name: 'Intersex', stripes: ['#ffd800'], overlay: 'intersex', desc: 'People born with sex characteristics that don’t fit typical binary definitions. The unbroken purple circle stands for wholeness and autonomy.' },
+];
+
+const commonPronouns = [
+  { s: 'she', o: 'her', pd: 'her', pp: 'hers', r: 'herself', ex: 'She grabbed her coat because it was hers; she made it herself.' },
+  { s: 'he', o: 'him', pd: 'his', pp: 'his', r: 'himself', ex: 'He grabbed his coat because it was his; he made it himself.' },
+  { s: 'they', o: 'them', pd: 'their', pp: 'theirs', r: 'themself', ex: 'They grabbed their coat because it was theirs; they made it themself.' },
+  { s: 'it', o: 'it', pd: 'its', pp: 'its', r: 'itself', ex: 'It grabbed its coat because it was its; it made it itself.' },
+];
+const neoPronouns = [
+  { s: 'ze', o: 'hir', pd: 'hir', pp: 'hirs', r: 'hirself' },
+  { s: 'ze', o: 'zir', pd: 'zir', pp: 'zirs', r: 'zirself' },
+  { s: 'xe', o: 'xem', pd: 'xyr', pp: 'xyrs', r: 'xemself' },
+  { s: 'ey', o: 'em', pd: 'eir', pp: 'eirs', r: 'emself' },
+  { s: 'fae', o: 'faer', pd: 'faer', pp: 'faers', r: 'faerself' },
+  { s: 'per', o: 'per', pd: 'per', pp: 'pers', r: 'perself' },
+  { s: 've', o: 'ver', pd: 'vis', pp: 'vis', r: 'verself' },
+];
+---
+
+<Base
+  title="Pronouns, Flags & Identities — Rainbow Circuits"
+  description="A friendly, inclusive guide to pronouns (including neopronouns) and queer flags and identities — what they mean and how to use them with care."
+  path="/identity-guide/"
+>
+  <div class="guide container">
+    <header class="guide-header">
+      <p class="kicker">Learn & celebrate</p>
+      <h1>Pronouns, Flags &amp; Identities</h1>
+      <p class="guide-intro">
+        A friendly place to learn about pronouns and the many flags and identities under the
+        LGBTQIA+ umbrella. This is an introduction, not the last word — language keeps growing,
+        people define themselves in their own words, and <strong>the way someone describes
+        themselves is always the authority</strong>. When in doubt, ask kindly and listen.
+      </p>
+    </header>
+
+    <!-- ── Pronouns ── -->
+    <section class="guide-section" aria-labelledby="pronouns-heading">
+      <h2 id="pronouns-heading"><span aria-hidden="true">💬</span> Pronouns</h2>
+      <p class="section-lead">
+        Pronouns are the little words we use to refer to someone instead of their name — like
+        <em>she</em>, <em>he</em>, <em>they</em>, or others. Using someone’s pronouns is a
+        simple, everyday way to show respect.
+      </p>
+
+      <h3>Common pronouns</h3>
+      <div class="table-scroll">
+        <table class="pron-table">
+          <thead>
+            <tr><th>Subject</th><th>Object</th><th>Possessive</th><th>Possessive pronoun</th><th>Reflexive</th><th>Example</th></tr>
+          </thead>
+          <tbody>
+            {commonPronouns.map((p) => (
+              <tr>
+                <td class="pron-key">{p.s}</td><td>{p.o}</td><td>{p.pd}</td><td>{p.pp}</td><td>{p.r}</td>
+                <td class="pron-ex">{p.ex}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Some neopronouns</h3>
+      <p class="section-lead">
+        Neopronouns are newer sets some people use instead of, or alongside, the ones above.
+        There are many — here are a few common ones. Sets can vary from person to person, so
+        follow each person’s lead.
+      </p>
+      <div class="table-scroll">
+        <table class="pron-table">
+          <thead>
+            <tr><th>Subject</th><th>Object</th><th>Possessive</th><th>Possessive pronoun</th><th>Reflexive</th></tr>
+          </thead>
+          <tbody>
+            {neoPronouns.map((p) => (
+              <tr><td class="pron-key">{p.s}</td><td>{p.o}</td><td>{p.pd}</td><td>{p.pp}</td><td>{p.r}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="notes-grid">
+        <div class="note-card card">
+          <h4>Mixing &amp; “any” pronouns</h4>
+          <p>Some people use more than one set (like <strong>she/they</strong>) — you can alternate, or ask which they prefer. Others are happy with <strong>any pronouns</strong>, or ask you to use their name instead.</p>
+        </div>
+        <div class="note-card card">
+          <h4>Noun-self pronouns</h4>
+          <p>A smaller group use nounself pronouns drawn from a noun (for example <em>fae/faer</em>, or bun/bunself). If someone shares one, just use it as you would any other set.</p>
+        </div>
+        <div class="note-card card">
+          <h4>Titles</h4>
+          <p><strong>Mx</strong> (pronounced “mix”) is a gender-neutral title, an alternative to Mr/Ms/Mrs.</p>
+        </div>
+        <div class="note-card card">
+          <h4>Sharing &amp; asking</h4>
+          <p>You can share yours first (“I’m Sam, I use they/them”) to make it easy for others. To ask, “What pronouns do you use?” is perfectly kind and welcome.</p>
+        </div>
+        <div class="note-card card">
+          <h4>If you slip up</h4>
+          <p>Briefly correct yourself, say a quick “sorry,” and move on — no big speech needed. Getting it right with practice matters more than getting it perfect first time.</p>
+        </div>
+        <div class="note-card card">
+          <h4>Why it matters</h4>
+          <p>Being referred to correctly helps people feel seen and safe. It costs nothing and means a great deal.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Flags & identities ── -->
+    <section class="guide-section" aria-labelledby="flags-heading">
+      <h2 id="flags-heading"><span aria-hidden="true">🏳️‍🌈</span> Flags &amp; identities</h2>
+      <p class="section-lead">
+        Pride flags are a shorthand for community and belonging. “<strong>Queer</strong>” is
+        often used as a warm umbrella term for the whole community, while the flags below name
+        some of the specific identities within it. Many people hold more than one, and no list
+        can capture everyone — that’s a feature, not a bug.
+      </p>
+
+      {[
+        { title: 'Community & pride flags', flags: communityFlags },
+        { title: 'Attraction — sexual & romantic orientations', flags: attractionFlags },
+        { title: 'Gender identities', flags: genderFlags },
+      ].map((group) => (
+        <div class="flag-group">
+          <h3>{group.title}</h3>
+          <ul class="id-grid">
+            {group.flags.map((f) => (
+              <li class="id-card card">
+                <span class:list={['flag', { 'flag-intersex': f.overlay === 'intersex' }]} role="img" aria-label={`${f.name} flag`}>
+                  {f.overlay !== 'intersex' && f.stripes.map((s) => (
+                    <span class="stripe" style={`flex-grow:${stripeWeight(s)};background:${stripeColor(s)};`}></span>
+                  ))}
+                  {(f.overlay === 'chevron' || f.overlay === 'chevron-intersex') && (
+                    <span class="flag-chevron">
+                      {CHEVRON.map((c) => <span class="stripe" style={`background:${c};`}></span>)}
+                    </span>
+                  )}
+                  {f.overlay === 'chevron-intersex' && <span class="flag-ring flag-ring-sm"></span>}
+                  {f.overlay === 'triangle' && <span class="flag-triangle"></span>}
+                  {f.overlay === 'intersex' && <span class="flag-ring"></span>}
+                </span>
+                <div class="id-body">
+                  <h4>{f.name}</h4>
+                  <p>{f.desc}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+
+      <div class="flag-group">
+        <h3>A few more to know</h3>
+        <ul class="plain-list">
+          <li><strong>Genderfluid, agender, demigender (demiboy / demigirl)</strong> — different ways of relating to gender: shifting, absent, or a partial connection.</li>
+          <li><strong>Graysexual / grayromantic &amp; demiromantic</strong> — sitting between “allo” and “ace/aro,” experiencing attraction rarely or only under certain conditions.</li>
+          <li><strong>Two-Spirit</strong> — an umbrella term specific to many Indigenous North American cultures; it carries cultural and spiritual meaning and isn’t interchangeable with Western labels.</li>
+          <li><strong>Questioning</strong> — still exploring, with no pressure to land on a label. That’s completely okay, and always welcome here.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="guide-cta card">
+      <p>Everyone deserves support that respects their identity. If you need someone to talk to, our support directory has affirming resources by region.</p>
+      <a class="btn btn-secondary" href={withBase('/resources/')}>Support &amp; resources</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .guide { padding-block: 3rem 1rem; max-width: 56rem; }
+  .guide-header { text-align: center; margin-bottom: 2.5rem; }
+  .guide-header h1 { font-size: clamp(2.1rem, 6vw, 3.2rem); margin-top: 0.3rem; }
+  .guide-intro { color: var(--text); max-width: 44rem; margin: 1rem auto 0; line-height: 1.75; }
+
+  .guide-section { margin-bottom: 3rem; }
+  .guide-section h2 { font-size: 1.7rem; margin-bottom: 0.6rem; }
+  .guide-section h3 { font-size: 1.2rem; margin: 1.75rem 0 0.75rem; }
+  .section-lead { color: var(--text-light); line-height: 1.7; max-width: 44rem; }
+  .section-lead em { color: var(--violet); font-style: normal; font-weight: 700; }
+
+  /* pronoun tables */
+  .table-scroll { overflow-x: auto; border-radius: 14px; border: var(--card-border); box-shadow: var(--card-shadow); }
+  .pron-table { width: 100%; border-collapse: collapse; background: var(--white); font-size: 0.92rem; min-width: 34rem; }
+  .pron-table th {
+    text-align: left;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--violet);
+    background: var(--lavender);
+    padding: 0.6rem 0.8rem;
+    white-space: nowrap;
+  }
+  .pron-table td { padding: 0.6rem 0.8rem; border-top: 1px solid rgba(110, 70, 184, 0.12); color: var(--text); }
+  .pron-key { font-family: var(--font-ui); font-weight: 700; color: var(--heading); }
+  .pron-ex { color: var(--text-light); font-style: italic; min-width: 16rem; }
+
+  .notes-grid { display: grid; gap: 0.9rem; margin-top: 1.5rem; }
+  @media (min-width: 40rem) { .notes-grid { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 60rem) { .notes-grid { grid-template-columns: repeat(3, 1fr); } }
+  .note-card { padding: 1.1rem 1.25rem; }
+  .note-card h4 { font-size: 1rem; margin-bottom: 0.35rem; }
+  .note-card p { font-size: 0.9rem; color: var(--text-light); line-height: 1.6; }
+
+  /* identity cards + CSS flags */
+  .flag-group { margin-top: 1.25rem; }
+  .id-grid { list-style: none; display: grid; gap: 0.85rem; }
+  @media (min-width: 44rem) { .id-grid { grid-template-columns: 1fr 1fr; align-items: start; } }
+  .id-card { display: flex; gap: 0.95rem; align-items: flex-start; padding: 0.95rem 1.1rem; }
+  .id-body h4 { font-size: 1.02rem; }
+  .id-body p { font-size: 0.9rem; color: var(--text-light); line-height: 1.55; margin-top: 0.2rem; }
+
+  .flag {
+    position: relative;
+    flex-shrink: 0;
+    width: 4rem;
+    height: 2.7rem;
+    margin-top: 0.15rem;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.14);
+  }
+  .flag .stripe { width: 100%; }
+  .flag-chevron {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 46%;
+    display: flex;
+    flex-direction: column;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+  }
+  .flag-chevron .stripe { flex: 1 0 0; }
+  .flag-triangle {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 42%;
+    background: #000;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+  }
+  .flag-ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1.5rem; height: 1.5rem;
+    border-radius: 50%;
+    border: 0.28rem solid #7902aa;
+  }
+  .flag-ring-sm {
+    top: 50%; left: 20%;
+    width: 0.85rem; height: 0.85rem;
+    border-width: 0.18rem;
+  }
+
+  .plain-list { display: grid; gap: 0.6rem; padding-left: 1.1rem; }
+  .plain-list li { line-height: 1.65; color: var(--text); }
+
+  .guide-cta {
+    text-align: center;
+    background: linear-gradient(135deg, var(--lavender), var(--pink-soft));
+    padding: 1.75rem 1.75rem;
+  }
+  .guide-cta p { max-width: 42rem; margin: 0 auto; line-height: 1.7; }
+  .guide-cta .btn { margin-top: 1.1rem; }
+</style>

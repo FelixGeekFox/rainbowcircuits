@@ -25,6 +25,14 @@ const groupId = (title: string) => `grp-${title.replace(/\s+/g, '-').toLowerCase
       <p class="res-disclaimer">{RESOURCES_DISCLAIMER}</p>
     </header>
 
+    <a class="guide-link" href={withBase('/identity-guide/')}>
+      <span class="guide-link-emoji" aria-hidden="true">🏳️‍🌈</span>
+      <span class="guide-link-text">
+        <strong>Pronouns, Flags &amp; Identities — a guide</strong>
+        <span>Learn about pronouns and the flags and identities under the LGBTQIA+ umbrella <span aria-hidden="true">→</span></span>
+      </span>
+    </a>
+
     <aside class="emergency" role="note" aria-label={EMERGENCY_CALLOUT.title}>
       <p class="emergency-title"><span aria-hidden="true">🚨</span> {EMERGENCY_CALLOUT.title}</p>
       <p>{EMERGENCY_CALLOUT.body}</p>
@@ -98,6 +106,24 @@ const groupId = (title: string) => `grp-${title.replace(/\s+/g, '-').toLowerCase
     font-size: 0.95rem;
     line-height: 1.6;
   }
+
+  .guide-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--lavender), var(--pink-soft));
+    border: 1.5px solid rgba(110, 70, 184, 0.2);
+    border-radius: var(--card-radius);
+    padding: 1.1rem 1.4rem;
+    margin-bottom: 1.5rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .guide-link:hover { transform: translateY(-2px); box-shadow: var(--card-shadow); }
+  .guide-link-emoji { font-size: 1.9rem; flex-shrink: 0; }
+  .guide-link-text { display: flex; flex-direction: column; gap: 0.15rem; }
+  .guide-link-text strong { font-family: var(--font-ui); font-size: 1.05rem; color: var(--violet); }
+  .guide-link-text span { color: var(--text); font-size: 0.92rem; line-height: 1.5; }
 
   .emergency {
     background: linear-gradient(135deg, #fff4e6, #fde8d8);
