@@ -14,6 +14,8 @@ interface Flag {
   desc: string;
   stripes: Stripe[];
   overlay?: 'chevron' | 'chevron-intersex' | 'triangle' | 'intersex';
+  /** Draw stripes side-by-side (vertical bars) instead of stacked. */
+  vertical?: boolean;
 }
 const stripeColor = (s: Stripe) => (Array.isArray(s) ? s[0] : s);
 const stripeWeight = (s: Stripe) => (Array.isArray(s) ? s[1] : 1);
@@ -22,32 +24,37 @@ const RAINBOW: Stripe[] = ['#e40303', '#ff8c00', '#ffed00', '#008026', '#004dff'
 const CHEVRON: Stripe[] = ['#ffffff', '#ffafc8', '#74d7ee', '#613915', '#000000'];
 
 const communityFlags: Flag[] = [
-  { name: 'Rainbow Pride', stripes: RAINBOW, desc: 'The classic six-stripe pride flag: red for life, orange for healing, yellow for sunlight, green for nature, blue for harmony, and violet for spirit.' },
+  { name: 'Rainbow Pride', stripes: RAINBOW, desc: 'Gilbert Baker’s 1978 flag — red for life, orange for healing, yellow for sunlight, green for nature, blue for harmony, violet for spirit. The original had eight stripes, including hot pink (sex) and turquoise (art).' },
   { name: 'Progress Pride', stripes: RAINBOW, overlay: 'chevron', desc: 'Daniel Quasar’s redesign adds a forward-pointing chevron — white, pink and light blue for trans people, brown and black for queer people of colour and those lost to AIDS.' },
   { name: 'Intersex-Inclusive Progress', stripes: RAINBOW, overlay: 'chevron-intersex', desc: 'Builds on the Progress flag with Valentino Vecchietti’s intersex symbol — a purple circle on yellow — so intersex people are represented too.' },
   { name: 'Philadelphia Pride', stripes: ['#000000', '#613915', ...RAINBOW], desc: 'Adds black and brown stripes above the rainbow to centre the experiences of queer people of colour.' },
 ];
 
 const attractionFlags: Flag[] = [
-  { name: 'Lesbian', stripes: ['#d52d00', '#ff9a56', '#ffffff', '#d362a4', '#a30262'], desc: 'Women (and many nonbinary people) who are attracted to women. The sunset palette runs from deep orange to rose.' },
-  { name: 'Gay / MLM', stripes: ['#078d70', '#99e8c2', '#ffffff', '#7bade1', '#3d1a78'], desc: 'Men (and many nonbinary people) loving men — the green-to-blue flag for the achillean / MLM community.' },
-  { name: 'Bisexual', stripes: [['#d60270', 2], ['#9b4f96', 1], ['#0038a8', 2]], desc: 'Attraction to two or more genders. The purple overlap of the pink and blue represents attraction across the spectrum.' },
+  { name: 'Lesbian', stripes: ['#d52d00', '#ff9a56', '#ffffff', '#d362a4', '#a30262'], desc: 'Women (and many nonbinary people) attracted to women. Emily Gwen’s 2018 “sunset” flag is an inclusive signal for the whole sapphic spectrum — butch, femme, and nonbinary lesbians.' },
+  { name: 'Gay / MLM', stripes: ['#078d70', '#99e8c2', '#ffffff', '#7bade1', '#3d1a78'], desc: 'Men (and many nonbinary people) loving men — greens for community and healing fading through white into blues for love and fortitude.' },
+  { name: 'Bisexual', stripes: [['#d60270', 2], ['#9b4f96', 1], ['#0038a8', 2]], desc: 'Attraction to two or more genders. Michael Page’s 1998 flag: pink for same-gender attraction, blue for different-gender, and the narrow lavender overlap as a distinct meeting point.' },
   { name: 'Pansexual', stripes: ['#ff218c', '#ffd800', '#21b1ff'], desc: 'Attraction to people regardless of gender — pink, yellow and blue for all along and beyond the gender spectrum.' },
   { name: 'Omnisexual', stripes: ['#fe9ace', '#ff53bf', '#200044', '#6760fe', '#8ea6ff'], desc: 'Attraction to all genders, where a person’s gender still plays a part in the attraction.' },
   { name: 'Polysexual', stripes: ['#f61cb9', '#07d569', '#1c92f6'], desc: 'Attraction to many, but not necessarily all, genders.' },
   { name: 'Asexual', stripes: ['#000000', '#a3a3a3', '#ffffff', '#800080'], desc: 'Little or no sexual attraction. Ace is a spectrum — grey-ace and demisexual sit under the same umbrella.' },
   { name: 'Demisexual', stripes: [['#ffffff', 1], ['#8b008b', 0.5], ['#d3d3d3', 1]], overlay: 'triangle', desc: 'Sexual attraction only after a strong emotional bond has formed.' },
-  { name: 'Aromantic', stripes: ['#3da542', '#a7d379', '#ffffff', '#a9a9a9', '#000000'], desc: 'Little or no romantic attraction. Aro people can experience love and connection in many other ways.' },
+  { name: 'Aromantic', stripes: ['#3da542', '#a7d379', '#ffffff', '#a9a9a9', '#000000'], desc: 'Little or no romantic attraction — green as the opposite of romance-red. Part of the split-attraction model, which separates romantic from sexual desire.' },
+  { name: 'Aroace', stripes: ['#e28c00', '#eccd00', '#ffffff', '#62aedc', '#203856'], desc: 'A whole identity for people who are both aromantic and asexual — orange for community, yellow for non-romantic love, white for wholeness, blues for the spectrum.' },
+  { name: 'Abrosexual', stripes: ['#47cd9a', '#a5e5c1', '#ffffff', '#f9a9c6', '#ee1766'], desc: 'An orientation that shifts and changes over time, moving between different attractions.' },
 ];
 
 const genderFlags: Flag[] = [
   { name: 'Transgender', stripes: ['#5bcefa', '#f5a9b8', '#ffffff', '#f5a9b8', '#5bcefa'], desc: 'People whose gender differs from the one they were assigned at birth. Designed by Monica Helms.' },
-  { name: 'Nonbinary', stripes: ['#fcf434', '#ffffff', '#9c5cd4', '#2c2c2c'], desc: 'Genders outside the man/woman binary — yellow (outside the binary), white (many/all genders), purple (a mix), black (without gender).' },
+  { name: 'Nonbinary', stripes: ['#fcf434', '#ffffff', '#9c5cd4', '#2c2c2c'], desc: 'Genders outside the man/woman binary. Designed by 17-year-old Kye Rowan in 2014 — yellow (outside the binary), white (many/all genders), purple (a mix), black (without gender).' },
   { name: 'Genderqueer', stripes: ['#b57edc', '#ffffff', '#4a8123'], desc: 'Gender that troubles or moves beyond conventional categories — lavender, white and green.' },
   { name: 'Genderfluid', stripes: ['#ff75a2', '#ffffff', '#be18d6', '#000000', '#333ebd'], desc: 'A gender that shifts and flows over time rather than staying fixed.' },
   { name: 'Agender', stripes: ['#000000', '#b9b9b9', '#ffffff', '#b8f483', '#ffffff', '#b9b9b9', '#000000'], desc: 'Without gender, or gender-neutral. The green stripe is the inverse of purple to signal an absence of gender.' },
   { name: 'Bigender', stripes: ['#c479a2', '#eca6cb', '#d6c7e8', '#ffffff', '#d6c7e8', '#9ac7e8', '#6d82d1'], desc: 'Having two genders, either at once or moving between them.' },
-  { name: 'Intersex', stripes: ['#ffd800'], overlay: 'intersex', desc: 'People born with sex characteristics that don’t fit typical binary definitions. The unbroken purple circle stands for wholeness and autonomy.' },
+  { name: 'Androgyne', stripes: ['#f4a8c9', '#b088c9', '#7ea6dd'], vertical: true, desc: 'A blend of masculine and feminine. The vertical pink, purple and blue bars signal both present at once rather than shifting between them.' },
+  { name: 'Demiboy', stripes: ['#7f7f7f', '#c4c4c4', '#99d9ea', '#ffffff', '#99d9ea', '#c4c4c4', '#7f7f7f'], desc: 'A partial connection to being a boy or man, whatever else one is alongside it.' },
+  { name: 'Demigirl', stripes: ['#7f7f7f', '#c4c4c4', '#ffa6d3', '#ffffff', '#ffa6d3', '#c4c4c4', '#7f7f7f'], desc: 'A partial connection to being a girl or woman, whatever else one is alongside it.' },
+  { name: 'Intersex', stripes: ['#ffd800'], overlay: 'intersex', desc: 'People born with sex characteristics that don’t fit typical binary definitions. Morgan Carpenter’s unbroken purple circle stands for wholeness and bodily autonomy.' },
 ];
 
 const commonPronouns = [
@@ -112,9 +119,10 @@ const neoPronouns = [
 
       <h3>Some neopronouns</h3>
       <p class="section-lead">
-        Neopronouns are newer sets some people use instead of, or alongside, the ones above.
-        There are many — here are a few common ones. Sets can vary from person to person, so
-        follow each person’s lead.
+        Neopronouns are additional sets some people use instead of, or alongside, the ones above.
+        They’re often thought of as new, but some — like <em>xe/xem</em> — have been recorded since
+        1858. There are many; here are a few common ones, and sets can vary from person to person,
+        so follow each person’s lead.
       </p>
       <div class="table-scroll">
         <table class="pron-table">
@@ -144,7 +152,7 @@ const neoPronouns = [
         </div>
         <div class="note-card card">
           <h4>Sharing &amp; asking</h4>
-          <p>You can share yours first (“I’m Sam, I use they/them”) to make it easy for others. To ask, “What pronouns do you use?” is perfectly kind and welcome.</p>
+          <p>You can share yours first (“I’m Sam, I use they/them”) to make it easy for others — adding them to your bio, profile, or email signature helps too. To ask, “What pronouns do you use?” is perfectly kind and welcome.</p>
         </div>
         <div class="note-card card">
           <h4>If you slip up</h4>
@@ -177,7 +185,7 @@ const neoPronouns = [
           <ul class="id-grid">
             {group.flags.map((f) => (
               <li class="id-card card">
-                <span class:list={['flag', { 'flag-intersex': f.overlay === 'intersex' }]} role="img" aria-label={`${f.name} flag`}>
+                <span class:list={['flag', { 'flag-intersex': f.overlay === 'intersex', 'flag-vertical': f.vertical }]} role="img" aria-label={`${f.name} flag`}>
                   {f.overlay !== 'intersex' && f.stripes.map((s) => (
                     <span class="stripe" style={`flex-grow:${stripeWeight(s)};background:${stripeColor(s)};`}></span>
                   ))}
@@ -203,10 +211,21 @@ const neoPronouns = [
       <div class="flag-group">
         <h3>A few more to know</h3>
         <ul class="plain-list">
-          <li><strong>Genderfluid, agender, demigender (demiboy / demigirl)</strong> — different ways of relating to gender: shifting, absent, or a partial connection.</li>
-          <li><strong>Graysexual / grayromantic &amp; demiromantic</strong> — sitting between “allo” and “ace/aro,” experiencing attraction rarely or only under certain conditions.</li>
-          <li><strong>Two-Spirit</strong> — an umbrella term specific to many Indigenous North American cultures; it carries cultural and spiritual meaning and isn’t interchangeable with Western labels.</li>
+          <li><strong>Graysexual / grayromantic &amp; demiromantic</strong> — sitting between “allo” and “ace/aro,” experiencing attraction rarely or only after an emotional bond forms.</li>
+          <li><strong>Trixic &amp; toric</strong> — attraction labels for nonbinary people: trixic is attraction to women, toric is attraction to men.</li>
           <li><strong>Questioning</strong> — still exploring, with no pressure to land on a label. That’s completely okay, and always welcome here.</li>
+        </ul>
+      </div>
+
+      <div class="flag-group">
+        <h3>Community &amp; heritage identities</h3>
+        <p class="section-lead">Some identities and flags mark a specific culture, history, or way of relating rather than an orientation or gender.</p>
+        <ul class="plain-list">
+          <li><strong>Two-Spirit</strong> — a sacred, Indigenous-specific identity that predates colonial ideas of gender. Introduced by Elder Dr. Myra Laramee (1990); its flag sets two feathers over a rainbow. It carries cultural and spiritual meaning and isn’t interchangeable with Western labels.</li>
+          <li><strong>Bear</strong> — a gay-male subculture celebrating body hair and a range of bodies; Craig Byrnes’ 1995 flag uses earth tones for the colours of bears worldwide.</li>
+          <li><strong>Leather</strong> — the kink and leather community, rooted in consent and safety; Tony DeBlase’s 1989 flag is black-and-blue stripes with a red heart.</li>
+          <li><strong>Polyamory</strong> — consensual, ethical non-monogamy. A 2022 redesign (gold heart on a white chevron) was chosen by a community vote of over 30,000 people, centring emotional bonds.</li>
+          <li><strong>Straight ally</strong> — cisgender, heterosexual people showing active solidarity, shown by a rainbow “A” over black-and-white stripes — support without claiming a queer identity.</li>
         </ul>
       </div>
     </section>
@@ -278,6 +297,8 @@ const neoPronouns = [
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.14);
   }
   .flag .stripe { width: 100%; }
+  .flag-vertical { flex-direction: row; }
+  .flag-vertical .stripe { width: auto; height: 100%; }
   .flag-chevron {
     position: absolute;
     top: 0; left: 0; bottom: 0;
