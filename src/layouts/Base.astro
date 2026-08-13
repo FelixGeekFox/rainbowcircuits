@@ -15,13 +15,15 @@ interface Props {
   structuredData?: object;
   /** Hide the standard site header (the issue page brings its own chrome). */
   bareHeader?: boolean;
+  /** Show a branding-only header (wordmark, no menu) — for standalone pages. */
+  logoOnlyHeader?: boolean;
   /** Hide the site footer — for standalone pages meant to be shared on their own. */
   bareFooter?: boolean;
   /** Ask search engines not to index this page (e.g. the mod area). */
   noindex?: boolean;
 }
 
-const { title, description, path, socialImage, structuredData, bareHeader = false, bareFooter = false, noindex = false } = Astro.props;
+const { title, description, path, socialImage, structuredData, bareHeader = false, logoOnlyHeader = false, bareFooter = false, noindex = false } = Astro.props;
 const canonical = new URL(withBase(path), Astro.site);
 ---
 
@@ -62,7 +64,7 @@ const canonical = new URL(withBase(path), Astro.site);
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    {!bareHeader && <SiteHeader />}
+    {!bareHeader && <SiteHeader logoOnly={logoOnlyHeader} />}
     <main id="main">
       <slot />
     </main>

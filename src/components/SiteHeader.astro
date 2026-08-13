@@ -7,8 +7,10 @@ import logoWhite from '../assets/brand/logo-words-white.png';
 interface Props {
   /** Render on a twilight background (issue covers). */
   onDark?: boolean;
+  /** Show only the (non-linking) wordmark, no menu — for standalone pages. */
+  logoOnly?: boolean;
 }
-const { onDark = false } = Astro.props;
+const { onDark = false, logoOnly = false } = Astro.props;
 
 const links = [
   { href: withBase('/'), label: 'Home' },
@@ -21,32 +23,42 @@ const links = [
 
 <header class:list={['site-header', { 'on-dark': onDark }]}>
   <nav class="container header-inner" aria-label="Rainbow Circuits">
-    <a class="wordmark" href={withBase('/')}>
-      <Image src={onDark ? logoWhite : logoNavy} alt="Rainbow Circuits" widths={[280, 460, 700]} sizes="15rem" class="wordmark-logo" />
-    </a>
+    {logoOnly ? (
+      <span class="wordmark">
+        <Image src={onDark ? logoWhite : logoNavy} alt="Rainbow Circuits" widths={[280, 460, 700]} sizes="15rem" class="wordmark-logo" />
+      </span>
+    ) : (
+      <a class="wordmark" href={withBase('/')}>
+        <Image src={onDark ? logoWhite : logoNavy} alt="Rainbow Circuits" widths={[280, 460, 700]} sizes="15rem" class="wordmark-logo" />
+      </a>
+    )}
 
-    <button
-      type="button"
-      class="menu-toggle"
-      aria-expanded="false"
-      aria-controls="site-nav"
-      aria-label="Open menu"
-    >
-      <span class="menu-bars" aria-hidden="true"></span>
-    </button>
+    {!logoOnly && (
+      <>
+        <button
+          type="button"
+          class="menu-toggle"
+          aria-expanded="false"
+          aria-controls="site-nav"
+          aria-label="Open menu"
+        >
+          <span class="menu-bars" aria-hidden="true"></span>
+        </button>
 
-    <div class="header-nav" id="site-nav">
-      <ul class="header-links">
-        {links.map((link) => (
-          <li>
-            <a href={link.href} {...(link.external ? { rel: 'noopener' } : {})}>
-              {link.label}{link.external && <span class="visually-hidden"> (opens the community site)</span>}
-            </a>
-          </li>
-        ))}
-      </ul>
-      <a class="contact-btn" href={withBase('/contact/')}>Contact</a>
-    </div>
+        <div class="header-nav" id="site-nav">
+          <ul class="header-links">
+            {links.map((link) => (
+              <li>
+                <a href={link.href} {...(link.external ? { rel: 'noopener' } : {})}>
+                  {link.label}{link.external && <span class="visually-hidden"> (opens the community site)</span>}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a class="contact-btn" href={withBase('/contact/')}>Contact</a>
+        </div>
+      </>
+    )}
   </nav>
 </header>
 
