@@ -4,8 +4,13 @@ import { SITE, withBase } from '../lib/site';
 import heart from '../assets/brand/heart.png';
 const year = new Date().getFullYear();
 
+interface Props {
+  /** Show only the copyright line — for standalone pages. */
+  minimal?: boolean;
+}
+const { minimal = false } = Astro.props;
+
 const links = [
-  { href: withBase('/newsletter/'), label: 'Newsletter' },
   { href: withBase('/resources/'), label: 'Support' },
   { href: withBase('/community/'), label: 'Community' },
   { href: withBase('/about/'), label: 'About' },
@@ -13,25 +18,27 @@ const links = [
 ];
 ---
 
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <div class="footer-brand">
-      <a class="footer-mark" href={withBase('/')} aria-label="Rainbow Circuits home">
-        <Image src={heart} alt="" width={72} height={72} />
-      </a>
-      <p class="footer-tagline">{SITE.strapline}</p>
+<footer class:list={['site-footer', { minimal }]}>
+  {!minimal && (
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a class="footer-mark" href={withBase('/')} aria-label="Rainbow Circuits home">
+          <Image src={heart} alt="" width={72} height={72} />
+        </a>
+        <p class="footer-tagline">{SITE.strapline}</p>
+      </div>
+
+      <nav class="footer-nav" aria-label="Footer">
+        <ul>
+          {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        </ul>
+      </nav>
+
+      <p class="footer-contact">
+        <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>
+      </p>
     </div>
-
-    <nav class="footer-nav" aria-label="Footer">
-      <ul>
-        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
-      </ul>
-    </nav>
-
-    <p class="footer-contact">
-      <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>
-    </p>
-  </div>
+  )}
   <p class="footer-copy">© {year} Rainbow Circuits · Made with kindness, glitter, and a little harmless chaos.</p>
 </footer>
 
@@ -89,4 +96,6 @@ const links = [
     padding: 0.5rem var(--gutter) 1.5rem;
     border-top: 1px solid rgba(60, 90, 150, 0.08);
   }
+  .site-footer.minimal { margin-top: 3rem; }
+  .site-footer.minimal .footer-copy { border-top: none; padding-top: 1.5rem; }
 </style>

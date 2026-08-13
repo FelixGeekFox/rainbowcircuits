@@ -19,11 +19,13 @@ interface Props {
   logoOnlyHeader?: boolean;
   /** Hide the site footer — for standalone pages meant to be shared on their own. */
   bareFooter?: boolean;
+  /** Show only the copyright line in the footer (no nav/brand). */
+  minimalFooter?: boolean;
   /** Ask search engines not to index this page (e.g. the mod area). */
   noindex?: boolean;
 }
 
-const { title, description, path, socialImage, structuredData, bareHeader = false, logoOnlyHeader = false, bareFooter = false, noindex = false } = Astro.props;
+const { title, description, path, socialImage, structuredData, bareHeader = false, logoOnlyHeader = false, bareFooter = false, minimalFooter = false, noindex = false } = Astro.props;
 const canonical = new URL(withBase(path), Astro.site);
 ---
 
@@ -68,6 +70,6 @@ const canonical = new URL(withBase(path), Astro.site);
     <main id="main">
       <slot />
     </main>
-    {!bareFooter && <SiteFooter />}
+    {!bareFooter && <SiteFooter minimal={minimalFooter} />}
   </body>
 </html>
