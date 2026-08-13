@@ -72,6 +72,71 @@ const neoPronouns = [
   { s: 'per', o: 'per', pd: 'per', pp: 'pers', r: 'perself' },
   { s: 've', o: 'ver', pd: 'vis', pp: 'vis', r: 'verself' },
 ];
+
+/**
+ * Glossary of common terms, adapted (paraphrased) from the Australian
+ * Institute of Family Studies' "LGBTIQA+ glossary of common terms".
+ */
+const glossary: { category: string; terms: { term: string; def: string }[] }[] = [
+  {
+    category: 'Bodies & variations in sex characteristics',
+    terms: [
+      { term: 'Endosex', def: 'Someone whose innate sex characteristics fit medical and conventional understandings of male and female bodies (the opposite of intersex).' },
+      { term: 'Intersex', def: 'An umbrella term for people whose anatomical, chromosomal or hormonal characteristics differ from typical definitions of male and female. There are at least 40 variations; most intersex people are cisgender and have a range of orientations.' },
+      { term: 'Sex characteristics', def: 'The physical parts of the body related to development and reproduction — primary (chromosomes, gonads, genitals, hormones) and secondary (traits that emerge at puberty, like body hair or voice pitch).' },
+      { term: 'Sex', def: 'A classification usually made at birth as male or female based on external anatomy. It isn’t always straightforward — a person may be intersex, and characteristics can change over a lifetime.' },
+    ],
+  },
+  {
+    category: 'Gender',
+    terms: [
+      { term: 'AFAB / AMAB', def: 'Assigned (or presumed) Female / Male At Birth — framing sex as an externally assigned label rather than an innate identity.' },
+      { term: 'Cisgender (cis)', def: 'Someone whose gender matches the sex they were assigned at birth.' },
+      { term: 'Deadname', def: 'A former name a person no longer uses. Using it can cause distress or gender dysphoria.' },
+      { term: 'Gender identity', def: 'A person’s internal sense of being a man, woman, non-binary, agender, or another gender — distinct from biological sex.' },
+      { term: 'Gender affirmation', def: 'The personal process someone takes to validate their gender — which can be social (name, pronouns, appearance), medical, and/or legal.' },
+      { term: 'Gender-affirming care', def: 'Holistic health and social support that respects and affirms a person’s gender identity.' },
+      { term: 'Gender binary', def: 'The idea of just two genders — male and female. Non-binary genders sit outside or between these, or aren’t male or female at all.' },
+      { term: 'Gender diversity', def: 'An umbrella term for the range of gender identities and expressions beyond the man/woman binary.' },
+      { term: 'Gender dysphoria', def: 'Distress or unease from being misgendered, or when someone’s gender and body feel disconnected. Not all trans people experience it, and it can ease with support.' },
+      { term: 'Gender euphoria', def: 'The comfort, connection and joy a person can feel when their sense of self and gender align — often after a gender-affirming moment.' },
+      { term: 'Gender expression', def: 'How someone outwardly presents their gender — clothing, hair, make-up, voice, body language.' },
+      { term: 'Gender questioning', def: 'Being unsure which gender, if any, one identifies with. It’s a valid place to be, not necessarily a fixed identity.' },
+      { term: 'Sistergirl / Brotherboy', def: 'Terms for trans people in some Aboriginal and Torres Strait Islander communities, carrying distinct cultural identities and roles (also spelt sistagirl / brothaboy).' },
+      { term: 'Transgender (trans)', def: 'An umbrella term for people whose assigned sex at birth doesn’t match their gender identity. Trans people have the full range of sexual orientations.' },
+      { term: 'Transfem / Transfemme', def: 'Trans people whose gender or expression is feminine, or aligned with femininity in some way.' },
+      { term: 'Transmasc', def: 'Trans people whose gender or expression is masculine, or aligned with masculinity in some way.' },
+    ],
+  },
+  {
+    category: 'Sexual orientation',
+    terms: [
+      { term: 'Sexual orientation', def: 'A person’s sexual and/or romantic attraction to others. There are many possibilities beyond the common labels, and some people describe theirs as fluid.' },
+      { term: 'Heterosexual (straight)', def: 'Someone attracted to a different/“opposite” gender.' },
+      { term: 'Gay', def: 'Usually a man attracted to men, though it can describe anyone attracted to the same gender; sometimes used as a broad umbrella term.' },
+      { term: 'Bisexual (bi)', def: 'Attraction to people of the same gender and people of another gender — without assuming there are only two genders.' },
+      { term: 'Pansexual', def: 'Attraction that isn’t restricted by gender.' },
+      { term: 'Asexual (ace)', def: 'Little to no sexual attraction. Ace people may still experience romantic attraction, and it doesn’t imply a lack of libido.' },
+      { term: 'Aromantic (aro)', def: 'Little to no romantic attraction. Aromantic people may or may not also be asexual.' },
+    ],
+  },
+  {
+    category: 'Societal attitudes & issues',
+    terms: [
+      { term: 'Misgendering', def: 'Referring to someone with language that doesn’t match their gender — wrong pronouns, gendered titles, or other gendered words. It can be harmful.' },
+      { term: 'Heteronormativity', def: 'The assumption that heterosexual relationships are the natural, default expression of sexuality — which can render LGBTIQA+ people invisible.' },
+      { term: 'Heterosexism', def: 'A social system that privileges heteronormative beliefs and practices, providing the backdrop for homophobia.' },
+      { term: 'Cisnormativity', def: 'The assumption that everyone is, and will remain, the gender they were assigned at birth — erasing trans people.' },
+      { term: 'Cisgenderism', def: 'Systems and beliefs that privilege cisgender identities and treat other gender identities as a problem to be fixed.' },
+      { term: 'Homonormativity', def: 'Privileging “normative” people and relationships within queer communities, pressuring LGBTIQA+ people to conform to mainstream norms.' },
+      { term: 'Homophobia', def: 'Negative beliefs, prejudice, fear or hostility toward same-sex attracted people — from offensive language to discrimination and violence.' },
+      { term: 'Biphobia', def: 'Prejudice or discrimination against bisexual people, including dismissing bisexuality as not real or legitimate.' },
+      { term: 'Transphobia', def: 'Negative beliefs, prejudice and discrimination against trans people. It can occur inside the LGBTIQA+ community too.' },
+      { term: 'Microaggressions', def: 'Subtle, everyday words or actions that communicate hostility or negative beliefs toward marginalised people.' },
+      { term: 'QTIPOC', def: 'Queer, Trans and/or Intersex People of Colour — encompassing experiences of both LGBTIQA+ identity and racial or ethnic marginalisation.' },
+    ],
+  },
+];
 ---
 
 <Base
@@ -230,6 +295,32 @@ const neoPronouns = [
       </div>
     </section>
 
+    <!-- ── Glossary ── -->
+    <section class="guide-section glossary" aria-labelledby="glossary-heading">
+      <h2 id="glossary-heading"><span aria-hidden="true">📖</span> Glossary of common terms</h2>
+      <p class="section-lead">
+        A quick reference to language you might come across, grouped by theme. It isn’t
+        exhaustive, and people are always the experts on the words that fit them best.
+      </p>
+      {glossary.map((group) => (
+        <div class="gloss-group">
+          <h3>{group.category}</h3>
+          <dl class="gloss-list">
+            {group.terms.map((t) => (
+              <div class="gloss-item">
+                <dt>{t.term}</dt>
+                <dd>{t.def}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      ))}
+      <p class="gloss-source">
+        Glossary terms adapted from the Australian Institute of Family Studies’
+        <a href="https://aifs.gov.au/resources/resource-sheets/lgbtiqa-glossary-common-terms" rel="noopener">LGBTIQA+ glossary of common terms</a>.
+      </p>
+    </section>
+
     <div class="guide-cta card">
       <p>Everyone deserves support that respects their identity. If you need someone to talk to, our support directory has affirming resources by region.</p>
       <a class="btn btn-secondary" href={withBase('/resources/')}>Support &amp; resources</a>
@@ -331,6 +422,21 @@ const neoPronouns = [
 
   .plain-list { display: grid; gap: 0.6rem; padding-left: 1.1rem; }
   .plain-list li { line-height: 1.65; color: var(--text); }
+
+  /* glossary */
+  .gloss-group { margin-top: 1.5rem; }
+  .gloss-group h3 { font-size: 1.15rem; color: var(--heading); margin-bottom: 0.6rem; }
+  .gloss-list { display: grid; gap: 0.7rem; }
+  .gloss-item {
+    background: var(--white);
+    border: var(--card-border);
+    border-left: 4px solid var(--violet);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+  }
+  .gloss-item dt { font-family: var(--font-ui); font-weight: 700; color: var(--violet); }
+  .gloss-item dd { margin: 0.2rem 0 0; font-size: 0.92rem; line-height: 1.6; color: var(--text); }
+  .gloss-source { margin-top: 1.75rem; font-size: 0.85rem; color: var(--text-light); }
 
   .guide-cta {
     text-align: center;
