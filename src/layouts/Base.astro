@@ -15,11 +15,13 @@ interface Props {
   structuredData?: object;
   /** Hide the standard site header (the issue page brings its own chrome). */
   bareHeader?: boolean;
+  /** Hide the site footer — for standalone pages meant to be shared on their own. */
+  bareFooter?: boolean;
   /** Ask search engines not to index this page (e.g. the mod area). */
   noindex?: boolean;
 }
 
-const { title, description, path, socialImage, structuredData, bareHeader = false, noindex = false } = Astro.props;
+const { title, description, path, socialImage, structuredData, bareHeader = false, bareFooter = false, noindex = false } = Astro.props;
 const canonical = new URL(withBase(path), Astro.site);
 ---
 
@@ -64,6 +66,6 @@ const canonical = new URL(withBase(path), Astro.site);
     <main id="main">
       <slot />
     </main>
-    <SiteFooter />
+    {!bareFooter && <SiteFooter />}
   </body>
 </html>
