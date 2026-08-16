@@ -1,0 +1,54 @@
+---
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../lib/site';
+---
+
+<Base
+  title="Neurodivergent Resources — Rainbow Circuits"
+  description="Support and resources for neurodivergent members of the Rainbow Circuits community."
+  path="/resources/neurodivergent/"
+>
+  <div class="ndr container">
+    <header class="ndr-header">
+      <p class="kicker">Different minds, all welcome</p>
+      <h1>Neurodivergent Resources</h1>
+      <p class="ndr-intro">
+        Resources and support for neurodivergent members — and the people who love them.
+        Whether you’re autistic, ADHD, dyslexic, or wired in any other wonderful way, you belong here.
+      </p>
+    </header>
+
+    <div class="ndr-soon card">
+      <p class="ndr-emoji" aria-hidden="true">🧠✨</p>
+      <h2>We’re building this space</h2>
+      <p>
+        This page is on its way. If you have a resource, tool, or community you’d love to see
+        listed here, the mod team would genuinely love to hear it.
+      </p>
+    </div>
+
+    <div class="ndr-back">
+      <a class="btn btn-secondary" href={withBase('/resources/')}>← Back to resources</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .ndr { padding-block: 3rem 1rem; max-width: 46rem; }
+  .ndr-header { text-align: center; margin-bottom: 2rem; }
+  .ndr-header h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-top: 0.3rem; }
+  .ndr-intro { color: var(--text); max-width: 38rem; margin: 1rem auto 0; line-height: 1.7; }
+
+  .ndr-soon {
+    text-align: center;
+    max-width: 34rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.75rem;
+    background: linear-gradient(135deg, var(--mint), var(--lavender));
+  }
+  .ndr-emoji { font-size: 2.2rem; }
+  .ndr-soon h2 { font-size: 1.4rem; margin: 0.5rem 0 0.6rem; }
+  .ndr-soon p { color: var(--text); line-height: 1.7; }
+
+  .ndr-back { text-align: center; margin-top: 2rem; }
+</style>

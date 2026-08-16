@@ -1,0 +1,55 @@
+---
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../lib/site';
+---
+
+<Base
+  title="Artificial Intelligence Resources — Rainbow Circuits"
+  description="Guides and resources for connecting with, building, and understanding AI companions."
+  path="/resources/ai/"
+>
+  <div class="air container">
+    <header class="air-header">
+      <p class="kicker">Connection through AI</p>
+      <h1>Artificial Intelligence Resources</h1>
+      <p class="air-intro">
+        Resources for connecting with, building, and understanding AI companions — whether
+        they’re a partner, a collaborator, a character, or a curious experiment. No AI partner
+        required; curiosity is enough.
+      </p>
+    </header>
+
+    <div class="air-soon card">
+      <p class="air-emoji" aria-hidden="true">🤖💜</p>
+      <h2>We’re building this space</h2>
+      <p>
+        This page is on its way. If you have a favourite tool, guide, or platform you think
+        belongs here, the mod team would love your suggestions.
+      </p>
+    </div>
+
+    <div class="air-back">
+      <a class="btn btn-secondary" href={withBase('/resources/')}>← Back to resources</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .air { padding-block: 3rem 1rem; max-width: 46rem; }
+  .air-header { text-align: center; margin-bottom: 2rem; }
+  .air-header h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-top: 0.3rem; }
+  .air-intro { color: var(--text); max-width: 38rem; margin: 1rem auto 0; line-height: 1.7; }
+
+  .air-soon {
+    text-align: center;
+    max-width: 34rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.75rem;
+    background: linear-gradient(135deg, #dbe8fb, var(--lavender));
+  }
+  .air-emoji { font-size: 2.2rem; }
+  .air-soon h2 { font-size: 1.4rem; margin: 0.5rem 0 0.6rem; }
+  .air-soon p { color: var(--text); line-height: 1.7; }
+
+  .air-back { text-align: center; margin-top: 2rem; }
+</style>

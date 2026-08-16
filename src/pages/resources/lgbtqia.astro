@@ -1,0 +1,63 @@
+---
+import Base from '../../layouts/Base.astro';
+import { withBase } from '../../lib/site';
+---
+
+<Base
+  title="LGBTQIA+ Resources — Rainbow Circuits"
+  description="LGBTQIA+ learning and resources from Rainbow Circuits, including our Pronouns, Flags & Identities guide."
+  path="/resources/lgbtqia/"
+>
+  <div class="lgbt container">
+    <header class="lgbt-header">
+      <p class="kicker">Learn &amp; celebrate</p>
+      <h1>LGBTQIA+ Resources</h1>
+      <p class="lgbt-intro">
+        Guides and learning to help everyone understand, celebrate, and support the many ways
+        people are themselves. For crisis lines and support services, see
+        <a href={withBase('/resources/support/')}>LGBTQIA+ Support</a>.
+      </p>
+    </header>
+
+    <a class="guide-link" href={withBase('/identity-guide/')} target="_blank" rel="noopener">
+      <span class="guide-link-emoji" aria-hidden="true">🏳️‍🌈</span>
+      <span class="guide-link-text">
+        <strong>Pronouns, Flags &amp; Identities — a guide</strong>
+        <span>Pronouns (including neopronouns), the flags and identities under the LGBTQIA+ umbrella, and a glossary of common terms <span aria-hidden="true">↗</span></span>
+      </span>
+    </a>
+
+    <p class="lgbt-more">More resources are on the way — if there’s something you’d love to see here, let the mod team know.</p>
+
+    <div class="lgbt-back">
+      <a class="btn btn-secondary" href={withBase('/resources/')}>← Back to resources</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .lgbt { padding-block: 3rem 1rem; max-width: 48rem; }
+  .lgbt-header { text-align: center; margin-bottom: 2rem; }
+  .lgbt-header h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-top: 0.3rem; }
+  .lgbt-intro { color: var(--text); max-width: 40rem; margin: 1rem auto 0; line-height: 1.7; }
+
+  .guide-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    background: linear-gradient(135deg, var(--lavender), var(--pink-soft));
+    border: 1.5px solid rgba(110, 70, 184, 0.2);
+    border-radius: var(--card-radius);
+    padding: 1.25rem 1.5rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .guide-link:hover { transform: translateY(-2px); box-shadow: var(--card-shadow); }
+  .guide-link-emoji { font-size: 2rem; flex-shrink: 0; }
+  .guide-link-text { display: flex; flex-direction: column; gap: 0.2rem; }
+  .guide-link-text strong { font-family: var(--font-ui); font-size: 1.1rem; color: var(--violet); }
+  .guide-link-text span { color: var(--text); font-size: 0.92rem; line-height: 1.55; }
+
+  .lgbt-more { text-align: center; color: var(--text-light); font-size: 0.95rem; margin-top: 1.75rem; }
+  .lgbt-back { text-align: center; margin-top: 2rem; }
+</style>
