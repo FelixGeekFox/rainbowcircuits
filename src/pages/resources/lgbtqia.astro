@@ -19,13 +19,23 @@ import { withBase } from '../../lib/site';
       </p>
     </header>
 
-    <a class="guide-link" href={withBase('/identity-guide/')} target="_blank" rel="noopener">
-      <span class="guide-link-emoji" aria-hidden="true">🏳️‍🌈</span>
-      <span class="guide-link-text">
-        <strong>Pronouns, Flags &amp; Identities — a guide</strong>
-        <span>Pronouns (including neopronouns), the flags and identities under the LGBTQIA+ umbrella, and a glossary of common terms <span aria-hidden="true">↗</span></span>
-      </span>
-    </a>
+    <div class="lgbt-cards">
+      <a class="guide-link" href={withBase('/identity-guide/')} target="_blank" rel="noopener">
+        <span class="guide-link-emoji" aria-hidden="true">🏳️‍🌈</span>
+        <span class="guide-link-text">
+          <strong>Pronouns, Flags &amp; Identities — a guide</strong>
+          <span>Pronouns (including neopronouns), the flags and identities under the LGBTQIA+ umbrella, and a glossary of common terms <span aria-hidden="true">↗</span></span>
+        </span>
+      </a>
+
+      <a class="guide-link" href="https://genderdysphoria.fyi/en" target="_blank" rel="noopener">
+        <span class="guide-link-emoji" aria-hidden="true">📖</span>
+        <span class="guide-link-text">
+          <strong>The Gender Dysphoria Bible</strong>
+          <span>An in-depth, accessible guide to what gender dysphoria is and the different ways it can be experienced <span aria-hidden="true">↗</span></span>
+        </span>
+      </a>
+    </div>
 
     <p class="lgbt-more">More resources are on the way — if there’s something you’d love to see here, let the mod team know.</p>
 
@@ -41,6 +51,7 @@ import { withBase } from '../../lib/site';
   .lgbt-header h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-top: 0.3rem; }
   .lgbt-intro { color: var(--text); max-width: 40rem; margin: 1rem auto 0; line-height: 1.7; }
 
+  .lgbt-cards { display: grid; gap: 1rem; }
   .guide-link {
     display: flex;
     align-items: center;
