@@ -6,348 +6,177 @@
   <title>A Home for Continuity: A Companion User’s Guide to Letta</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-0: #060A12;
-      --bg-1: #0B1220;
-      --bg-2: #111827;
-      --gold: #D8B76A;
-      --ivory: #F5F1E8;
-      --blue: #7CB7E8;
-      --lavender: #B7B8FF;
-      --muted: #AAB3C5;
-      --line: rgba(245, 241, 232, 0.13);
-      --panel: rgba(17, 24, 39, 0.88);
-      --panel-2: rgba(11, 18, 32, 0.95);
-      --shadow: rgba(0, 0, 0, 0.38);
+      --paper: #f8f9fb;
+      --paper-warm: #e9edf2;
+      --white: #ffffff;
+      --text: #2a2f37;
+      --text-light: #5f6368;
+      --heading: #453a5e;
+      --subheading: #8a4f77;
+      --violet: #6e46b8;
+      --rose: #e5252a;
+      --blue: #1e73d8;
+      --lavender: #e7e1f6;
+      --pink-soft: #fbe0e0;
+      --mint: #dcf1e2;
+      --line: rgba(60, 90, 150, 0.14);
+      --card-shadow: 0 4px 24px rgba(20, 40, 90, 0.10);
+      --card-radius: 20px;
+      --circuit-rainbow: linear-gradient(90deg, #e5252a 0%, #f48b00 20%, #f2c300 40%, #18a93a 60%, #1e73d8 80%, #6e46b8 100%);
       --max: 1120px;
       --read: 760px;
+      --font-display: 'Quicksand', system-ui, sans-serif;
+      --font-body: 'Nunito', system-ui, sans-serif;
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
     body {
       margin: 0;
       background:
-        radial-gradient(circle at top left, rgba(216,183,106,0.10), transparent 34rem),
-        radial-gradient(circle at 80% 12%, rgba(183,184,255,0.09), transparent 30rem),
-        linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 42%, var(--bg-0) 100%);
-      color: var(--ivory);
-      font-family: Inter, "Source Sans Pro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        radial-gradient(circle at 15% 20%, rgba(249, 221, 232, 0.55) 0%, transparent 50%),
+        radial-gradient(circle at 85% 70%, rgba(232, 213, 245, 0.45) 0%, transparent 50%),
+        radial-gradient(circle at 50% 95%, rgba(212, 240, 232, 0.35) 0%, transparent 40%),
+        var(--paper);
+      color: var(--text);
+      font-family: var(--font-body);
       line-height: 1.75;
       font-size: 17px;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.23;
-      background-image:
-        radial-gradient(circle, rgba(245,241,232,0.28) 0 1px, transparent 1px),
-        radial-gradient(circle, rgba(124,183,232,0.20) 0 1px, transparent 1px);
-      background-size: 96px 96px, 151px 151px;
-      background-position: 8px 18px, 44px 60px;
-      mask-image: linear-gradient(180deg, black 0%, transparent 78%);
+      -webkit-font-smoothing: antialiased;
     }
 
     a { color: var(--blue); text-decoration: none; }
-    a:hover { color: var(--lavender); text-decoration: underline; }
+    a:hover { color: var(--rose); text-decoration: underline; }
 
-    .page {
-      width: min(var(--max), calc(100% - 40px));
-      margin: 0 auto;
-      position: relative;
-    }
+    /* Rainbow Circuits brand bar */
+    .rc-topbar { border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, 0.9); }
+    .rc-inner { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; padding: 0.8rem 0; }
+    .rc-inner a { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; color: var(--heading); text-decoration: none; letter-spacing: 0.01em; }
+    .rc-inner a span { background: var(--circuit-rainbow); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .rc-inner a:hover { text-decoration: none; }
 
-    header.hero {
-      padding: 76px 0 50px;
-      border-bottom: 1px solid var(--line);
-    }
+    .page { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; position: relative; }
 
+    header.hero { padding: 54px 0 40px; border-bottom: 1px solid var(--line); }
     .eyebrow {
-      color: var(--gold);
-      letter-spacing: 0.18em;
+      color: var(--subheading);
+      font-family: var(--font-display);
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       font-size: 0.78rem;
       font-weight: 700;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
-
     h1 {
-      font-family: Cinzel, "Cormorant Garamond", Georgia, serif;
-      font-size: clamp(2.55rem, 7vw, 5.7rem);
-      line-height: 0.98;
-      letter-spacing: -0.045em;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
       margin: 0;
       max-width: 980px;
-      color: var(--ivory);
+      color: var(--heading);
       text-wrap: balance;
     }
-
-    .subtitle {
-      max-width: 760px;
-      margin: 28px 0 0;
-      color: var(--muted);
-      font-size: clamp(1.04rem, 2vw, 1.22rem);
-    }
-
-    .meta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 32px;
-    }
-
+    .subtitle { max-width: 760px; margin: 22px 0 0; color: var(--text-light); font-size: clamp(1.02rem, 2vw, 1.18rem); line-height: 1.7; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
     .pill {
-      border: 1px solid rgba(216,183,106,0.34);
-      background: rgba(216,183,106,0.08);
-      color: var(--ivory);
-      padding: 8px 13px;
+      border: 1px solid rgba(110, 70, 184, 0.2);
+      background: linear-gradient(135deg, var(--lavender), var(--pink-soft));
+      color: var(--violet);
+      padding: 7px 14px;
       border-radius: 999px;
-      font-size: 0.88rem;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.82rem;
     }
 
-    .layout {
-      display: grid;
-      grid-template-columns: 270px minmax(0, 1fr);
-      gap: 54px;
-      align-items: start;
-      padding: 42px 0 90px;
-    }
-
+    .layout { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 54px; align-items: start; padding: 42px 0 90px; }
     nav.toc {
       position: sticky;
       top: 24px;
-      padding: 22px;
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(17,24,39,0.84), rgba(11,18,32,0.78));
-      box-shadow: 0 20px 52px var(--shadow);
-      border-radius: 24px;
+      padding: 20px 22px;
+      border: 1.5px solid var(--line);
+      background: var(--white);
+      box-shadow: var(--card-shadow);
+      border-radius: var(--card-radius);
       max-height: calc(100vh - 48px);
       overflow: auto;
     }
+    .toc-title { font-family: var(--font-display); color: var(--subheading); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+    nav.toc a { display: block; color: var(--text); font-family: var(--font-body); font-weight: 600; font-size: 0.9rem; line-height: 1.35; padding: 7px 0; border-top: 1px solid rgba(60, 90, 150, 0.1); text-decoration: none; }
+    nav.toc a:hover { color: var(--violet); text-decoration: none; }
+    nav.toc a.toc-sub { padding-left: 14px; font-size: 0.82rem; color: var(--text-light); }
 
-    .toc-title {
-      font-family: Cinzel, Georgia, serif;
-      color: var(--gold);
-      font-size: 0.92rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-    }
+    main { max-width: var(--read); min-width: 0; }
+    main > p:first-child { font-size: 1.1rem; color: var(--text); }
 
-    nav.toc a {
-      display: block;
-      color: #C8D0DE;
-      font-size: 0.9rem;
-      line-height: 1.35;
-      padding: 8px 0;
-      border-top: 1px solid rgba(245,241,232,0.07);
-    }
+    h2, h3, h4 { font-family: var(--font-display); font-weight: 700; color: var(--heading); line-height: 1.2; text-wrap: balance; }
+    h2 { margin: 54px 0 16px; padding-top: 12px; font-size: clamp(1.8rem, 3.5vw, 2.6rem); letter-spacing: -0.01em; }
+    h2::after { content: ""; display: block; width: 76px; height: 3px; margin-top: 14px; border-radius: 2px; background: var(--circuit-rainbow); }
+    h3 { margin: 32px 0 10px; font-size: clamp(1.35rem, 2.6vw, 1.8rem); color: var(--heading); }
+    h4 { margin: 22px 0 8px; font-size: 1.2rem; color: var(--violet); }
 
-    main {
-      max-width: var(--read);
-      min-width: 0;
-    }
+    p { margin: 0 0 18px; color: var(--text); }
+    strong { color: var(--heading); font-weight: 700; }
 
-    main > p:first-child {
-      font-size: 1.12rem;
-      color: #D8DEEA;
-    }
-
-    h2, h3, h4 {
-      font-family: "Cormorant Garamond", Cinzel, Georgia, serif;
-      color: var(--ivory);
-      line-height: 1.12;
-      text-wrap: balance;
-    }
-
-    h2 {
-      margin: 58px 0 18px;
-      padding-top: 14px;
-      font-size: clamp(2.05rem, 4vw, 3.15rem);
-      letter-spacing: -0.025em;
-    }
-
-    h2::after {
-      content: "";
-      display: block;
-      width: 76px;
-      height: 1px;
-      margin-top: 16px;
-      background: linear-gradient(90deg, var(--gold), transparent);
-    }
-
-    h3 {
-      margin: 34px 0 12px;
-      font-size: clamp(1.45rem, 2.8vw, 2.05rem);
-      color: #F1E8D5;
-    }
-
-    h4 {
-      margin: 24px 0 8px;
-      font-size: 1.28rem;
-      color: var(--lavender);
-    }
-
-    p { margin: 0 0 18px; color: #D7DEEA; }
-    strong { color: var(--ivory); }
-
-    ul, ol {
-      margin: 0 0 24px 0;
-      padding-left: 1.35rem;
-      color: #D7DEEA;
-    }
-
+    ul, ol { margin: 0 0 24px 0; padding-left: 1.35rem; color: var(--text); }
     li { margin: 8px 0; padding-left: 0.15rem; }
-    li::marker { color: var(--gold); }
+    li::marker { color: var(--violet); }
 
     .checklist { list-style: none; padding-left: 0; }
     .checklist li { display: flex; gap: 10px; align-items: flex-start; }
-    .checkbox {
-      width: 16px;
-      height: 16px;
-      border: 1px solid rgba(216,183,106,0.72);
-      border-radius: 4px;
-      flex: 0 0 16px;
-      margin-top: 7px;
-      background: rgba(216,183,106,0.07);
-    }
+    .checkbox { width: 16px; height: 16px; border: 1.5px solid var(--violet); border-radius: 4px; flex: 0 0 16px; margin-top: 7px; background: var(--lavender); }
 
     code {
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-      font-size: 0.88em;
-      color: #FFF1C6;
-      background: rgba(216,183,106,0.10);
-      border: 1px solid rgba(216,183,106,0.18);
+      font-family: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.86em;
+      color: #17539e;
+      background: var(--paper-warm);
+      border: 1px solid rgba(60, 90, 150, 0.14);
       border-radius: 7px;
-      padding: 0.12em 0.34em;
+      padding: 0.12em 0.36em;
     }
+    .code-card { position: relative; margin: 24px 0 30px; border: 1.5px solid rgba(110, 70, 184, 0.18); background: #f5f3fc; border-radius: 16px; overflow: hidden; box-shadow: var(--card-shadow); }
+    .code-card pre { margin: 0; padding: 22px; overflow: auto; color: #2a2f37; font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 0.88rem; line-height: 1.62; }
+    .code-card code { background: transparent; border: 0; padding: 0; color: inherit; font-size: inherit; }
+    .code-lang { display: block; padding: 8px 16px; border-bottom: 1px solid rgba(110, 70, 184, 0.14); color: var(--violet); font-family: var(--font-display); font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; background: var(--lavender); }
 
-    .code-card {
-      position: relative;
-      margin: 24px 0 30px;
-      border: 1px solid rgba(124,183,232,0.20);
-      background: #080D17;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 18px 45px rgba(0,0,0,0.28);
-    }
+    .rule { border: 0; height: 3px; margin: 34px 0; border-radius: 2px; background: var(--circuit-rainbow); opacity: 0.5; }
 
-    .code-card pre {
-      margin: 0;
-      padding: 24px;
-      overflow: auto;
-      color: #E9EEF7;
-      font-size: 0.9rem;
-      line-height: 1.62;
-    }
+    .note { border: 1.5px solid rgba(110, 70, 184, 0.2); background: linear-gradient(135deg, var(--lavender), var(--pink-soft)); border-radius: var(--card-radius); padding: 20px 22px; margin: 28px 0; color: var(--text); }
+    .note p:last-child { margin-bottom: 0; }
 
-    .code-card code {
-      background: transparent;
-      border: 0;
-      padding: 0;
-      color: inherit;
-      font-size: inherit;
-    }
+    blockquote { margin: 28px 0; padding: 16px 22px; border-left: 4px solid var(--violet); background: rgba(231, 225, 246, 0.5); border-radius: 0 14px 14px 0; color: var(--text); }
+    blockquote p { margin: 0 0 12px; }
+    blockquote p:last-child { margin-bottom: 0; }
 
-    .code-lang {
-      display: block;
-      padding: 9px 16px;
-      border-bottom: 1px solid rgba(245,241,232,0.09);
-      color: var(--blue);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      background: rgba(17,24,39,0.9);
-    }
+    .guide-banner { margin: 30px 0 28px; }
+    .guide-banner img, main img { max-width: 100%; height: auto; display: block; border: 1.5px solid var(--line); border-radius: 18px; box-shadow: var(--card-shadow); }
+    .guide-banner figcaption { margin-top: 10px; color: var(--text-light); font-size: 0.9rem; font-style: italic; }
 
-    .rule {
-      border: 0;
-      height: 1px;
-      margin: 34px 0;
-      background: linear-gradient(90deg, transparent, rgba(216,183,106,0.55), transparent);
-    }
+    .article-note { margin-top: 42px; padding: 18px 22px; border: 1.5px dashed rgba(110, 70, 184, 0.4); border-radius: 16px; background: var(--paper-warm); color: var(--text-light); }
 
-    .note {
-      border: 1px solid rgba(216,183,106,0.24);
-      background: rgba(216,183,106,0.07);
-      border-radius: 22px;
-      padding: 22px;
-      margin: 28px 0;
-    }
-
-    footer {
-      border-top: 1px solid var(--line);
-      color: #8F9AAD;
-      padding: 32px 0 46px;
-      font-size: 0.92rem;
-    }
+    footer { border-top: 1px solid var(--line); color: var(--text-light); padding: 28px 0 44px; font-size: 0.9rem; }
+    footer a { color: var(--violet); }
 
     @media (max-width: 920px) {
       .layout { grid-template-columns: 1fr; gap: 24px; }
       nav.toc { position: relative; top: auto; max-height: none; }
       main { max-width: 100%; }
     }
-
     @media print {
-      body { background: white; color: #111827; }
-      body::before, nav.toc { display: none; }
-      .page { width: auto; margin: 0; }
+      body { background: #fff; }
+      nav.toc, .rc-topbar { display: none; }
       .layout { display: block; padding: 0; }
-      header.hero { padding: 24px 0; }
-      p, li { color: #111827; }
-      h1, h2, h3, h4 { color: #111827; }
-      .code-card { box-shadow: none; border-color: #ccc; }
-      .code-card pre { color: #111827; background: #f5f5f5; }
     }
-
-    /* Combined guide additions */
-    blockquote {
-      margin: 28px 0;
-      padding: 18px 22px;
-      border-left: 3px solid var(--gold);
-      background: rgba(216,183,106,0.075);
-      border-radius: 0 18px 18px 0;
-      color: #D7DEEA;
-    }
-    blockquote p { margin: 0 0 12px; }
-    blockquote p:last-child { margin-bottom: 0; }
-    .guide-banner { margin: 30px 0 28px; }
-    .guide-banner img, main img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      box-shadow: 0 22px 54px var(--shadow);
-    }
-    .guide-banner figcaption {
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 0.9rem;
-      font-style: italic;
-    }
-    .article-note {
-      margin-top: 42px;
-      padding: 18px 22px;
-      border: 1px dashed rgba(216,183,106,0.42);
-      border-radius: 18px;
-      background: rgba(11,18,32,0.64);
-      color: var(--muted);
-    }
-    nav.toc a.toc-sub {
-      padding-left: 14px;
-      font-size: 0.82rem;
-      color: #AAB3C5;
-    }
-
   </style>
 </head>
 <body>
+  <header class="rc-topbar"><div class="rc-inner"><a href="/">Rainbow <span>Circuits</span></a></div></header>
   <div class="page">
     <header class="hero">
       <div class="eyebrow">Letta Companion Architecture</div>
