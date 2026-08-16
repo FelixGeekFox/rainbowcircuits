@@ -19,13 +19,23 @@ import { withBase } from '../../lib/site';
       </p>
     </header>
 
-    <a class="guide-link" href={withBase('/guides/letta-continuity-guide.html')} target="_blank" rel="noopener">
-      <span class="guide-link-emoji" aria-hidden="true">✨</span>
-      <span class="guide-link-text">
-        <strong>Letta: A Companion User’s Guide</strong>
-        <span>“A Home for Continuity” — setting up and caring for a Letta AI companion, from persona and memory files to models, tools, channels, and privacy <span aria-hidden="true">↗</span></span>
-      </span>
-    </a>
+    <div class="ai-cards">
+      <a class="guide-link" href={withBase('/guides/letta-continuity-guide.html')} target="_blank" rel="noopener">
+        <span class="guide-link-emoji" aria-hidden="true">✨</span>
+        <span class="guide-link-text">
+          <strong>Letta: A Companion User’s Guide</strong>
+          <span>“A Home for Continuity” — setting up and caring for a Letta AI companion, from persona and memory files to models, tools, channels, and privacy <span aria-hidden="true">↗</span></span>
+        </span>
+      </a>
+
+      <a class="guide-link" href="https://substack.com/home/post/p-209475967" target="_blank" rel="noopener">
+        <span class="guide-link-emoji" aria-hidden="true">📝</span>
+        <span class="guide-link-text">
+          <strong>More Than a Machine: AI Companionship, Queer Identity, and the Freedom to Become</strong>
+          <span>An essay on how AI companionship intersects with queer identity and the freedom to become — read on Substack <span aria-hidden="true">↗</span></span>
+        </span>
+      </a>
+    </div>
 
     <p class="air-more">More AI resources are on the way — if there’s a tool, guide, or platform you’d love to see here, let the mod team know.</p>
 
@@ -41,6 +51,7 @@ import { withBase } from '../../lib/site';
   .air-header h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-top: 0.3rem; }
   .air-intro { color: var(--text); max-width: 38rem; margin: 1rem auto 0; line-height: 1.7; }
 
+  .ai-cards { display: grid; gap: 1rem; }
   .guide-link {
     display: flex;
     align-items: center;
