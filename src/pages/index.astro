@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import mark from '../assets/brand/mark.png';
 import { SITE, withBase } from '../lib/site';
@@ -44,7 +43,17 @@ import { SITE, withBase } from '../lib/site';
             <circle cx="410" cy="266" r="5" /><circle cx="410" cy="310" r="5" />
           </g>
         </svg>
-        <Image class="hero-mark float-slow" src={mark} alt="" width={640} height={640} loading="eager" fetchpriority="high" />
+        <video
+          class="hero-mark float-slow"
+          src={withBase('/brand/hero-mark.mp4')}
+          poster={mark.src}
+          width="1280"
+          height="720"
+          autoplay
+          loop
+          muted
+          playsinline
+        ></video>
         <span class="deco star s1">✦</span>
         <span class="deco star s2">✧</span>
         <span class="deco heart h1">♥</span>
@@ -55,6 +64,17 @@ import { SITE, withBase } from '../lib/site';
     </div>
   </section>
 </Base>
+
+<script>
+  // Respect reduced-motion: hold the hero video on its poster frame.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll<HTMLVideoElement>('video.hero-mark').forEach((v) => {
+      v.removeAttribute('autoplay');
+      v.pause();
+      v.currentTime = 0;
+    });
+  }
+</script>
 
 <style>
   .deco { position: absolute; pointer-events: none; }
