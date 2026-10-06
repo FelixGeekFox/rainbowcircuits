@@ -1,0 +1,1782 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { withBase } from '../../../lib/site';
+
+/**
+ * Tertiary attraction — a community guide.
+ *
+ * Built from two supplied sources:
+ *  1. "Comprehensive Briefing Document: Non-Romantic Attraction Frameworks,
+ *     the Split Attraction Model, and Queerplatonic Partnerships" (the
+ *     detailed one — history, etymology, academic citations).
+ *  2. A community infographic, "Understanding Tertiary Attraction"
+ *     (Gemini Notebook), which names many more attraction types but is
+ *     visibly garbled in places and contradicts itself on some slang.
+ *
+ * Where only the infographic supports a term, the group it sits in says so
+ * out loud. Nothing here is invented to fill a gap — where the sources stop,
+ * the page says the sources stop.
+ */
+
+interface AttractionType {
+  id: string;
+  name: string;
+  /** Short label used in the constellation graphic. */
+  node: string;
+  /** Concise definition. */
+  short: string;
+  /** The same idea in ordinary language. */
+  plain: string;
+  /** A hypothetical — what it might feel like from the inside. */
+  feels: string;
+  /** Distinctions, overlaps, history. */
+  notes?: string;
+  /** Informal community word for this kind of crush. */
+  crush?: string;
+  accent: string;
+  /** Position in the constellation, as percentages. */
+  x: number;
+  y: number;
+}
+
+interface TypeGroup {
+  id: string;
+  title: string;
+  lead: string;
+  /** Honest note about how settled the language in this group is. */
+  caveat?: string;
+  types: AttractionType[];
+}
+
+const GROUPS: TypeGroup[] = [
+  {
+    id: 'widely-recognised',
+    title: 'The ones you’ll run into most',
+    lead: 'These turn up constantly in aro and ace spaces, and they’re the ones most likely to be understood without a preamble.',
+    types: [
+      {
+        id: 'platonic',
+        name: 'Platonic attraction',
+        node: 'Platonic',
+        accent: 'var(--teal)',
+        x: 22, y: 10,
+        crush: 'squish',
+        short: 'Wanting friendship with a particular person — to know them, be known by them, and build something that isn’t romantic or sexual.',
+        plain: 'Not “I should be friendly to this person,” but “I want <em>this</em> person, specifically, woven into my week.” It’s a pull toward someone, with a destination that happens to be friendship.',
+        feels: 'I met them once and immediately thought: I need this person in my life. I have been rehearsing an opening line about a board game for four days.',
+        notes: 'A squish can be every bit as nerve-racking as a crush — nervous, preoccupying, slightly humiliating. The stakes just aren’t romantic ones.',
+      },
+      {
+        id: 'queerplatonic',
+        name: 'Queerplatonic attraction',
+        node: 'Queerplatonic',
+        accent: 'var(--violet)',
+        x: 45, y: 8,
+        crush: 'squish (a partner is a zucchini)',
+        short: 'Wanting a committed, intimate partnership with someone that isn’t a romantic relationship.',
+        plain: 'Where platonic attraction wants friendship, this wants <em>partnership</em> — the explicit, load-bearing kind, with the commitment and the status and the shared life, minus the romance.',
+        feels: 'I want to be their emergency contact. I want to own a terrible couch with them. I don’t want to date them — I want something exactly as big as dating that isn’t dating.',
+        notes: 'AVEN describes a queerplatonic relationship as a non-romantic significant-other relationship of “partner status.” Julie Sondra Decker notes that these can look indistinguishable from romance to anyone watching from outside — which doesn’t make them romance.',
+      },
+      {
+        id: 'alterous',
+        name: 'Alterous attraction',
+        node: 'Alterous',
+        accent: 'var(--blue)',
+        x: 68, y: 10,
+        crush: 'mesh, or hush (both used sparingly)',
+        short: 'Wanting emotional closeness that is neither clearly platonic nor clearly romantic.',
+        plain: 'Sometimes it sits in the grey area between the two. Sometimes it isn’t on that line at all — it’s a separate thing that the romantic/platonic split simply doesn’t have an axis for.',
+        feels: 'This is more than how I feel about my friends. It is also not what people seem to mean by “in love.” It is its own thing, and I’ve stopped trying to make it be one of the other two.',
+        notes: 'It can be built into an orientation — bi-alterous, homo-alterous, demi-alterous — or used on its own. It can happen alongside sexual attraction, separately from it, or at the same time. Light blue is the colour most associated with it. It gets a whole section further down.',
+      },
+      {
+        id: 'aesthetic',
+        name: 'Aesthetic attraction',
+        node: 'Aesthetic',
+        accent: 'var(--coral)',
+        x: 8, y: 32,
+        short: 'Being drawn to how someone looks, without that pull being sexual or romantic.',
+        plain: 'Admiring a person the way you’d admire a building, a painting, or an extremely good coat. The looking is the whole of it.',
+        feels: 'I could look at them for hours. They are genuinely beautiful. I do not want to kiss them. I want to draw them, badly, in biro.',
+        notes: 'Worth saying plainly: thinking someone is beautiful doesn’t establish that you’re sexually attracted to them. Those two can arrive together, and they can arrive entirely separately.',
+      },
+      {
+        id: 'sensual',
+        name: 'Sensual attraction',
+        node: 'Sensual',
+        accent: 'var(--rose-soft)',
+        x: 33, y: 30,
+        short: 'Wanting non-sexual physical closeness with someone — hugging, cuddling, leaning, hands in hair.',
+        plain: 'The pull toward touch, stopping short of sex. For a lot of people this is the single most useful word on this page, because “I want to be held” and “I want sex” get collapsed into each other constantly.',
+        feels: 'I want to fall asleep against them on the couch. Nothing after that. Just that, for about four hours.',
+        notes: 'Enjoying cuddling doesn’t establish sexual attraction, romantic attraction, or anything else. It establishes that you like cuddling.',
+      },
+    ],
+  },
+  {
+    id: 'care',
+    title: 'Wanting to look after, or be looked after',
+    lead: 'A pair of attractions that face each other — one pointed at protecting, one at being protected — plus a third that moves between them.',
+    caveat: 'Cedural attraction is well documented in our sources, right down to who coined it and when. Tutelary and wechselnd attraction come from the infographic alone, and it gives two different slang words for a tutelary crush in two different places — so we’ve left that one off rather than pick.',
+    types: [
+      {
+        id: 'tutelary',
+        name: 'Tutelary attraction',
+        node: 'Tutelary',
+        accent: 'var(--gold)',
+        x: 56, y: 30,
+        short: 'Wanting to protect, care for, guide or nurture someone, in a guardian-shaped way.',
+        plain: 'The pull isn’t “I want to be close to you,” it’s “I want to make sure you’re alright.” Those can travel together, but they aren’t the same want.',
+        feels: 'I want to know they’ve eaten. I want to be the person they ring at 2am when something has gone sideways. I don’t need anything back, particularly.',
+        notes: 'Our sources call the relationship built on this guardianship, wardship, or tutelage, and describe cedural attraction as its mirror image.',
+      },
+      {
+        id: 'cedural',
+        name: 'Cedural attraction',
+        node: 'Cedural',
+        accent: 'var(--violet-soft)',
+        x: 80, y: 32,
+        crush: 'gush, or sush',
+        short: 'Wanting to be protected, covered, understood, taught and supported by someone.',
+        plain: 'Our sources describe it as growing out of feeling vulnerable — and also out of wanting to be needed, which is a less obvious and rather more interesting half of it. Also called docile, dependent, or submissive attraction, depending on who you ask and when.',
+        feels: 'I want someone who knows what they’re doing to take the wheel for a bit. Not forever. Just while I work out which way is up.',
+        notes: 'Our sources are unusually firm about what this <em>isn’t</em>: not Dependent Personality Disorder (there’s a separate term, dependplatonic, for that), not protector roles inside plural systems (sysplatonic), and not BDSM or kink power play, which the original Spanish-language framework filed separately as <em>atracción de rol</em> — role attraction. It began on Spanish-language AVEN in December 2014 as <em>atracción hacia protector</em>, coined by a user called Arya; reached English in 2018 as “submissive attraction”; and was renamed <em>cedural</em> later that year, from “procedural” and the verb “to cede.”',
+      },
+      {
+        id: 'wechselnd',
+        name: 'Wechselnd attraction',
+        node: 'Wechselnd',
+        accent: 'var(--gold-soft)',
+        x: 92, y: 52,
+        short: 'An attraction that moves between wanting to protect and wanting to be protected.',
+        plain: 'Not a midpoint — a switch. The direction of care changes depending on the person, the day, or what’s currently on fire.',
+        feels: 'With them I’m the steady one. With them I’m absolutely not. It’s the same feeling pointing different ways.',
+      },
+    ],
+  },
+  {
+    id: 'shapes',
+    title: 'Closeness with a particular shape',
+    lead: 'Words for wanting a specific kind of life with someone — the furniture of it, rather than the feeling in the abstract.',
+    caveat: 'Everything in this group comes from the infographic in our source set, not the detailed briefing. The experiences are recognisable; the exact vocabulary is not widely settled, and you shouldn’t expect people to know these words.',
+    types: [
+      {
+        id: 'exteramo',
+        name: 'Exteramo attraction',
+        node: 'Exteramo',
+        accent: 'var(--navy)',
+        x: 16, y: 56,
+        crush: 'orush',
+        short: 'Emotional attraction that sits completely outside both romance and friendship.',
+        plain: 'Not between the two categories — off the map entirely, in a direction the map doesn’t have.',
+        feels: 'People keep asking whether it’s romantic or platonic and I keep saying “neither” and they keep hearing “I don’t know yet.” I do know. It’s neither.',
+        notes: 'Our two sources frame this differently: the briefing calls exteramo a recognised subset of alterous attraction, while the infographic lists it as its own category. Both framings are out there. If it’s useful to you, it doesn’t much matter which box it lives in.',
+      },
+      {
+        id: 'amical',
+        name: 'Amical attraction',
+        node: 'Amical',
+        accent: 'var(--teal-soft)',
+        x: 34, y: 53,
+        crush: 'shush, or thresh',
+        short: 'A deep best-friend or sibling-shaped bond that includes non-romantic physical affection.',
+        plain: 'The “we’re practically family” register — hanging off each other on the couch, hair-braiding, shoulder-to-shoulder, nothing romantic anywhere in it.',
+        feels: 'We hold hands in public and people assume. We’re not. We’re just like this.',
+      },
+      {
+        id: 'familial',
+        name: 'Familial & parental attraction',
+        node: 'Familial',
+        accent: 'var(--subheading)',
+        x: 10, y: 80,
+        short: 'Wanting a family-shaped emotional connection with someone. Parental attraction specifically is wanting to raise a child together.',
+        plain: 'Chosen family, described as a pull rather than an arrangement. Parental attraction is the narrower one — not “I want kids,” but “I want to do this with <em>you</em>.”',
+        feels: 'I’ve never wanted to marry anyone. I have absolutely pictured us at a school pick-up, arguing about whose turn it was.',
+      },
+      {
+        id: 'domestic',
+        name: 'Domestic attraction',
+        node: 'Domestic',
+        accent: 'var(--heading)',
+        x: 30, y: 82,
+        short: 'Wanting to build a home and run a household with someone.',
+        plain: 'Mortgages, bin night, a shared shelf of chipped mugs, deciding together that the hallway should be green. Domesticity as the thing you want, not as a by-product of something else you wanted first.',
+        feels: 'I don’t daydream about kissing them. I daydream about our kitchen.',
+      },
+    ],
+  },
+  {
+    id: 'minds',
+    title: 'Minds, company and meaning',
+    lead: 'Pulls toward how someone thinks, how they move through a room, or simply toward being near them.',
+    caveat: 'These also come from the infographic alone. Use them if they’re useful; don’t expect them to be recognised.',
+    types: [
+      {
+        id: 'intellectual',
+        name: 'Intellectual & noetic attraction',
+        node: 'Intellectual',
+        accent: 'var(--navy-soft)',
+        x: 59, y: 63,
+        crush: 'mish',
+        short: 'Intellectual: wanting deep mental connection and conversation. Noetic: being drawn to someone’s mind and way of seeing the world.',
+        plain: 'One is about the exchange — the four-hour conversation, the argument you’re both enjoying. The other is about the person’s mind itself, as a thing you admire.',
+        feels: 'I don’t want to date them. I want to be argued with by them, at length, about something neither of us will resolve.',
+      },
+      {
+        id: 'social',
+        name: 'Social attraction',
+        node: 'Social',
+        accent: 'var(--rose)',
+        x: 76, y: 70,
+        crush: 'rush',
+        short: 'Being drawn to someone for their social wisdom, talent, standing or mentorship — an aspirational pull.',
+        plain: 'The feeling of wanting to be in someone’s orbit because of who they are in a room, or because you’d learn something by being near them.',
+        feels: 'I want them to like me. I’m not sure I want anything else. I’d just like to be the kind of person they find interesting.',
+      },
+      {
+        id: 'presential',
+        name: 'Presential attraction',
+        node: 'Presential',
+        accent: 'var(--charcoal)',
+        x: 50, y: 88,
+        short: 'Simply wanting to be in someone’s presence, or to get to know them by being near them.',
+        plain: 'No agenda past the proximity. Parallel play for adults — same room, separate books.',
+        feels: 'I don’t need to talk to them. I just like it better when they’re here.',
+      },
+      {
+        id: 'doraric',
+        name: 'Doraric & spiritual attraction',
+        node: 'Doraric',
+        accent: 'var(--coral)',
+        x: 70, y: 88,
+        crush: 'dish',
+        short: 'Spiritual: valuing someone’s existence. Doraric: deep admiration and awe, with a desire to honour or serve them.',
+        plain: 'The register that reverence lives in — the pull toward someone that feels less like wanting and more like regard.',
+        feels: 'I’m glad they exist. That’s the whole feeling. I’d do a lot for them and I don’t need anything in return.',
+      },
+    ],
+  },
+];
+
+const ALL_TYPES = GROUPS.flatMap((g) => g.types);
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Tertiary Attraction: more ways to be drawn to someone',
+  description:
+    'A community guide to tertiary attraction — the forms of attraction that are neither romantic nor sexual — including the Split Attraction Model and queerplatonic relationships.',
+  inLanguage: 'en-AU',
+  author: { '@type': 'Organization', name: 'Rainbow Circuits' },
+  publisher: { '@type': 'Organization', name: 'Rainbow Circuits' },
+};
+
+/** Suggested overlaps for the constellation lines — nearness, not taxonomy. */
+const LINKS: [string, string][] = [
+  ['platonic', 'queerplatonic'],
+  ['platonic', 'amical'],
+  ['queerplatonic', 'alterous'],
+  ['queerplatonic', 'domestic'],
+  ['alterous', 'exteramo'],
+  ['alterous', 'sensual'],
+  ['aesthetic', 'sensual'],
+  ['sensual', 'amical'],
+  ['amical', 'familial'],
+  ['familial', 'domestic'],
+  ['tutelary', 'cedural'],
+  ['tutelary', 'wechselnd'],
+  ['cedural', 'wechselnd'],
+  ['intellectual', 'social'],
+  ['intellectual', 'presential'],
+  ['presential', 'doraric'],
+  ['social', 'doraric'],
+  ['exteramo', 'amical'],
+];
+const nodeAt = (id: string) => ALL_TYPES.find((t) => t.id === id)!;
+
+const PROMPTS = [
+  'When you imagine being close to this person, what kind of closeness are you picturing?',
+  'Do you want to kiss them — or does kissing just feel like the culturally obvious thing you’re meant to want next?',
+  'Do you want to date them, or do you want them to be important to you?',
+  'Is it touch you’re after, and does it need to lead anywhere?',
+  'Would you still want this connection if nobody else ever called it romantic?',
+  'Is there something you want to <em>build</em> with them — a home, a routine, a Tuesday?',
+  'Does finding a precise word make the feeling clearer, or does it make it more complicated?',
+];
+
+const MYTHS: { myth: string; reality: string }[] = [
+  {
+    myth: '“Tertiary attraction is just friendship with a fancy name.”',
+    reality: 'Some of it is about friendship — platonic attraction is literally the pull toward friendship. But wanting to look at someone, wanting to be held by someone, wanting to be guided by someone and wanting to build a household with someone are four different wants, and “friendship” flattens all of them into one word. The vocabulary exists because the flattening was costing people something.',
+  },
+  {
+    myth: '“If you want to cuddle someone, you’re romantically attracted to them.”',
+    reality: 'Sensual attraction is its own thing. Wanting physical affection doesn’t establish romantic attraction, and it doesn’t establish sexual attraction either. Behaviour and attraction aren’t the same layer.',
+  },
+  {
+    myth: '“If you think someone’s beautiful, you’re sexually attracted to them.”',
+    reality: 'Aesthetic attraction is the word for exactly this gap. You can find a person breathtaking in the way you find a coastline breathtaking.',
+  },
+  {
+    myth: '“Aromantic people don’t feel attraction.”',
+    reality: 'Aromantic means little or no <em>romantic</em> attraction. Our sources are explicit that aro and ace people often identify other kinds of attraction more distinctly precisely because the romantic or sexual layer isn’t there to blur them together.',
+  },
+  {
+    myth: '“Asexual people don’t want intimacy.”',
+    reality: 'Asexual means little or no sexual attraction. It says nothing about wanting closeness, touch, partnership, or a shared life. One of the researchers in our source set specifically looked at how ace people sustain committed relationships that diverge from the expected script.',
+  },
+  {
+    myth: '“Queerplatonic is just friendship with extra steps.”',
+    reality: 'The term was coined because “friend” and “partner” left a gap with nothing in it. Angela Chen describes a QPR as an explicit title that fills exactly that social void, giving non-romantic partners the security and recognition that romantic partners get handed automatically.',
+  },
+  {
+    myth: '“You need to work out every type of attraction you experience.”',
+    reality: 'You really don’t. Our sources note that for people who aren’t a-spec, these attractions often arrive bundled together and never need separating. The model is a tool for people it helps. It isn’t homework.',
+  },
+];
+
+const GLOSSARY: { category: string; terms: { term: string; def: string; href?: string }[] }[] = [
+  {
+    category: 'The frameworks',
+    terms: [
+      { term: 'Split Attraction Model (SAM)', href: '#sam', def: 'A framework separating romantic from sexual attraction, often extended to cover tertiary attractions too. Named by ace and aro online communities around 2015, though the idea goes back much further.' },
+      { term: 'Tertiary attraction', href: '#what', def: 'Umbrella term for attractions that are neither sexual nor romantic — or that can’t be clearly placed on that binary at all.' },
+      { term: 'Varioriented', def: 'Having romantic and sexual orientations that differ from each other — for instance homoromantic bisexual.' },
+      { term: 'Perioriented', def: 'Having romantic and sexual orientations that match — for instance heteroromantic heterosexual.' },
+      { term: 'Cross-orientation', def: 'Umbrella term for split or mixed attraction states.' },
+      { term: 'Amatonormativity', href: '#relationships', def: 'The assumption that a romantic relationship is the natural goal for everyone, and is worth more than non-romantic ties.' },
+      { term: 'Erotonormativity', def: 'The assumption that real intimacy must be sexual.' },
+    ],
+  },
+  {
+    category: 'Kinds of attraction',
+    terms: [
+      { term: 'Platonic attraction', href: '#platonic', def: 'Wanting friendship with a particular person.' },
+      { term: 'Queerplatonic attraction', href: '#queerplatonic', def: 'Wanting a committed, intimate, non-romantic partnership.' },
+      { term: 'Alterous attraction', href: '#alterous-deep', def: 'Wanting emotional closeness that’s neither clearly platonic nor clearly romantic — either in the grey area between them, or outside that binary altogether.' },
+      { term: 'Aesthetic attraction', href: '#aesthetic', def: 'Being drawn to how someone looks, non-sexually and non-romantically.' },
+      { term: 'Sensual attraction', href: '#sensual', def: 'Wanting non-sexual physical closeness.' },
+      { term: 'Cedural attraction', href: '#cedural', def: 'Wanting to be protected, guided and supported. Also called docile, dependent or submissive attraction.' },
+      { term: 'Tutelary attraction', href: '#tutelary', def: 'Wanting to protect and look after someone — the mirror of cedural attraction.' },
+      { term: 'Exteramo attraction', href: '#exteramo', def: 'Emotional attraction outside both romance and friendship. Described in one of our sources as a subset of alterous attraction, and in the other as its own category.' },
+      { term: 'Emotional attraction', def: 'Named in our sources as part of the extended model, but never actually defined in them — so we haven’t defined it for you either. You’ll see it used; expect the meaning to vary.' },
+    ],
+  },
+  {
+    category: 'Crushes, partners & people',
+    terms: [
+      { term: 'Squish', def: 'A platonic or otherwise non-romantic crush. Often the start of a queerplatonic relationship.' },
+      { term: 'Zucchini', href: '#queerplatonic', def: 'A queerplatonic partner. An in-joke that stuck, born from there being no serious word available.' },
+      { term: 'Mesh / hush', def: 'An alterous crush. Both are used sparingly.' },
+      { term: 'Gush / sush', def: 'A cedural crush.' },
+      { term: 'Aro-ace', def: 'Someone who is both aromantic and asexual.' },
+      { term: 'Oriented aroace / angled aroace', href: '#aro-ace', def: 'Terms used by aro-ace people who experience tertiary attraction. The two aren’t used identically everywhere — one of our sources treats “angled” as sitting on the aro or ace spectrum rather than fully at the end of it. Worth asking what someone means.' },
+      { term: 'Atertiary', def: 'A term for someone who experiences no tertiary attraction. It appears once in our sources, alongside a second term we couldn’t transcribe reliably — so treat the spelling as provisional.' },
+    ],
+  },
+  {
+    category: 'The aplatonic spectrum',
+    terms: [
+      { term: 'Aplatonic spectrum (apl-spec)', href: '#aplatonic', def: 'Umbrella for platonic orientations marked by an absence of, or significant deviation from, conventional platonic attraction. Independent of romantic or sexual orientation — apl-spec people can be any of those.' },
+      { term: 'Alloplatonic', def: 'Experiencing platonic attraction in the conventional amount and style — the counterpart to apl-spec.' },
+      { term: 'Apl-spec identities', def: 'Aplatonic, aplflux, aplspike, demiplatonic, frayplatonic, greyplatonic, laimoplatonic. Microlabels within the umbrella include apothiplatonic, cassplatonic, myrplatonic, cupioplatonic, iculaplatonic and preaplatonic.' },
+      { term: 'Plato-favourable / repulsed / indifferent / ambivalent', def: 'Attitude descriptors — how someone feels about platonic relationships, separately from how much platonic attraction they experience.' },
+    ],
+  },
+  {
+    category: 'Relationships',
+    terms: [
+      { term: 'Queerplatonic relationship (QPR / QPP)', href: '#relationships', def: 'An explicit, committed, non-romantic intimate partnership. Coined on 24 December 2010 in a thread called Kaz’s Scribblings, by s.e. smith and Kaz.' },
+      { term: 'Relationship anarchy (RA)', href: '#relationships', def: 'Declining to rank relationships by type, and setting the terms of each one with the people in it rather than from a template. Our sources note significant overlap with QPRs.' },
+      { term: 'Boston marriage', def: 'Late nineteenth-century New England term for a formalised, long-term household shared by two women. Named in our sources as a historical parallel to queerplatonic partnership.' },
+    ],
+  },
+];
+---
+
+<Base
+  title="Tertiary Attraction: more ways to be drawn to someone — Rainbow Circuits"
+  description="Attraction isn’t one feeling. A warm guide to tertiary attraction — platonic, alterous, aesthetic, sensual and queerplatonic — for aro, ace and curious readers."
+  path="/resources/lgbtqia/tertiary-attraction/"
+  structuredData={structuredData}
+>
+  <article class="ta">
+    <!-- ── Hero ───────────────────────────────────────────────── -->
+    <header class="ta-hero">
+      <div class="container hero-inner">
+        <p class="kicker">Learn &amp; celebrate</p>
+        <h1>There are more ways to be drawn to someone</h1>
+        <p class="hero-equation" aria-hidden="true">
+          <span>attraction</span><span class="neq">≠</span><span>one feeling</span>
+        </p>
+        <p class="visually-hidden">Attraction is not one single feeling.</p>
+        <p class="hero-lead">
+          You can think someone is breathtakingly beautiful without wanting to kiss them. You can
+          want to curl up against someone on the couch without wanting sex. You can want somebody
+          woven right through your life without <em>romance</em> ever feeling like the right word
+          for whatever is happening between you.
+        </p>
+        <p class="hero-lead">
+          Humans are complicated little creatures. Sometimes the vocabulary has to catch up.
+          <strong>Tertiary attraction</strong> is the bit of vocabulary that’s been catching up.
+        </p>
+      </div>
+    </header>
+
+    <div class="container ta-body">
+      <!-- ── Contents ─────────────────────────────────────────── -->
+      <nav class="ta-toc" aria-labelledby="toc-heading">
+        <h2 id="toc-heading">On this page</h2>
+        <ol>
+          <li><a href="#what">What tertiary attraction means</a></li>
+          <li><a href="#ladder">Attraction isn’t a ladder</a></li>
+          <li><a href="#kinds">The kinds people talk about</a></li>
+          <li><a href="#friendship">“Isn’t some of this just friendship?”</a></li>
+          <li><a href="#alterous-deep">Alterous attraction, up close</a></li>
+          <li><a href="#sam">The Split Attraction Model</a></li>
+          <li><a href="#aro-ace">Why this matters in aro and ace communities</a></li>
+          <li><a href="#relationships">Relationships don’t come with factory settings</a></li>
+          <li><a href="#what-am-i-feeling">“What am I feeling?”</a></li>
+          <li><a href="#overlap">All of it at once</a></li>
+          <li><a href="#labels">You don’t have to label any of this</a></li>
+          <li><a href="#myths">Things people get wrong</a></li>
+          <li><a href="#glossary">Quick reference</a></li>
+          <li><a href="#sources">Where this came from</a></li>
+        </ol>
+      </nav>
+
+      <!-- ── 1. What is it ────────────────────────────────────── -->
+      <section id="what" class="ta-section" aria-labelledby="what-h">
+        <h2 id="what-h">What tertiary attraction means</h2>
+        <div class="prose-block">
+          <p>
+            <strong>Tertiary attraction</strong> is an umbrella term. It covers forms of attraction
+            that are neither sexual nor romantic — and also the ones that can’t be placed neatly on
+            that binary at all.
+          </p>
+          <p>
+            That’s genuinely all it is. It isn’t a scientific taxonomy, it isn’t a settled list, and
+            it isn’t a set of boxes everyone’s feelings are supposed to sort into. It’s a bag of
+            words that people made because the existing words kept failing them.
+          </p>
+          <p>
+            Our sources make one observation that explains a lot about where this language came from:
+            for people who experience romantic and sexual attraction, these other pulls tend to arrive
+            <em>bundled</em> — braided together with romance and sex so tightly that there’s never
+            much reason to pick them apart. For asexual and aromantic people, with one or both of
+            those strands missing, the rest become much easier to see individually. So the vocabulary
+            grew where it was needed most. That doesn’t make it aro/ace property — anyone can find it
+            useful — but it does explain why it grew there.
+          </p>
+        </div>
+
+        <aside class="callout callout-violet">
+          <p class="callout-title">Think of these as tools, not boxes</p>
+          <p>
+            Nothing on this page is a test you can pass or fail. If a word helps you explain
+            something to yourself or to someone you love, it’s doing its job. If it doesn’t, put it
+            down. You’re allowed to leave with nothing.
+          </p>
+        </aside>
+
+        <div class="prose-block">
+          <h3>Six words that get tangled together</h3>
+          <p>
+            Most of the confusion on this subject comes from treating these as one thing. They
+            overlap constantly. They are not the same layer.
+          </p>
+          <ul class="layer-list">
+            <li><strong>Attraction</strong> — the pull itself. Involuntary. It arrives without asking.</li>
+            <li><strong>Desire</strong> — wanting something to happen. Related to attraction, not identical to it.</li>
+            <li><strong>Behaviour</strong> — what you actually do. Hugging, dating, having sex, moving in.</li>
+            <li><strong>Relationship</strong> — the structure you and another person agree on.</li>
+            <li><strong>Identity</strong> — the words you use for yourself, if you use any.</li>
+            <li><strong>Preference</strong> — the kind of connection you’d <em>like</em> to have, which isn’t always the kind you feel pulled toward.</li>
+          </ul>
+          <p>
+            You can’t reliably reverse-engineer any of these from the others. Having sex doesn’t
+            establish sexual attraction. Dating someone doesn’t establish romantic attraction.
+            Enjoying a cuddle doesn’t establish anything except that you enjoyed a cuddle. People
+            do things for all sorts of reasons — curiosity, love, obligation, loneliness, habit,
+            because it was Tuesday.
+          </p>
+        </div>
+      </section>
+
+      <!-- ── 2. Not a ladder ──────────────────────────────────── -->
+      <section id="ladder" class="ta-section" aria-labelledby="ladder-h">
+        <h2 id="ladder-h">Attraction isn’t a ladder</h2>
+        <div class="prose-block">
+          <p>
+            Popular culture has one story about how closeness works, and it runs in a straight line:
+          </p>
+        </div>
+
+        <p class="ladder-line">
+          stranger <span aria-hidden="true">→</span> friend <span aria-hidden="true">→</span> crush
+          <span aria-hidden="true">→</span> romance <span aria-hidden="true">→</span> sex
+          <span aria-hidden="true">→</span> forever
+        </p>
+
+        <div class="prose-block">
+          <p>
+            Every step is supposed to imply the next one. Going sideways is “not getting anywhere.”
+            Stopping is a failure. And whatever you feel for the people you don’t do this with is,
+            by definition, the smaller thing.
+          </p>
+          <p>
+            It’s a tidy story. It also leaves an enormous number of people with no way to describe
+            their actual lives. One kind of attraction simply doesn’t imply another. They’re
+            neighbours, not rungs — some of them sit right on top of each other, some of them never
+            meet, and none of them is the top.
+          </p>
+        </div>
+
+        <!-- ── Constellation ── -->
+        <div class="constellation-wrap">
+          <h3 id="constellation-h">A map, not a ladder</h3>
+          <p class="section-lead">
+            Every point below is a kind of attraction people have put a name to. The threads
+            between them suggest where experiences tend to sit near each other or blur — they
+            aren’t claims about how anything works. Pick one to read about it.
+          </p>
+
+          <nav class="constellation" aria-labelledby="constellation-h">
+            <svg class="constellation-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              {LINKS.map(([a, b]) => (
+                <line
+                  x1={nodeAt(a).x} y1={nodeAt(a).y}
+                  x2={nodeAt(b).x} y2={nodeAt(b).y}
+                  vector-effect="non-scaling-stroke"
+                />
+              ))}
+            </svg>
+            <ul class="constellation-nodes">
+              {ALL_TYPES.map((t) => (
+                <li style={`--nx:${t.x}%; --ny:${t.y}%; --node-accent:${t.accent};`}>
+                  <a href={`#${t.id}`}>
+                    <span class="node-dot" aria-hidden="true"></span>
+                    <span class="node-label">{t.node}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <p class="constellation-note">
+            Nothing here is hidden behind the graphic — every one of these is written out in full
+            just below.
+          </p>
+        </div>
+      </section>
+
+      <!-- ── 3. The types ─────────────────────────────────────── -->
+      <section id="kinds" class="ta-section" aria-labelledby="kinds-h">
+        <h2 id="kinds-h">The kinds people talk about</h2>
+        <div class="prose-block">
+          <p>
+            Here’s the part that looks like a list, with one warning attached before you start:
+            <strong>these are descriptions, not requirements.</strong> The little quoted bits are
+            hypothetical — one way a feeling <em>might</em> show up, not a specification you have to
+            match to qualify. If yours sounds nothing like the example and the term still fits,
+            the term still fits.
+          </p>
+          <p>
+            Some of this vocabulary is widely used and well documented. Some of it exists in a
+            corner of one community and has never been standardised by anyone. We’ve said which is
+            which as we go, because pretending otherwise would be doing you a disservice.
+          </p>
+        </div>
+
+        {GROUPS.map((group) => (
+          <div class="type-group" id={group.id}>
+            <h3>{group.title}</h3>
+            <p class="section-lead">{group.lead}</p>
+            {group.caveat && (
+              <p class="source-note"><strong>About these words:</strong> {group.caveat}</p>
+            )}
+            <ul class="type-list">
+              {group.types.map((t) => (
+                <li class="type-card card" id={t.id} style={`--accent:${t.accent};`}>
+                  <h4>{t.name}</h4>
+                  <p class="type-short">{t.short}</p>
+                  <p class="type-plain" set:html={t.plain} />
+                  <p class="type-feels">
+                    <span class="visually-hidden">An example of what this might feel like: </span>
+                    {t.feels}
+                  </p>
+                  {t.crush && (
+                    <p class="type-crush"><strong>Word for this kind of crush:</strong> {t.crush}</p>
+                  )}
+                  {t.notes && <p class="type-notes" set:html={t.notes} />}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+
+        <aside class="callout callout-grey">
+          <p class="callout-title">One we can’t define for you</p>
+          <p>
+            <strong>Emotional attraction</strong> turns up repeatedly in our sources as part of the
+            extended model — and is never actually defined in them. Rather than invent a definition
+            and hand it to you with a straight face, we’ll just say: you’ll see the term used, the
+            meaning varies, and it’s worth asking what someone means by it.
+          </p>
+        </aside>
+      </section>
+
+      <!-- ── 4. Just friendship? ──────────────────────────────── -->
+      <section id="friendship" class="ta-section" aria-labelledby="friendship-h">
+        <h2 id="friendship-h">“Isn’t some of this just friendship?”</h2>
+        <div class="prose-block">
+          <p>
+            Sometimes, yes — and that was never the insult it’s usually meant as.
+          </p>
+          <p>
+            Let’s get the important part out of the way first. Friendship is not the lesser
+            thing. A platonic relationship can be central, committed, lifelong, intimate,
+            affectionate, domestic, financially entangled, emotionally enormous and entirely
+            life-defining. People build families out of friendship. People raise children inside
+            it, buy houses in it, grow old in it. The idea that it’s what you have <em>until</em>
+            you get a real relationship is a cultural habit, not a fact, and it’s worth noticing
+            how much of this conversation that habit quietly ruins.
+          </p>
+          <p>
+            Our sources have a name for the habit: <strong>amatonormativity</strong> — the
+            assumption that romantic partnership is the natural goal for everyone and is worth
+            more than every other kind of tie. Several of the writers in our source set make the
+            same sharp point about it: we had to invent the word “queerplatonic” mainly because
+            ordinary culture refuses to accept that deep friendship can be a foundation for life
+            partnership, living together, and building a family. The gap in the language was never
+            about the feelings. It was about what the surrounding culture was prepared to count.
+          </p>
+          <h3>So what’s the actual difference?</h3>
+          <p>
+            Often it isn’t intensity. A squish can be as consuming as a crush; a friendship can be
+            more committed than a marriage. The difference these words are reaching for is one of
+            two things:
+          </p>
+          <ul class="layer-list">
+            <li><strong>The texture of the pull.</strong> Wanting to look at someone, wanting to be held by someone, wanting to be guided by someone and wanting to build a household with someone are four genuinely different wants. “Friendship” doesn’t distinguish them. Sometimes you need to.</li>
+            <li><strong>How the people in it understand it.</strong> Two people can do identical things and mean different things by them. Our sources are firm that an outsider doesn’t get to assign the category — if the people in a relationship say it isn’t romantic, it isn’t, no matter what it looks like from the pavement.</li>
+          </ul>
+          <p>
+            And sometimes the honest answer really is “it’s a friendship, and I just needed a better
+            word for how much.” That’s a completely legitimate place to land.
+          </p>
+        </div>
+      </section>
+
+      <!-- ── 5. Alterous ──────────────────────────────────────── -->
+      <section id="alterous-deep" class="ta-section" aria-labelledby="alterous-h">
+        <h2 id="alterous-h">Alterous attraction, up close</h2>
+        <div class="prose-block">
+          <p>
+            Alterous attraction gets its own section because it’s the one that’s hardest to explain
+            in borrowed language, and the one most often explained badly.
+          </p>
+          <p>
+            You’ll frequently see it summarised as “halfway between friendship and romance.” That’s
+            one of the things it can be — and our sources are clear that it’s <em>not the only</em>
+            one. Alterous attraction can sit in the grey area between platonic and romantic. It can
+            also exist as a framework entirely separate from that binary, which is a different claim
+            altogether: not a point on the line, but a thing the line doesn’t measure.
+          </p>
+          <blockquote class="pull">
+            <p>
+              “I know this is more than the way I feel about my friends. But calling it romantic
+              feels wrong too — not modest, not shy. Just wrong, like being handed the wrong coat.”
+            </p>
+          </blockquote>
+          <p>
+            It’s flexible in how it’s used, too. <em>Alterous</em> works as a description of the
+            attraction and as an orientation in its own right — people use bi-alterous,
+            homo-alterous, demi-alterous, or just alterous on its own. It can happen alongside
+            sexual attraction, completely separately from it, or at the same time as it. An alterous
+            crush is sometimes called a <strong>mesh</strong> or a <strong>hush</strong>, though
+            neither word is in heavy circulation. Light blue is the colour most associated with it,
+            and there are terms — a-alterous, analterous, nonalterous — for people who don’t
+            experience it at all.
+          </p>
+          <h3>A piece of history worth keeping</h3>
+          <p>
+            The term appeared around 2015. From 2016 onwards, some of the definitions in circulation
+            drew criticism from within the community for an unintended implication: by positioning
+            alterous feelings as “stronger than platonic but not quite romantic,” they framed
+            non-romantic and platonic feelings as inherently <em>weaker</em>. Which is exactly the
+            hierarchy this whole vocabulary was built to get out from under.
+          </p>
+          <p>
+            That argument hasn’t fully resolved, and you’ll meet both framings in the wild. We’d
+            rather tell you the disagreement exists than hand you one version and call it settled.
+          </p>
+        </div>
+      </section>
+
+      <!-- ── 6. SAM ───────────────────────────────────────────── -->
+      <section id="sam" class="ta-section" aria-labelledby="sam-h">
+        <h2 id="sam-h">The Split Attraction Model</h2>
+        <div class="prose-block">
+          <p>
+            The <strong>Split Attraction Model</strong>, usually shortened to SAM, is the idea
+            underneath all of this. At its core it says one thing: a person’s romantic attraction
+            and their sexual attraction are separate, and don’t have to point the same way.
+          </p>
+          <p>
+            That’s the whole core premise. Someone can be homoromantic and bisexual. Someone can be
+            panromantic and demisexual. Our sources call that state <strong>varioriented</strong>,
+            and the matching state — where the two line up — <strong>perioriented</strong>. The
+            umbrella for all of it is <strong>cross-orientation</strong>.
+          </p>
+          <p>
+            The model is commonly extended outward from there to cover the tertiary attractions:
+            platonic, sensual, aesthetic, intellectual, emotional. That extension is where this page
+            lives.
+          </p>
+        </div>
+
+        <div class="sam-examples">
+          <div class="sam-card card">
+            <p class="sam-who">Someone might describe themselves like this:</p>
+            <dl class="sam-list">
+              <div><dt>Sexual attraction</dt><dd>rarely</dd></div>
+              <div><dt>Romantic attraction</dt><dd>no</dd></div>
+              <div><dt>Aesthetic attraction</dt><dd>often</dd></div>
+              <div><dt>Sensual attraction</dt><dd>strongly</dd></div>
+              <div><dt>Platonic attraction</dt><dd>strongly</dd></div>
+            </dl>
+          </div>
+          <div class="sam-card card sam-card-plain">
+            <p class="sam-who">And someone else might say:</p>
+            <p class="sam-quote">“I like who I like. I don’t separate it.”</p>
+            <p class="sam-after">
+              Both of these are complete answers. Neither person is doing queerness better than the
+              other.
+            </p>
+          </div>
+        </div>
+
+        <div class="prose-block">
+          <h3>It’s older than the internet</h3>
+          <p>
+            The name is recent; the idea isn’t. Our sources trace a line back through three
+            moments:
+          </p>
+          <ul class="timeline">
+            <li>
+              <span class="t-year">1879</span>
+              <span class="t-body">
+                German writer <strong>Karl Heinrich Ulrichs</strong> set out early classifications of
+                split orientation — distinguishing people with passionate feelings toward both men
+                and women from people with tender feelings toward one gender and “in love” feelings
+                toward another. The scheme was too complex to catch on at the time.
+              </span>
+            </li>
+            <li>
+              <span class="t-year">1979</span>
+              <span class="t-body">
+                <strong>Dorothy Tennov</strong>, in <em>Love and Limerence</em>, named “limerence” —
+                that intense, obsessive crush state — and recognised that sex wasn’t its primary
+                focus. Her term “non-limerent” is treated as an early ancestor of “aromantic.”
+              </span>
+            </li>
+            <li>
+              <span class="t-year">2005–2015</span>
+              <span class="t-body">
+                Aromanticism emerged as a concept around 2005. The phrase “split attraction model”
+                itself was coined by asexual and aromantic online communities around 2015, to
+                explain something people were already living.
+              </span>
+            </li>
+          </ul>
+          <h3>And it isn’t compulsory</h3>
+          <p>
+            This matters enough to say on its own. The Split Attraction Model is a description that
+            helps a lot of people. It is not an obligation, a developmental stage, or a sign of
+            self-awareness. Nobody has to dissect their feelings into separate labelled strands.
+            Plenty of people find that the dissecting makes things blurrier rather than clearer —
+            and stopping is allowed.
+          </p>
+          <p class="aside-note">
+            Worth noting: one study in our source set found that mismatches between romantic
+            orientation and sexual attitudes show up in allosexual people too, not just a-spec ones.
+            Split attraction isn’t a minority-only phenomenon. It’s just that a-spec communities
+            were the ones who needed the words badly enough to make them.
+          </p>
+        </div>
+      </section>
+
+      <!-- ── 7. Aro/ace ───────────────────────────────────────── -->
+      <section id="aro-ace" class="ta-section" aria-labelledby="aro-ace-h">
+        <h2 id="aro-ace-h">Why this matters in aro and ace communities</h2>
+        <div class="prose-block">
+          <p>
+            If you take one thing from this page, make it this: <strong>“little or no romantic
+            attraction” and “little or no sexual attraction” are statements about two specific
+            pulls.</strong> They are not statements about whether someone loves, needs people,
+            wants to be touched, wants a partner, wants a home, or has a rich interior life.
+          </p>
+          <p>
+            An aromantic person can be fiercely devoted. An asexual person can want to be held
+            every day of their life. An aro-ace person can have a partner, a household, a shared
+            mortgage and an emergency-contact form with someone else’s name on it. The assumption
+            that aro or ace means lonely, cold, immature, unfinished, or incapable of love is just
+            incorrect — and it’s the assumption that makes this vocabulary necessary in the first
+            place, because without it people get read as having nothing rather than having
+            something the reader doesn’t have a word for.
+          </p>
+          <p>
+            Our sources point out something neat about how this works. For allo people, these
+            attractions usually arrive braided together and never need separating. For aro and ace
+            people, with one or both of the headline strands missing, the others become far easier
+            to see on their own. The clarity isn’t a consolation prize. It’s just what happens when
+            the loudest signal isn’t drowning out the rest.
+          </p>
+          <p>
+            Some aro-ace people who experience tertiary attraction use the terms <strong>oriented
+            aroace</strong> or <strong>angled aroace</strong> for themselves. Fair warning: the two
+            aren’t used in exactly the same way everywhere — one of our sources treats “angled” as
+            describing people sitting on the aro or ace spectrum rather than fully at the end of it.
+            If precision matters in a given conversation, ask what the person means.
+          </p>
+        </div>
+
+        <aside class="callout callout-teal">
+          <p class="callout-title">And some people don’t experience much attraction at all</p>
+          <p>
+            It would be easy to defend aro and ace people by insisting they all feel loads of other
+            attraction instead. We’re not going to do that, because it isn’t true and it builds a
+            new hierarchy on the ruins of the old one.
+          </p>
+          <p>
+            Some people experience very little attraction of any kind — including platonic. There’s
+            a whole framework for it, below. That’s not a deficiency, a symptom, or a thing to be
+            fixed. A life isn’t made meaningful by the quantity of pull in it.
+          </p>
+        </aside>
+
+        <div class="prose-block" id="aplatonic">
+          <h3>The aplatonic spectrum</h3>
+          <p>
+            The <strong>aplatonic spectrum</strong> — apl-spec for short — covers platonic
+            orientations marked by an absence of, or a significant deviation from, conventional
+            platonic attraction. Apl-spec people don’t experience the “standard” amount or style of
+            platonic attraction that <strong>alloplatonic</strong> people do.
+          </p>
+          <p>
+            It runs independently of everything else. An apl-spec person can hold any sexual or
+            romantic orientation at all — ace-spec, aro-spec, allosexual, alloromantic, any
+            combination. It’s its own axis.
+          </p>
+          <p>
+            The spectrum has its own vocabulary: identities including aplatonic, aplflux, aplspike,
+            demiplatonic, frayplatonic, greyplatonic and laimoplatonic, plus microlabels like
+            apothiplatonic, cassplatonic, myrplatonic, cupioplatonic, iculaplatonic and
+            preaplatonic. There’s also a separate set of words for <em>attitude</em> rather than
+            attraction — plato-favourable, plato-repulsed, plato-indifferent and plato-ambivalent —
+            which is a genuinely useful distinction. How much platonic attraction you feel and how
+            you feel about platonic relationships are two different questions.
+          </p>
+          <p class="aside-note">
+            We’ve listed those microlabels rather than defined them, because our sources name them
+            without explaining them, and we’d rather leave a gap visible than fill it with a guess.
+            If you want the detail on a specific one, the apl-spec community is where to look.
+          </p>
+        </div>
+      </section>
+
+      <!-- ── 8. Relationships ─────────────────────────────────── -->
+      <section id="relationships" class="ta-section" aria-labelledby="rel-h">
+        <h2 id="rel-h">Relationships don’t come with factory settings</h2>
+        <div class="prose-block">
+          <p>
+            Attraction and relationships are related the way weather and plans are related. One
+            informs the other. Neither determines it.
+          </p>
+          <p>
+            You can feel an attraction and decide not to act on it — because it isn’t mutual,
+            because the timing’s wrong, because you simply don’t want to. You can take part in
+            something without feeling the attraction culturally attached to it. And you can build a
+            relationship around whichever forms of connection actually matter to the people in it,
+            in whatever combination, regardless of what the labels would predict.
+          </p>
+          <p>
+            Friendship. Romantic relationships. Queerplatonic partnerships. Chosen family.
+            Committed platonic partnerships. Sexual relationships without romance. Domestic
+            partnerships without sex. Creative partnerships. Relationships nobody has bothered to
+            define and nobody needs to. All of these are real structures that real people live in.
+          </p>
+        </div>
+
+        <div class="qpr-feature">
+          <h3>Queerplatonic relationships</h3>
+          <p>
+            A <strong>queerplatonic relationship</strong> — QPR, sometimes QPP for queerplatonic
+            partnership — is an explicit, committed, non-romantic intimate partnership. The term was
+            coined on <strong>24 December 2010</strong>, in an online thread called
+            <em>Kaz’s Scribblings</em>, by the writers <strong>s.e. smith</strong> and
+            <strong>Kaz</strong>. It came out of aromantic and asexual spaces.
+          </p>
+          <p>
+            A queerplatonic partner is a <strong>zucchini</strong> — a joke that stuck, invented
+            precisely because there was no serious word available for a non-romantic life partner,
+            and the absence was ridiculous enough to deserve a ridiculous answer.
+          </p>
+          <p>Our sources define it in several ways, and the differences between them are interesting:</p>
+          <ul class="def-list">
+            <li><strong>AVEN</strong> — a non-romantic significant-other relationship of “partner status.”</li>
+            <li><strong>Angela Chen</strong>, in <em>Ace</em> — an explicit title filling the social void between “friend” and “romantic partner,” giving non-romantic partners the security and formal validation that romantic ones get automatically.</li>
+            <li><strong>Julie Sondra Decker</strong>, in <em>The Invisible Orientation</em> — a platonic relationship “queered” into something distinct. She stresses that these often look identical to romance from outside, and that outsiders don’t get to assign romantic status to a relationship whose participants say otherwise.</li>
+            <li><strong>CJ DeLuzio Chasin</strong> — a catch-all meta-category for non-normative relationships that traditional definitions of “friendship” don’t adequately cover.</li>
+            <li><strong>Stefani Goerlich</strong> — a non-romantic commitment deeper than typical friendship; “an ancient practice made popular again.”</li>
+          </ul>
+          <p>
+            That last phrase is worth sitting with. Our sources point to historical parallels
+            including the late nineteenth-century New England <strong>Boston marriage</strong> —
+            formalised, long-term households shared by two women — and the relationship of Ruth and
+            Naomi. People have been building this for a very long time. Only the vocabulary is new.
+          </p>
+        </div>
+
+        <div class="prose-block">
+          <h3>What QPRs are pushing back against</h3>
+          <p>Our sources name three assumptions specifically:</p>
+          <ul class="layer-list">
+            <li><strong>Amatonormativity</strong> — that romance outranks every other kind of tie.</li>
+            <li><strong>Erotonormativity</strong> — that real intimacy must be sexual.</li>
+            <li><strong>Couple-centric monogamism</strong> — that the two-person romantic couple is the only legitimate shape.</li>
+          </ul>
+          <p>
+            This is also where QPRs overlap with <strong>relationship anarchy</strong>: declining to
+            rank relationships by category, and negotiating the terms of each one with the people
+            actually in it rather than inheriting them from a template. Our sources note substantial
+            overlap between the two ideas, and that “queerplatonic” has become a recognised term in
+            writing about consensual non-monogamy and polyamorous communities as well.
+          </p>
+          <h3>Which all comes down to talking to each other</h3>
+          <p>
+            You can’t derive a relationship from an attraction label, and you shouldn’t try. Two
+            people who’d describe their attraction identically might want completely different
+            lives. The useful questions aren’t “what am I?” — they’re “what do we want this to be?”,
+            “what are we promising each other?”, and “what would hurt if it changed?”
+          </p>
+          <p>
+            Those conversations are awkward. They’re also considerably less awkward than the
+            alternative, which is two people quietly running different software and finding out in
+            about eight months.
+          </p>
+        </div>
+      </section>
+
+      <!-- ── 9. Reflection ────────────────────────────────────── -->
+      <section id="what-am-i-feeling" class="ta-section" aria-labelledby="feel-h">
+        <h2 id="feel-h">“What am I feeling?”</h2>
+        <div class="prose-block">
+          <p>
+            This bit is optional, and it is deliberately not a quiz. There’s no score and nothing
+            at the bottom tells you what you are. These are just questions that have been useful to
+            other people — things to turn over on a walk, not criteria to satisfy.
+          </p>
+          <p>
+            If a question doesn’t apply, skip it. If the honest answer is “I have no idea,” that’s
+            a real answer and you can stop there.
+          </p>
+        </div>
+        <ul class="prompt-list">
+          {PROMPTS.map((p) => (
+            <li><span set:html={p} /></li>
+          ))}
+        </ul>
+        <p class="prompt-after">
+          You can sit with these for years. People do. There’s no deadline, and nobody’s marking it.
+        </p>
+      </section>
+
+      <!-- ── 10. Overlap ──────────────────────────────────────── -->
+      <section id="overlap" class="ta-section" aria-labelledby="overlap-h">
+        <h2 id="overlap-h">All of it at once</h2>
+        <div class="prose-block">
+          <p>
+            These aren’t mutually exclusive. Most people feel several at the same time toward the
+            same person, in combinations that don’t resolve into anything tidy. Three hypothetical
+            people, to show the range:
+          </p>
+        </div>
+        <ul class="overlap-grid">
+          <li class="overlap-card card">
+            <h3>Rowan</h3>
+            <p>
+              Thinks Sam is stunning. Craves their company constantly. Wants to cuddle on the couch
+              for entire evenings. Feels emotionally closer to Sam than to anyone alive.
+            </p>
+            <p class="overlap-verdict">
+              Experiences neither romantic nor sexual attraction to Sam. None of the above is
+              evidence to the contrary.
+            </p>
+          </li>
+          <li class="overlap-card card">
+            <h3>Kit</h3>
+            <p>
+              Feels all of those things about their partner, plus romantic attraction, plus sexual
+              attraction, all braided together and arriving as one sensation.
+            </p>
+            <p class="overlap-verdict">
+              Has never once needed to separate them, and would find it strange to try. That’s a
+              complete experience too.
+            </p>
+          </li>
+          <li class="overlap-card card">
+            <h3>Fen</h3>
+            <p>
+              Doesn’t experience much pull toward anyone, in any direction. Has close people and
+              values them. Doesn’t describe what they feel as attraction at all.
+            </p>
+            <p class="overlap-verdict">
+              Is not missing anything, waiting for anything, or in need of an explanation.
+            </p>
+          </li>
+        </ul>
+        <p class="prompt-after">
+          Three different people. No winner. These words describe experiences — they don’t
+          prescribe them, and they don’t rank them.
+        </p>
+      </section>
+
+      <!-- ── 11. Labels optional ──────────────────────────────── -->
+      <section id="labels" class="ta-section" aria-labelledby="labels-h">
+        <h2 id="labels-h">You don’t have to label any of this</h2>
+        <div class="prose-block">
+          <p>
+            Language exists to help you understand yourself and explain yourself to other people.
+            When it stops doing those two jobs, it’s just admin.
+          </p>
+          <p>You are entirely within your rights to:</p>
+        </div>
+        <ul class="allowed-list">
+          <li>use several labels at once</li>
+          <li>use one broad label and leave it there</li>
+          <li>change your mind, repeatedly</li>
+          <li>keep a word entirely to yourself</li>
+          <li>define your relationship differently from your attraction</li>
+          <li>be uncertain indefinitely</li>
+          <li>decide microlabels aren’t for you</li>
+          <li>say “I don’t know, I just really like them”</li>
+        </ul>
+        <div class="prose-block">
+          <p>
+            And one thing worth stating directly, because this corner of the internet can imply
+            otherwise: knowing more microlabels does not make someone more queer, more
+            self-aware, or better at this. Precision is a tool. It’s valuable exactly as far as it’s
+            useful to the person holding it, and no further. Someone who says “I love them, it’s
+            complicated, next question” understands themselves perfectly well.
+          </p>
+        </div>
+      </section>
+
+      <!-- ── 12. Myths ────────────────────────────────────────── -->
+      <section id="myths" class="ta-section" aria-labelledby="myths-h">
+        <h2 id="myths-h">Things people get wrong</h2>
+        <p class="section-lead">
+          Not a fight — just the corrections that save the most time.
+        </p>
+        <ul class="myth-list">
+          {MYTHS.map((m) => (
+            <li class="myth-card card">
+              <p class="myth-claim">{m.myth}</p>
+              <p class="myth-real" set:html={m.reality} />
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <!-- ── 13. Glossary ─────────────────────────────────────── -->
+      <section id="glossary" class="ta-section" aria-labelledby="gloss-h">
+        <h2 id="gloss-h">Quick reference</h2>
+        <p class="section-lead">
+          Short versions of everything used on this page. Where communities don’t agree, it says so
+          rather than picking a winner.
+        </p>
+        {GLOSSARY.map((group) => (
+          <div class="gloss-group">
+            <h3>{group.category}</h3>
+            <dl class="gloss-list">
+              {group.terms.map((t) => (
+                <div class="gloss-item">
+                  <dt>
+                    {t.href ? <a href={t.href}>{t.term}</a> : t.term}
+                  </dt>
+                  <dd>{t.def}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ))}
+      </section>
+
+      <!-- ── 14. Sources ──────────────────────────────────────── -->
+      <section id="sources" class="ta-section" aria-labelledby="sources-h">
+        <h2 id="sources-h">Where this came from</h2>
+        <div class="prose-block">
+          <p>
+            This page was written from a briefing document compiled for Rainbow Circuits on
+            non-romantic attraction frameworks, the Split Attraction Model and queerplatonic
+            partnerships, together with a community infographic on tertiary attraction. Everything
+            definitional, historical or community-specific above traces back to one of those two.
+          </p>
+          <p>
+            The works below are the ones those sources cite. We’ve grouped them by what they are,
+            and said briefly why each might be worth your time — we haven’t independently verified
+            every one, so treat this as a reading list rather than a bibliography.
+          </p>
+        </div>
+
+        <div class="src-group">
+          <h3>Books you can actually go and read</h3>
+          <ul class="src-list">
+            <li>
+              <strong>Angela Chen, <em>Ace</em></strong> — the source of the clearest definition of a
+              QPR we have: an explicit title filling the gap between “friend” and “partner.” Good
+              starting point if you want one book about asexuality.
+            </li>
+            <li>
+              <strong>Julie Sondra Decker, <em>The Invisible Orientation</em></strong> — where the
+              principle that outsiders don’t get to assign romantic status to someone else’s
+              relationship is argued most firmly.
+            </li>
+            <li>
+              <strong>Michael Paramo, <em>Ending the Pursuit</em> (2024)</strong> — argues for
+              de-hierarchising attraction so people can re-imagine their relationships. Probably the
+              closest thing to a book-length version of this page’s core idea.
+            </li>
+            <li>
+              <strong>Dorothy Tennov, <em>Love and Limerence</em> (1979)</strong> — the origin of
+              “limerence,” and of “non-limerent,” treated as an early ancestor of “aromantic.”
+              Historical interest more than practical.
+            </li>
+          </ul>
+        </div>
+
+        <div class="src-group">
+          <h3>Community spaces and origins</h3>
+          <ul class="src-list">
+            <li>
+              <strong><a href="https://www.asexuality.org" rel="noopener">AVEN — the Asexual Visibility and Education Network</a></strong>
+              — where a great deal of this vocabulary was argued into existence, including the
+              English-language definition of a QPR as a relationship of “partner status.” Its
+              Spanish-language forum is where cedural attraction began in 2014.
+            </li>
+            <li>
+              <strong><em>Kaz’s Scribblings</em>, 24 December 2010</strong> — the thread where
+              s.e. smith and Kaz coined “queerplatonic.” Worth knowing that this language has an
+              author and a date, rather than appearing from nowhere.
+            </li>
+            <li>
+              <strong>Tumblr coinage blogs</strong> — much of the finer vocabulary here
+              (cedural, several alterous flags, the aplatonic spectrum flags) was created on Tumblr
+              between 2016 and 2022 by individual users, including beyond-mogai-pride-flags. Useful
+              context for why definitions vary: these terms were made by people, in public, with
+              revisions.
+            </li>
+          </ul>
+        </div>
+
+        <div class="src-group">
+          <h3>Academic work cited in our sources</h3>
+          <p class="src-note">
+            Research on split attraction is still thin, and most of this is recent. Listed with the
+            authors and years our briefing gives.
+          </p>
+          <ul class="src-list">
+            <li><strong>Lisa M. Diamond (2003)</strong> — the biobehavioural model establishing that romantic orientation can operate independently of sexual desire. The foundational citation for everything else here.</li>
+            <li><strong>Clark &amp; Zimmerman (2022)</strong> — found discordance between romantic orientation and sexual attitudes in allosexual as well as asexual adults. The study to point at when someone claims split attraction is an a-spec invention.</li>
+            <li><strong>Brozowski et al. (2022)</strong> — on relationship investment among asexual people, and how committed connections are sustained outside the usual script.</li>
+            <li><strong>Schubert &amp; Pope (2022)</strong> and <strong>Litam &amp; Speciale (2022)</strong> — multi-layered attraction frameworks taking aesthetic, emotional, intellectual and sensual attraction seriously.</li>
+            <li><strong>Roma De las Heras Gómez (2019)</strong>; <strong>Ansara (2020)</strong>; <strong>Cardoso et al. (2021)</strong> — on relationship anarchy, and on “queerplatonic” entering the language of consensual non-monogamy and therapeutic practice.</li>
+            <li><strong>Savie Luce (2021)</strong> — reads Mary Eleanor Wilkins Freeman’s short story <em>Two Friends</em> through a QPR lens and Ela Przybylo’s concept of “asexual erotics,” arguing it honours the characters’ intimacy better than forcing a sexual reading onto it. The most fun entry on this list.</li>
+            <li><strong>Stefani Goerlich</strong>, <em>Psychology Today</em> (2021) — QPRs as “an ancient practice made popular again,” with the Boston marriage parallel.</li>
+          </ul>
+        </div>
+
+        <aside class="callout callout-grey">
+          <p class="callout-title">A note on how settled any of this is</p>
+          <p>
+            Our two sources don’t agree on everything, and we haven’t smoothed that over. The
+            detailed briefing is specific about who coined what and when; the infographic names more
+            attraction types but is less careful, and contradicts itself in a couple of places —
+            particularly on the slang words for crushes. Where only the infographic supports a term,
+            the relevant section says so.
+          </p>
+          <p>
+            None of this is a standards body. It’s living community language, made by people, still
+            being argued about. That’s a feature.
+          </p>
+        </aside>
+      </section>
+
+      <!-- ── Close ────────────────────────────────────────────── -->
+      <div class="ta-close card">
+        <p class="close-big">
+          There are a lot of ways to care about someone. A lot of ways to want them in your life.
+          A lot of ways to be drawn toward another person.
+        </p>
+        <p>None of them have to turn into romance or sex to count.</p>
+        <p class="close-sign">Small hearts. Big feelings. Endless stories. 🌈</p>
+      </div>
+
+      <div class="ta-nav-out">
+        <a class="btn btn-secondary" href={withBase('/resources/lgbtqia/')}>← LGBTQIA+ resources</a>
+        <a class="btn btn-secondary" href={withBase('/identity-guide/')}>Pronouns, flags &amp; identities</a>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .ta { padding-bottom: 2rem; }
+
+  /* ── hero ───────────────────────────────────────────────── */
+  .ta-hero {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 18% 25%, rgba(231, 225, 246, 0.9) 0%, transparent 55%),
+      radial-gradient(circle at 82% 20%, rgba(251, 224, 224, 0.85) 0%, transparent 55%),
+      radial-gradient(circle at 60% 95%, rgba(220, 241, 226, 0.8) 0%, transparent 50%),
+      var(--paper);
+    border-bottom: 1px solid rgba(60, 90, 150, 0.12);
+  }
+  .ta-hero::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 4px;
+    background: var(--circuit-rainbow);
+    opacity: 0.85;
+  }
+  .hero-inner {
+    max-width: 48rem;
+    padding-block: clamp(2.75rem, 8vw, 4.5rem);
+    text-align: center;
+  }
+  .hero-inner h1 {
+    font-size: clamp(2.1rem, 6.5vw, 3.4rem);
+    margin-top: 0.4rem;
+    color: var(--heading);
+  }
+  .hero-equation {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem 0.75rem;
+    margin-top: 1.4rem;
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: clamp(1rem, 3.2vw, 1.35rem);
+    letter-spacing: 0.02em;
+    color: var(--violet);
+  }
+  .hero-equation span {
+    background: rgba(255, 255, 255, 0.72);
+    border: 1.5px solid rgba(110, 70, 184, 0.22);
+    border-radius: 999px;
+    padding: 0.3rem 1rem;
+  }
+  .hero-equation .neq {
+    border: none;
+    background: none;
+    padding: 0;
+    font-size: 1.4em;
+    color: var(--rose);
+  }
+  .hero-lead {
+    max-width: 40rem;
+    margin: 1.5rem auto 0;
+    line-height: 1.75;
+    text-align: left;
+  }
+  .hero-lead em { color: var(--violet); font-style: italic; }
+
+  /* ── body shell ─────────────────────────────────────────── */
+  .ta-body { max-width: 54rem; padding-block: 2.5rem 1rem; }
+  .ta-section { margin-bottom: 3.5rem; scroll-margin-top: 1.5rem; }
+  .ta-section > h2 {
+    font-size: clamp(1.5rem, 4.5vw, 2rem);
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(110, 70, 184, 0.18);
+  }
+  .ta-section h3 {
+    font-size: 1.22rem;
+    margin: 2rem 0 0.6rem;
+    color: var(--heading);
+  }
+  .prose-block { max-width: var(--measure); }
+  .prose-block > * + * { margin-top: 1.05em; }
+  .prose-block em { color: var(--violet); font-style: italic; }
+  .section-lead { max-width: var(--measure); color: var(--text-light); line-height: 1.7; }
+
+  /* ── contents ───────────────────────────────────────────── */
+  .ta-toc {
+    background: var(--white);
+    border: var(--card-border);
+    border-left: 4px solid var(--violet);
+    border-radius: var(--card-radius);
+    padding: 1.25rem 1.5rem 1.4rem;
+    margin-bottom: 3rem;
+  }
+  .ta-toc h2 {
+    font-family: var(--font-ui);
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--subheading);
+    margin-bottom: 0.7rem;
+  }
+  .ta-toc ol {
+    list-style: none;
+    display: grid;
+    gap: 0.3rem 1.5rem;
+    counter-reset: toc;
+  }
+  @media (min-width: 42rem) { .ta-toc ol { grid-template-columns: 1fr 1fr; } }
+  .ta-toc li { counter-increment: toc; }
+  .ta-toc a {
+    display: block;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.93rem;
+    text-decoration: none;
+    color: var(--navy);
+    padding: 0.2rem 0;
+  }
+  .ta-toc a::before {
+    content: counter(toc) '.';
+    color: var(--violet-soft);
+    font-weight: 700;
+    margin-right: 0.45rem;
+  }
+  .ta-toc a:hover { color: var(--rose); text-decoration: underline; }
+
+  /* ── callouts ───────────────────────────────────────────── */
+  .callout {
+    border-radius: var(--card-radius);
+    padding: 1.25rem 1.5rem;
+    margin-top: 1.75rem;
+    border: 1.5px solid;
+  }
+  .callout > * + * { margin-top: 0.7em; }
+  .callout p { line-height: 1.7; }
+  .callout-title {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--heading);
+  }
+  .callout-violet {
+    background: linear-gradient(135deg, var(--lavender), var(--pink-soft));
+    border-color: rgba(110, 70, 184, 0.28);
+  }
+  .callout-teal {
+    background: linear-gradient(135deg, var(--mint), #eaf7ef);
+    border-color: rgba(24, 169, 58, 0.3);
+  }
+  .callout-grey {
+    background: var(--paper-warm);
+    border-color: rgba(60, 90, 150, 0.2);
+  }
+
+  /* ── lists ──────────────────────────────────────────────── */
+  .layer-list, .def-list {
+    max-width: var(--measure);
+    display: grid;
+    gap: 0.6rem;
+    padding-left: 1.2rem;
+    margin-top: 1.05em;
+  }
+  .layer-list li, .def-list li { line-height: 1.65; }
+  .layer-list strong, .def-list strong { color: var(--heading); }
+
+  /* ── the ladder ─────────────────────────────────────────── */
+  .ladder-line {
+    margin: 1.5rem 0;
+    padding: 1rem 1.25rem;
+    background: var(--white);
+    border: 1.5px dashed rgba(60, 90, 150, 0.3);
+    border-radius: 14px;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.98rem;
+    line-height: 2;
+    text-align: center;
+    color: var(--text-light);
+  }
+  .ladder-line span { color: var(--mid-grey); padding: 0 0.15rem; }
+
+  /* ── constellation ──────────────────────────────────────── */
+  .constellation-wrap { margin-top: 2.5rem; }
+  .constellation {
+    position: relative;
+    margin-top: 1.25rem;
+  }
+  .constellation-lines { display: none; }
+  .constellation-nodes {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .constellation-nodes a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    text-decoration: none;
+    background: var(--white);
+    border: 1.5px solid rgba(60, 90, 150, 0.2);
+    border-left: 4px solid var(--node-accent);
+    border-radius: 999px;
+    padding: 0.4rem 0.95rem 0.4rem 0.8rem;
+    font-family: var(--font-ui);
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--navy);
+    box-shadow: 0 2px 8px rgba(20, 40, 90, 0.07);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+  }
+  .constellation-nodes a:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--card-shadow-hover);
+    color: var(--violet);
+  }
+  .node-dot {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: var(--node-accent);
+    flex-shrink: 0;
+  }
+  .constellation-note {
+    margin-top: 1rem;
+    font-size: 0.88rem;
+    color: var(--text-light);
+    font-style: italic;
+  }
+
+  /* wide screens: lay the chips out as an actual constellation */
+  @media (min-width: 52rem) {
+    .constellation {
+      aspect-ratio: 16 / 9;
+      min-height: 26rem;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 70%),
+        linear-gradient(135deg, rgba(231, 225, 246, 0.5), rgba(220, 241, 226, 0.4));
+      border: var(--card-border);
+      border-radius: var(--card-radius);
+      padding: 1rem;
+    }
+    .constellation-lines {
+      display: block;
+      position: absolute;
+      inset: 2.5rem 3rem;
+      width: auto;
+      height: auto;
+      overflow: visible;
+    }
+    .constellation-lines line {
+      stroke: rgba(110, 70, 184, 0.3);
+      stroke-width: 1.25;
+      stroke-linecap: round;
+      stroke-dasharray: 3 4;
+    }
+    .constellation-nodes {
+      position: absolute;
+      inset: 2.5rem 3rem;
+      display: block;
+    }
+    .constellation-nodes li {
+      position: absolute;
+      left: var(--nx);
+      top: var(--ny);
+      transform: translate(-50%, -50%);
+    }
+    .constellation-nodes a { white-space: nowrap; font-size: 0.85rem; }
+  }
+
+  /* ── attraction type cards ──────────────────────────────── */
+  .type-group { margin-top: 2.5rem; }
+  .source-note {
+    max-width: var(--measure);
+    margin-top: 0.9rem;
+    padding: 0.8rem 1rem;
+    background: var(--paper-warm);
+    border-left: 3px solid var(--mid-grey);
+    border-radius: 0 10px 10px 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-light);
+  }
+  .source-note strong { color: var(--heading); }
+
+  .type-list { list-style: none; display: grid; gap: 1rem; margin-top: 1.25rem; }
+  @media (min-width: 50rem) { .type-list { grid-template-columns: 1fr 1fr; align-items: start; } }
+  .type-card {
+    padding: 1.3rem 1.4rem;
+    border-top: 4px solid var(--accent);
+    scroll-margin-top: 1.5rem;
+  }
+  .type-card h4 {
+    font-family: var(--font-display);
+    font-size: 1.12rem;
+    font-weight: 700;
+    color: var(--heading);
+  }
+  .type-card p { line-height: 1.65; }
+  .type-card > * + * { margin-top: 0.7rem; }
+  .type-short { font-weight: 600; color: var(--text); }
+  .type-plain { font-size: 0.95rem; color: var(--text-light); }
+  .type-plain em, .type-notes em { color: var(--violet); font-style: italic; }
+  .type-feels {
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--heading);
+    background: rgba(231, 225, 246, 0.38);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 0.7rem 0.9rem;
+  }
+  .type-crush {
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    color: var(--subheading);
+  }
+  .type-crush strong { color: var(--heading); }
+  .type-notes { font-size: 0.9rem; color: var(--text-light); }
+
+  /* ── pull quote ─────────────────────────────────────────── */
+  .pull {
+    max-width: var(--measure);
+    margin: 1.75rem 0;
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, rgba(231, 225, 246, 0.6), rgba(251, 224, 224, 0.5));
+    border-left: 4px solid var(--violet);
+    border-radius: 0 16px 16px 0;
+  }
+  .pull p {
+    font-family: var(--font-display);
+    font-size: clamp(1.02rem, 2.6vw, 1.2rem);
+    font-weight: 600;
+    line-height: 1.6;
+    color: var(--heading);
+  }
+
+  /* ── SAM examples ───────────────────────────────────────── */
+  .sam-examples { display: grid; gap: 1rem; margin-top: 1.75rem; }
+  @media (min-width: 46rem) { .sam-examples { grid-template-columns: 1fr 1fr; align-items: start; } }
+  .sam-card { padding: 1.3rem 1.4rem; }
+  .sam-who {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--subheading);
+    margin-bottom: 0.9rem;
+  }
+  .sam-list { display: grid; gap: 0.45rem; }
+  .sam-list > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px dotted rgba(60, 90, 150, 0.25);
+  }
+  .sam-list dt { font-family: var(--font-ui); font-weight: 600; color: var(--text); font-size: 0.95rem; }
+  .sam-list dd { font-family: var(--font-ui); font-weight: 700; color: var(--violet); font-size: 0.95rem; text-align: right; }
+  .sam-card-plain { display: flex; flex-direction: column; justify-content: center; }
+  .sam-quote {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--heading);
+  }
+  .sam-after { margin-top: 1rem; font-size: 0.92rem; color: var(--text-light); line-height: 1.6; }
+
+  /* ── timeline ───────────────────────────────────────────── */
+  .timeline { list-style: none; display: grid; gap: 1rem; max-width: var(--measure); margin-top: 1.05em; }
+  .timeline li {
+    display: grid;
+    gap: 0.15rem 1rem;
+    padding-left: 1.1rem;
+    border-left: 3px solid var(--lavender);
+  }
+  @media (min-width: 38rem) { .timeline li { grid-template-columns: 7rem 1fr; } }
+  .t-year {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--violet);
+  }
+  .t-body { line-height: 1.65; }
+  .aside-note {
+    max-width: var(--measure);
+    font-size: 0.92rem;
+    color: var(--text-light);
+    line-height: 1.65;
+    border-left: 3px solid var(--mid-grey);
+    padding-left: 0.9rem;
+  }
+
+  /* ── QPR feature ────────────────────────────────────────── */
+  .qpr-feature {
+    margin-top: 2rem;
+    padding: 1.6rem 1.75rem;
+    background: linear-gradient(135deg, rgba(231, 225, 246, 0.55), rgba(220, 241, 226, 0.45));
+    border: 1.5px solid rgba(110, 70, 184, 0.22);
+    border-radius: var(--card-radius);
+  }
+  .qpr-feature h3 { margin-top: 0; }
+  .qpr-feature > * + * { margin-top: 1rem; }
+  .qpr-feature p { line-height: 1.7; max-width: var(--measure); }
+
+  /* ── reflection prompts ─────────────────────────────────── */
+  .prompt-list { list-style: none; display: grid; gap: 0.7rem; margin-top: 1.5rem; }
+  .prompt-list li {
+    position: relative;
+    background: var(--white);
+    border: var(--card-border);
+    border-radius: 14px;
+    padding: 0.95rem 1.2rem 0.95rem 2.9rem;
+    line-height: 1.65;
+    font-size: 0.98rem;
+  }
+  .prompt-list li::before {
+    content: '?';
+    position: absolute;
+    left: 1rem;
+    top: 0.85rem;
+    width: 1.35rem;
+    height: 1.35rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--lavender);
+    color: var(--violet);
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+  .prompt-list em { color: var(--violet); font-style: italic; }
+  .prompt-after {
+    max-width: var(--measure);
+    margin-top: 1.25rem;
+    color: var(--text-light);
+    line-height: 1.7;
+  }
+
+  /* ── overlap cards ──────────────────────────────────────── */
+  .overlap-grid { list-style: none; display: grid; gap: 1rem; margin-top: 1.5rem; }
+  @media (min-width: 48rem) { .overlap-grid { grid-template-columns: repeat(3, 1fr); align-items: start; } }
+  .overlap-card { padding: 1.3rem 1.4rem; border-top: 4px solid var(--violet-soft); }
+  .overlap-card h3 { margin: 0 0 0.6rem; font-size: 1.1rem; }
+  .overlap-card p { font-size: 0.93rem; line-height: 1.65; }
+  .overlap-verdict {
+    margin-top: 0.8rem;
+    padding-top: 0.8rem;
+    border-top: 1px dotted rgba(60, 90, 150, 0.28);
+    color: var(--text-light);
+  }
+
+  /* ── allowed list ───────────────────────────────────────── */
+  .allowed-list {
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+  }
+  @media (min-width: 44rem) { .allowed-list { grid-template-columns: 1fr 1fr; } }
+  .allowed-list li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    background: var(--white);
+    border: var(--card-border);
+    border-radius: 12px;
+    padding: 0.65rem 0.95rem;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .allowed-list li::before {
+    content: '✓';
+    color: var(--teal);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ── myths ──────────────────────────────────────────────── */
+  .myth-list { list-style: none; display: grid; gap: 0.9rem; margin-top: 1.5rem; }
+  .myth-card { padding: 1.2rem 1.4rem; border-left: 4px solid var(--rose-soft); }
+  .myth-claim {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.02rem;
+    color: var(--subheading);
+  }
+  .myth-real { margin-top: 0.55rem; line-height: 1.68; font-size: 0.96rem; }
+  .myth-real em { color: var(--violet); font-style: italic; }
+
+  /* ── glossary ───────────────────────────────────────────── */
+  .gloss-group { margin-top: 2rem; }
+  .gloss-group h3 { font-size: 1.12rem; margin-bottom: 0.7rem; }
+  .gloss-list { display: grid; gap: 0.6rem; }
+  .gloss-item {
+    background: var(--white);
+    border: var(--card-border);
+    border-left: 4px solid var(--violet);
+    border-radius: 12px;
+    padding: 0.8rem 1.05rem;
+  }
+  .gloss-item dt { font-family: var(--font-ui); font-weight: 700; color: var(--violet); }
+  .gloss-item dt a { color: inherit; }
+  .gloss-item dd { margin: 0.25rem 0 0; font-size: 0.93rem; line-height: 1.6; color: var(--text); }
+
+  /* ── sources ────────────────────────────────────────────── */
+  .src-group { margin-top: 2rem; }
+  .src-note { max-width: var(--measure); font-size: 0.92rem; color: var(--text-light); margin-bottom: 0.8rem; }
+  .src-list { display: grid; gap: 0.85rem; padding-left: 1.2rem; max-width: var(--measure); }
+  .src-list li { line-height: 1.65; font-size: 0.96rem; }
+  .src-list strong { color: var(--heading); }
+
+  /* ── closing ────────────────────────────────────────────── */
+  .ta-close {
+    margin-top: 1rem;
+    padding: 2rem 1.75rem;
+    text-align: center;
+    background: linear-gradient(135deg, var(--lavender), var(--pink-soft), var(--mint));
+  }
+  .ta-close > * + * { margin-top: 0.8rem; }
+  .ta-close p { max-width: 38rem; margin-inline: auto; line-height: 1.7; }
+  .close-big {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
+    font-weight: 600;
+    color: var(--heading);
+  }
+  .close-sign {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    color: var(--subheading);
+    font-size: 0.95rem;
+  }
+
+  .ta-nav-out {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-top: 2.5rem;
+  }
+</style>
