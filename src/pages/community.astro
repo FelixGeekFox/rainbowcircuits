@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import { SITE, withBase } from '../lib/site';
 
+const applicationUrl = 'https://docs.google.com/forms/d/e/1FAIpQLScU4F-oaoIuBUYbwd5Zt9JXKd-ifjwFQEvQuxhGfBL-YPconw/viewform';
+
 const gatherings = [
   {
     emoji: '🧵',
@@ -84,13 +86,11 @@ const happenings = [
     <section class="join">
       <h2>Want in?</h2>
       <p>
-        Because our spaces are kept safe and members-only, the easiest way in is to say hello —
-        we’ll help you find your way to Reddit and Discord.
+        Tell us a little about yourself through our short membership application. It helps us
+        keep Rainbow Circuits warm, inclusive, and welcoming for everyone.
       </p>
       <div class="join-actions">
-        {SITE.discordUrl
-          ? <a class="btn btn-primary" href={SITE.discordUrl} rel="noopener">Join our Discord</a>
-          : <a class="btn btn-primary" href="https://www.reddit.com/message/compose?to=r/RainbowCircuits" target="_blank" rel="noopener noreferrer">Get in touch to join</a>}
+        <a class="btn btn-primary" href={applicationUrl} target="_blank" rel="noopener noreferrer">Apply to join</a>
         <a class="btn btn-secondary" href={withBase('/community/rules/')}>Read our rules</a>
         <a class="btn btn-secondary" href={`mailto:${SITE.contactEmail}`}>Email us</a>
       </div>
