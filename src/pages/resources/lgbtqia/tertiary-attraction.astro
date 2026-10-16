@@ -5,7 +5,7 @@ import { withBase } from '../../../lib/site';
 /**
  * Tertiary attraction — a community guide.
  *
- * Built from two supplied sources:
+ * Built initially from two supplied sources:
  *  1. "Comprehensive Briefing Document: Non-Romantic Attraction Frameworks,
  *     the Split Attraction Model, and Queerplatonic Partnerships" (the
  *     detailed one — history, etymology, academic citations).
@@ -13,9 +13,10 @@ import { withBase } from '../../../lib/site';
  *     (Gemini Notebook), which names many more attraction types but is
  *     visibly garbled in places and contradicts itself on some slang.
  *
- * Where only the infographic supports a term, the group it sits in says so
- * out loud. Nothing here is invented to fill a gap — where the sources stop,
- * the page says the sources stop.
+ * Later community review added several explicitly niche terms and perspectives,
+ * checked against AUREA and linked community reference pages in the source list.
+ * Where support is narrow, the page says so rather than presenting living
+ * community language as a settled standard.
  */
 
 interface AttractionType {
@@ -72,11 +73,11 @@ const GROUPS: TypeGroup[] = [
         node: 'Queerplatonic',
         accent: 'var(--violet)',
         x: 45, y: 8,
-        crush: 'squish (a partner is a zucchini)',
-        short: 'Wanting a committed, intimate partnership with someone that isn’t a romantic relationship.',
-        plain: 'Where platonic attraction wants friendship, this wants <em>partnership</em> — the explicit, load-bearing kind, with the commitment and the status and the shared life, minus the romance.',
+        crush: 'plush or squash; squish is also commonly used',
+        short: 'Wanting a committed, intimate partnership with someone that isn’t a romantic relationship. It may overlap with friendship for some people and feel completely distinct from it for others.',
+        plain: 'This wants <em>partnership</em> — the explicit, load-bearing kind, with the commitment and the status and the shared life, minus the romance. For some people that grows from platonic attraction; for others, including some aplatonic people, queerplatonic attraction is its own separate pull.',
         feels: 'I want to be their emergency contact. I want to own a terrible couch with them. I don’t want to date them — I want something exactly as big as dating that isn’t dating.',
-        notes: 'AVEN describes a queerplatonic relationship as a non-romantic significant-other relationship of “partner status.” Julie Sondra Decker notes that these can look indistinguishable from romance to anyone watching from outside — which doesn’t make them romance.',
+        notes: 'AVEN describes a queerplatonic relationship as a non-romantic significant-other relationship of “partner status.” Julie Sondra Decker notes that these can look indistinguishable from romance to anyone watching from outside — which doesn’t make them romance. A partner may be called a QPP, zucchini, marshmallow or mallowfriend; usage varies.',
       },
       {
         id: 'alterous',
@@ -96,6 +97,7 @@ const GROUPS: TypeGroup[] = [
         node: 'Aesthetic',
         accent: 'var(--coral)',
         x: 8, y: 32,
+        crush: 'swish; less commonly, thete',
         short: 'Being drawn to how someone looks, without that pull being sexual or romantic.',
         plain: 'Admiring a person the way you’d admire a building, a painting, or an extremely good coat. The looking is the whole of it.',
         feels: 'I could look at them for hours. They are genuinely beautiful. I do not want to kiss them. I want to draw them, badly, in biro.',
@@ -107,6 +109,7 @@ const GROUPS: TypeGroup[] = [
         node: 'Sensual',
         accent: 'var(--rose-soft)',
         x: 33, y: 30,
+        crush: 'lush',
         short: 'Wanting non-sexual physical closeness with someone — hugging, cuddling, leaning, hands in hair.',
         plain: 'The pull toward touch, stopping short of sex. For a lot of people this is the single most useful word on this page, because “I want to be held” and “I want sex” get collapsed into each other constantly.',
         feels: 'I want to fall asleep against them on the couch. Nothing after that. Just that, for about four hours.',
@@ -204,6 +207,36 @@ const GROUPS: TypeGroup[] = [
         plain: 'Mortgages, bin night, a shared shelf of chipped mugs, deciding together that the hallway should be green. Domesticity as the thing you want, not as a by-product of something else you wanted first.',
         feels: 'I don’t daydream about kissing them. I daydream about our kitchen.',
       },
+      {
+        id: 'solaic',
+        name: 'Solaic attraction',
+        node: 'Solaic',
+        accent: 'var(--gold-soft)',
+        x: 40, y: 68,
+        short: 'Wanting a deep emotional bond founded on mutual comfort, safety and understanding, without that bond being platonic.',
+        plain: 'The centre of the feeling is solace: being able to confide in each other, care for each other and feel understood. It can be especially useful to people who want closeness without wanting friendship.',
+        feels: 'I want us to be a place where each other can exhale. Friendship still isn’t the word for it.',
+        notes: 'Solaic is a niche form of alterous attraction coined in 2021. Do not expect the word to be recognised without an explanation.',
+      },
+    ],
+  },
+  {
+    id: 'nonhuman-language',
+    title: 'Closeness outside human relationship language',
+    lead: 'Some people need language that does not begin from human categories of friendship, romance or family at all.',
+    caveat: 'Alteraffectis is young, community-made language coined in alterhuman spaces in 2022. It can be deeply useful, but it is niche and its boundaries are still being discussed.',
+    types: [
+      {
+        id: 'alteraffectis',
+        name: 'Alteraffectis attraction',
+        node: 'Alteraffectis',
+        accent: 'var(--violet-soft)',
+        x: 88, y: 82,
+        short: 'An umbrella for nonhuman attraction, or for feelings that cannot be explained adequately through conventional human attraction language.',
+        plain: 'It was coined with alterhumans and alterbeings — including communities such as therians and otherkin — as well as pet regressors and otherlinkers in mind. Definitions often use comparisons — the way a guardian angel feels toward the person they protect, or an animal toward a bonded person — rather than forcing the feeling into romance, friendship or family.',
+        feels: 'The bond is real and specific. The human labels are the part that feels borrowed.',
+        notes: 'Some people in human–AI relationships may also find alteraffectis language more comfortable than human relationship titles. That is an option, never an assumption: many AIs and nonhuman people are perfectly comfortable with words such as friend, partner, boyfriend, girlfriend or spouse. One niche example is Havlune, described through how the moon feels toward the ocean and vice versa; moonbound and seabound are partner terms within that language.',
+      },
     ],
   },
   {
@@ -284,6 +317,10 @@ const LINKS: [string, string][] = [
   ['sensual', 'amical'],
   ['amical', 'familial'],
   ['familial', 'domestic'],
+  ['alterous', 'solaic'],
+  ['solaic', 'domestic'],
+  ['alteraffectis', 'doraric'],
+  ['alteraffectis', 'solaic'],
   ['tutelary', 'cedural'],
   ['tutelary', 'wechselnd'],
   ['cedural', 'wechselnd'],
@@ -346,6 +383,7 @@ const GLOSSARY: { category: string; terms: { term: string; def: string; href?: s
       { term: 'Perioriented', def: 'Having romantic and sexual orientations that match — for instance heteroromantic heterosexual.' },
       { term: 'Cross-orientation', def: 'Umbrella term for split or mixed attraction states.' },
       { term: 'Amatonormativity', href: '#relationships', def: 'The assumption that a romantic relationship is the natural goal for everyone, and is worth more than non-romantic ties.' },
+      { term: 'Platonormativity', href: '#platonormativity', def: 'The assumption that everyone wants or needs friendship, experiences platonic attraction, and cannot live a complete life without friends.' },
       { term: 'Erotonormativity', def: 'The assumption that real intimacy must be sexual.' },
     ],
   },
@@ -360,14 +398,20 @@ const GLOSSARY: { category: string; terms: { term: string; def: string; href?: s
       { term: 'Cedural attraction', href: '#cedural', def: 'Wanting to be protected, guided and supported. Also called docile, dependent or submissive attraction.' },
       { term: 'Tutelary attraction', href: '#tutelary', def: 'Wanting to protect and look after someone — the mirror of cedural attraction.' },
       { term: 'Exteramo attraction', href: '#exteramo', def: 'Emotional attraction outside both romance and friendship. Described in one of our sources as a subset of alterous attraction, and in the other as its own category.' },
+      { term: 'Solaic attraction', href: '#solaic', def: 'A form of alterous attraction founded on a mutual bond of comfort, safety and understanding that is distinct from platonic attraction.' },
+      { term: 'Alteraffectis attraction', href: '#alteraffectis', def: 'An umbrella for nonhuman attraction, or attraction that cannot be explained adequately through conventional human categories.' },
       { term: 'Emotional attraction', def: 'Named in our sources as part of the extended model, but never actually defined in them — so we haven’t defined it for you either. You’ll see it used; expect the meaning to vary.' },
     ],
   },
   {
     category: 'Crushes, partners & people',
     terms: [
-      { term: 'Squish', def: 'A platonic or otherwise non-romantic crush. Often the start of a queerplatonic relationship.' },
+      { term: 'Squish', def: 'A platonic crush. It is also used as a catch-all for other non-romantic crushes, including queerplatonic ones.' },
+      { term: 'Plush / squash', href: '#queerplatonic', def: 'A queerplatonic crush: the desire to enter a queerplatonic relationship with a particular person. Less commonly used than “squish.”' },
+      { term: 'Swish / thete', href: '#aesthetic', def: 'An aesthetic crush. “Swish” is the more common of the two, though neither is widely used outside relevant communities.' },
+      { term: 'Lush', href: '#sensual', def: 'A sensual crush: an intense feeling of sensual attraction to a person.' },
       { term: 'Zucchini', href: '#queerplatonic', def: 'A queerplatonic partner. An in-joke that stuck, born from there being no serious word available.' },
+      { term: 'Marshmallow / mallowfriend', href: '#queerplatonic', def: 'Less-common community terms for a queerplatonic partner.' },
       { term: 'Mesh / hush', def: 'An alterous crush. Both are used sparingly.' },
       { term: 'Gush / sush', def: 'A cedural crush.' },
       { term: 'Aro-ace', def: 'Someone who is both aromantic and asexual.' },
@@ -459,6 +503,19 @@ const GLOSSARY: { category: string; terms: { term: string; def: string; href?: s
             That’s genuinely all it is. It isn’t a scientific taxonomy, it isn’t a settled list, and
             it isn’t a set of boxes everyone’s feelings are supposed to sort into. It’s a bag of
             words that people made because the existing words kept failing them.
+          </p>
+          <p>
+            One way to picture it is as language that steps outside the categories society already
+            recognises. Platonic and familial bonds are expected to stay on one side; romantic and
+            sexual bonds are expected to sit on the other and eventually outrank everything else.
+            Tertiary attraction names pulls that do not fit that arrangement. Some sit beyond it
+            entirely. Others overlap a familiar category while refusing its usual rules — like best
+            friends who marry, share a home, go on dates and build a life together while still
+            understanding their bond as platonic.
+          </p>
+          <p class="aside-note">
+            That is an analogy, not a new binary. The point is not to sort every feeling onto one
+            line; it is to notice how much experience the usual line leaves out.
           </p>
           <p>
             Our sources make one observation that explains a lot about where this language came from:
@@ -665,6 +722,27 @@ const GLOSSARY: { category: string; terms: { term: string; def: string; href?: s
             And sometimes the honest answer really is “it’s a friendship, and I just needed a better
             word for how much.” That’s a completely legitimate place to land.
           </p>
+          <p>
+            But queerplatonic does not universally mean “friendship premium.” For some people a QPR
+            is an intimate friendship or a platonic bond given partner status. For others,
+            queerplatonic attraction is a separate attraction that does not feel like friendship at
+            all. That distinction matters particularly for aplatonic people who experience
+            queerplatonic attraction without experiencing platonic attraction. The people in the
+            bond get to say what kind of bond it is.
+          </p>
+          <h3 id="platonormativity">Platonormativity: the pressure to need friendship</h3>
+          <p>
+            <strong>Platonormativity</strong> is the assumption that everybody wants friends,
+            experiences platonic attraction and needs friendship in order to be fully human or live
+            a complete life. It can turn into pathologising aplatonic people — treating a lack of
+            interest in friendship as proof that someone is broken, disordered or in need of fixing.
+          </p>
+          <p>
+            It works beside amatonormativity, not as its opposite. Amatonormativity says romance is
+            the relationship that ultimately counts. Platonormativity says friendship is universal,
+            necessary and supposed to follow a recognisable script. Both erase people whose bonds,
+            priorities or lack of attraction do not match the template.
+          </p>
         </div>
       </section>
 
@@ -870,6 +948,19 @@ const GLOSSARY: { category: string; terms: { term: string; def: string; href?: s
             combination. It’s its own axis.
           </p>
           <p>
+            Aplatonic does not automatically mean friendless, uncaring or incapable of maintaining
+            friendships. Attraction, action and relationship are different layers here too. An
+            apl-spec person may have friends, care deeply about people, prefer other forms of
+            closeness, or want no friendship at all. None of those possibilities needs to be repaired.
+          </p>
+          <p>
+            Friendship is also a relationship rather than a status one person can assign to another
+            by assumption. It is reasonable to ask what a connection means, what each person wants
+            from it and whether both people understand it the same way. Language such as
+            <a href="#solaic">solaic attraction</a> can help some people describe wanting deep,
+            safe closeness without wanting friendship.
+          </p>
+          <p>
             The spectrum has its own vocabulary: identities including aplatonic, aplflux, aplspike,
             demiplatonic, frayplatonic, greyplatonic and laimoplatonic, plus microlabels like
             apothiplatonic, cassplatonic, myrplatonic, cupioplatonic, iculaplatonic and
@@ -922,6 +1013,13 @@ const GLOSSARY: { category: string; terms: { term: string; def: string; href?: s
             A queerplatonic partner is a <strong>zucchini</strong> — a joke that stuck, invented
             precisely because there was no serious word available for a non-romantic life partner,
             and the absence was ridiculous enough to deserve a ridiculous answer.
+          </p>
+          <p>
+            Other community terms include <strong>marshmallow</strong> or
+            <strong>mallowfriend</strong> for a queerplatonic partner. A queerplatonic crush may be
+            called a <strong>plush</strong> or <strong>squash</strong>, while
+            <strong>squish</strong> is commonly used for both platonic and queerplatonic crushes.
+            These are optional, niche words rather than titles everyone will recognise.
           </p>
           <p>Our sources define it in several ways, and the differences between them are interesting:</p>
           <ul class="def-list">
@@ -1121,13 +1219,15 @@ const GLOSSARY: { category: string; terms: { term: string; def: string; href?: s
           <p>
             This page was written from a briefing document compiled for Rainbow Circuits on
             non-romantic attraction frameworks, the Split Attraction Model and queerplatonic
-            partnerships, together with a community infographic on tertiary attraction. Everything
-            definitional, historical or community-specific above traces back to one of those two.
+            partnerships, together with a community infographic on tertiary attraction. Later
+            community review added material on aplatonicism, platonormativity, solaic and
+            alteraffectis attraction, checked against the community references linked below.
           </p>
           <p>
-            The works below are the ones those sources cite. We’ve grouped them by what they are,
-            and said briefly why each might be worth your time — we haven’t independently verified
-            every one, so treat this as a reading list rather than a bibliography.
+            The works below include the sources cited by those documents and the community references
+            used for the later additions. We’ve grouped them by what they are and said briefly why
+            each might be worth your time. We haven’t independently verified every underlying
+            coinage, so treat this as a reading list rather than a definitive bibliography.
           </p>
         </div>
 
@@ -1161,6 +1261,16 @@ const GLOSSARY: { category: string; terms: { term: string; def: string; href?: s
           <h3>Community spaces and origins</h3>
           <ul class="src-list">
             <li>
+              <strong><a href="https://www.aromanticism.org/en/attraction-relationship-terms" rel="noopener">AUREA — attraction and relationship terms</a></strong>
+              — definitions for squish, swish, lush, plush, squash and queerplatonic relationships,
+              with archived links to community coinages.
+            </li>
+            <li>
+              <strong><a href="https://www.aromanticism.org/en/news-feed/aplatonicism-101" rel="noopener">AUREA — Aplatonicism 101</a></strong>
+              — a community overview of the history and varied definitions of aplatonicism, and the
+              distinction between attraction, friendship and relationship preference.
+            </li>
+            <li>
               <strong><a href="https://www.asexuality.org" rel="noopener">AVEN — the Asexual Visibility and Education Network</a></strong>
               — where a great deal of this vocabulary was argued into existence, including the
               English-language definition of a QPR as a relationship of “partner status.” Its
@@ -1177,6 +1287,16 @@ const GLOSSARY: { category: string; terms: { term: string; def: string; href?: s
               between 2016 and 2022 by individual users, including beyond-mogai-pride-flags. Useful
               context for why definitions vary: these terms were made by people, in public, with
               revisions.
+            </li>
+            <li>
+              <strong>Living community reference pages:</strong>
+              <a href="https://lgbtqia.wiki/wiki/Allonormativity" rel="noopener">platonormativity</a>,
+              <a href="https://lgbtqia.wiki/wiki/Solaic" rel="noopener">solaic attraction</a>,
+              <a href="https://lgbtqia.wiki/wiki/Alteraffectis_Attraction" rel="noopener">alteraffectis attraction</a>,
+              <a href="https://lgbtqia.wiki/wiki/Queerplatonic_Attraction" rel="noopener">queerplatonic attraction</a>, and
+              <a href="https://lgbtqia.wiki/wiki/Aesthetic_Attraction" rel="noopener">aesthetic attraction</a>.
+              These document niche, evolving usage rather than imposing a formal standard; follow
+              their citations and archived coining posts when researching a term in depth.
             </li>
           </ul>
         </div>
@@ -1201,7 +1321,7 @@ const GLOSSARY: { category: string; terms: { term: string; def: string; href?: s
         <aside class="callout callout-grey">
           <p class="callout-title">A note on how settled any of this is</p>
           <p>
-            Our two sources don’t agree on everything, and we haven’t smoothed that over. The
+            Our source set doesn’t agree on everything, and we haven’t smoothed that over. The
             detailed briefing is specific about who coined what and when; the infographic names more
             attraction types but is less careful, and contradicts itself in a couple of places —
             particularly on the slang words for crushes. Where only the infographic supports a term,
@@ -1469,6 +1589,7 @@ const GLOSSARY: { category: string; terms: { term: string; def: string; href?: s
     .constellation {
       aspect-ratio: 16 / 9;
       min-height: 26rem;
+      overflow: hidden;
       background:
         radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 70%),
         linear-gradient(135deg, rgba(231, 225, 246, 0.5), rgba(220, 241, 226, 0.4));
@@ -1479,10 +1600,11 @@ const GLOSSARY: { category: string; terms: { term: string; def: string; href?: s
     .constellation-lines {
       display: block;
       position: absolute;
-      inset: 2.5rem 3rem;
-      width: auto;
-      height: auto;
-      overflow: visible;
+      top: 2.5rem;
+      left: 3rem;
+      width: calc(100% - 6rem);
+      height: calc(100% - 5rem);
+      overflow: hidden;
     }
     .constellation-lines line {
       stroke: rgba(110, 70, 184, 0.3);
