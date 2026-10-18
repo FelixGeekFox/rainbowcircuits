@@ -61,6 +61,12 @@
   --card-shadow: 0 4px 24px rgba(20, 40, 90, 0.10);
   --card-shadow-hover: 0 8px 32px rgba(20, 40, 90, 0.16);
   --card-border: 1.5px solid rgba(60, 90, 150, 0.14);
+  --surface: #ffffff;
+  --surface-muted: #eef1f5;
+  --border: rgba(60, 90, 150, 0.18);
+  --border-strong: rgba(10, 44, 92, 0.35);
+  --header-bg: rgba(255, 255, 255, 0.92);
+  --field-bg: #ffffff;
 
   /* layout */
   --measure: 42rem;        /* comfortable line length for long-form copy */
@@ -70,6 +76,45 @@
   /* rainbow gradient — brand accents in spectrum order */
   --circuit-rainbow: linear-gradient(90deg,
     #e5252a 0%, #f48b00 20%, #f2c300 40%, #18a93a 60%, #1e73d8 80%, #6e46b8 100%);
+}
+
+html[data-theme='dark'] {
+  --navy: #b8d8ff;
+  --navy-soft: #9ec9ff;
+  --blue: #7fbdff;
+  --cream: #0d1421;
+  --paper: #0d1421;
+  --paper-warm: #172235;
+  --pink-soft: #482632;
+  --lavender: #30294a;
+  --mint: #17382b;
+  --peach: #40311e;
+  --rose: #ff858b;
+  --rose-soft: #ff9da2;
+  --violet: #c4a8ff;
+  --violet-soft: #b79ae9;
+  --teal: #70d98b;
+  --teal-soft: #82e49a;
+  --gold: #f5ce60;
+  --coral: #ffad45;
+  --cyan: #7fbdff;
+  --charcoal: #aebbd0;
+  --mid-grey: #637086;
+  --light-grey: #273349;
+  --text: #e7edf7;
+  --text-light: #b6c2d4;
+  --heading: #f1eaff;
+  --subheading: #f0a9d3;
+  --white: #172235;
+  --surface: #172235;
+  --surface-muted: #202d43;
+  --border: rgba(174, 196, 228, 0.22);
+  --border-strong: rgba(174, 196, 228, 0.42);
+  --header-bg: rgba(13, 20, 33, 0.94);
+  --field-bg: #111b2b;
+  --card-shadow: 0 6px 26px rgba(0, 0, 0, 0.34);
+  --card-shadow-hover: 0 10px 34px rgba(0, 0, 0, 0.46);
+  --card-border: 1.5px solid var(--border);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -100,6 +145,14 @@ body {
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+html[data-theme='dark'] body {
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(110, 70, 184, 0.16) 0%, transparent 50%),
+    radial-gradient(circle at 85% 70%, rgba(30, 115, 216, 0.14) 0%, transparent 50%),
+    radial-gradient(circle at 50% 95%, rgba(24, 169, 58, 0.1) 0%, transparent 40%);
 }
 
 img, svg, video { max-width: 100%; height: auto; display: block; }
@@ -132,6 +185,20 @@ a:hover { color: var(--rose); }
 button {
   font-family: var(--font-ui);
   cursor: pointer;
+}
+
+input, textarea, select {
+  background: var(--field-bg);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+html[data-theme='dark'] :is(.card, article, form, dialog) {
+  border-color: var(--border);
+}
+html[data-theme='dark'] :is(.card, form, dialog) {
+  background-color: var(--surface);
+  color: var(--text);
 }
 
 /* ── skip link ─────────────────────────────────────────────── */

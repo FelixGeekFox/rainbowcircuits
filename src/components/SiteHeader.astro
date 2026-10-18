@@ -55,6 +55,11 @@ const links = [
             ))}
           </ul>
           <a class="contact-btn" href={withBase('/contact/')}>Contact</a>
+          <button type="button" class="theme-toggle" aria-label="Switch to dark mode" title="Switch to dark mode">
+            <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path></svg>
+            <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 15.7A9 9 0 0 1 8.3 3.4a9 9 0 1 0 12.3 12.3Z"></path></svg>
+            <span class="theme-label">Dark</span>
+          </button>
         </div>
       </>
     )}
@@ -65,6 +70,25 @@ const links = [
   const header = document.querySelector('.site-header');
   const toggle = header?.querySelector<HTMLButtonElement>('.menu-toggle');
   const nav = header?.querySelector<HTMLElement>('#site-nav');
+  const themeToggle = header?.querySelector<HTMLButtonElement>('.theme-toggle');
+  const syncThemeToggle = () => {
+    if (!themeToggle) return;
+    const isDark = document.documentElement.dataset.theme === 'dark';
+    const action = `Switch to ${isDark ? 'light' : 'dark'} mode`;
+    themeToggle.setAttribute('aria-label', action);
+    themeToggle.title = action;
+    const label = themeToggle.querySelector('.theme-label');
+    if (label) label.textContent = isDark ? 'Light' : 'Dark';
+  };
+  themeToggle?.addEventListener('click', () => {
+    const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+    localStorage.setItem('rc-theme', theme);
+    syncThemeToggle();
+  });
+  syncThemeToggle();
+
   if (toggle && nav) {
     const setOpen = (open: boolean) => {
       toggle.setAttribute('aria-expanded', String(open));
@@ -89,8 +113,8 @@ const links = [
   .site-header {
     position: relative;
     z-index: 60;
-    border-bottom: 1px solid rgba(60, 90, 150, 0.14);
-    background: rgba(255, 255, 255, 0.92);
+    border-bottom: 1px solid var(--border);
+    background: var(--header-bg);
     backdrop-filter: blur(8px);
   }
   .site-header.on-dark {
@@ -186,6 +210,25 @@ const links = [
   .contact-btn:hover { background: var(--navy); color: var(--white); border-color: var(--navy); }
   .on-dark .contact-btn { color: var(--on-twilight); border-color: rgba(242, 246, 252, 0.5); }
   .on-dark .contact-btn:hover { background: var(--white); color: var(--navy); border-color: var(--white); }
+
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.5rem;
+    padding: 0.4rem 0.75rem;
+    border: 1.5px solid var(--border-strong);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+  .theme-toggle:hover { background: var(--surface-muted); }
+  .theme-icon { width: 1.1rem; height: 1.1rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .theme-icon-moon { display: none; }
+  :global(html[data-theme='dark']) .theme-icon-sun { display: none; }
+  :global(html[data-theme='dark']) .theme-icon-moon { display: block; }
 
   /* ── desktop: inline nav, no hamburger ── */
   @media (min-width: 48rem) {

@@ -1,7 +1,5 @@
 ---
-import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import heroMark from '../assets/brand/hero-mark.png';
 import { SITE, withBase } from '../lib/site';
 ---
 
@@ -44,12 +42,12 @@ import { SITE, withBase } from '../lib/site';
             <circle cx="410" cy="266" r="5" /><circle cx="410" cy="310" r="5" />
           </g>
         </svg>
-        <Image
+        <img
           class="hero-mark float-slow"
-          src={heroMark}
-          alt=""
-          widths={[480, 768, 1100]}
-          sizes="(min-width: 56rem) 24rem, 40vw"
+          src={withBase('/images/rc-web-logo.png')}
+          alt="Rainbow Circuits"
+          width="1024"
+          height="1024"
           loading="eager"
           fetchpriority="high"
         />
@@ -158,6 +156,10 @@ import { SITE, withBase } from '../lib/site';
   .btn-mint:hover { color: #0f6a37; box-shadow: 0 7px 22px rgba(24, 169, 58, 0.24); }
   .btn-pink:hover { color: #9e2b52; box-shadow: 0 7px 22px rgba(229, 37, 42, 0.22); }
   .btn-lavender:hover { color: #5e3aa6; box-shadow: 0 7px 22px rgba(110, 70, 184, 0.24); }
+  :global(html[data-theme='dark']) .btn-sky { color: #0b366d; }
+  :global(html[data-theme='dark']) .btn-mint { color: #063c1d; }
+  :global(html[data-theme='dark']) .btn-pink { color: #66132f; }
+  :global(html[data-theme='dark']) .btn-lavender { color: #361b70; }
   .hero-note {
     margin-top: 1.1rem;
     text-align: center;
@@ -169,7 +171,7 @@ import { SITE, withBase } from '../lib/site';
 
   .hero-art { position: relative; min-height: 16rem; display: grid; place-items: center; animation: riseIn 0.9s ease both; }
   .hero-trails { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.5; z-index: 0; }
-  .hero-mark { position: relative; z-index: 1; width: clamp(16rem, 44vw, 27rem); height: auto; border-radius: 18px; }
+  .hero-mark { position: relative; z-index: 1; width: clamp(16rem, 44vw, 27rem); height: auto; border-radius: 18px; filter: drop-shadow(0 10px 28px rgba(3, 43, 103, 0.16)); }
   .hero-art .star.s1 { top: 6%; left: 14%; animation: floatyx 5s ease-in-out infinite; }
   .hero-art .star.s2 { bottom: 12%; right: 16%; font-size: 1rem; animation: floatyx 7s ease-in-out infinite 0.5s; }
   .hero-art .heart.h1 { top: 20%; right: 10%; animation: floaty 5.5s ease-in-out infinite; }
