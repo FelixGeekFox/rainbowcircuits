@@ -1,8 +1,6 @@
 ---
-import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { SITE, withBase } from '../lib/site';
-import mark from '../assets/brand/mark.png';
 
 const pillars = [
   {
@@ -32,7 +30,7 @@ const values = ['Warm', 'Inclusive', 'Creative', 'Curious', 'Playful'];
 >
   <div class="about container">
     <header class="about-hero">
-      <Image src={mark} alt="" width={220} height={220} class="about-mark" />
+      <img src={withBase('/images/rainbow-circuits-mark.png')} alt="Rainbow Circuits rainbow circuit-heart mark" width="220" height="220" class="about-mark" />
       <p class="kicker">{SITE.strapline}</p>
       <h1>About Rainbow Circuits</h1>
       <p class="about-mission">{SITE.tagline}</p>
@@ -76,7 +74,8 @@ const values = ['Warm', 'Inclusive', 'Creative', 'Curious', 'Playful'];
 <style>
   .about { padding-block: 3rem 1rem; max-width: 56rem; }
   .about-hero { text-align: center; margin-bottom: 3rem; }
-  .about-mark { width: 6rem; height: 6rem; object-fit: contain; margin: 0 auto 1rem; }
+  .about-mark { width: clamp(7rem, 18vw, 10rem); height: auto; aspect-ratio: 1; object-fit: contain; margin: 0 auto 1rem; filter: drop-shadow(0 8px 20px rgba(3, 43, 103, 0.14)); }
+  :global(html[data-theme='dark']) .about-mark { filter: drop-shadow(0 8px 24px rgba(127, 189, 255, 0.2)); }
   .about-hero h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); margin-top: 0.3rem; }
   .about-mission {
     max-width: 40rem;
