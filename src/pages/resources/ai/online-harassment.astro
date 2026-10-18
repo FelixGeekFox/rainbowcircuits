@@ -274,6 +274,13 @@ import { withBase } from '../../../lib/site';
     background: linear-gradient(135deg, #fff4e6, #fde8d8);
     border: 1.5px solid var(--gold-soft);
   }
+  :global(html[data-theme='dark']) .short-version,
+  :global(html[data-theme='dark']) .note.warn {
+    background: linear-gradient(135deg, rgba(132, 55, 18, 0.72), rgba(100, 32, 32, 0.68));
+    border-color: #f5b94d;
+    color: #ffe8d4;
+  }
+  :global(html[data-theme='dark']) .short-version :is(h2, p, li) { color: #ffe8d4; }
 
   .eg {
     border-radius: 12px;

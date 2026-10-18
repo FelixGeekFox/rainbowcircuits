@@ -201,6 +201,16 @@ html[data-theme='dark'] :is(.card, form, dialog) {
   color: var(--text);
 }
 
+/* Dark-mode treatment for recurring pastel callouts and feature panels. */
+html[data-theme='dark'] :is(
+  .community-callout, .soft-callout, .guide-callout, .resource-callout,
+  .res-crisis, .gentle-reminder, .closing-note
+) {
+  background: linear-gradient(135deg, rgba(110, 70, 184, 0.24), rgba(229, 37, 91, 0.12));
+  border: 1px solid rgba(196, 168, 255, 0.28);
+  color: var(--text);
+}
+
 /* ── skip link ─────────────────────────────────────────────── */
 .skip-link {
   position: absolute;

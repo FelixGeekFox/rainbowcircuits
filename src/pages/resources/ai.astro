@@ -76,6 +76,13 @@ import { withBase } from '../../lib/site';
   .guide-link-text { display: flex; flex-direction: column; gap: 0.2rem; }
   .guide-link-text strong { font-family: var(--font-ui); font-size: 1.1rem; color: #17539e; }
   .guide-link-text span { color: var(--text); font-size: 0.92rem; line-height: 1.55; }
+  :global(html[data-theme='dark']) .guide-link {
+    background: linear-gradient(135deg, rgba(30, 115, 216, 0.28), rgba(110, 70, 184, 0.2));
+    border-color: rgba(127, 189, 255, 0.44);
+  }
+  :global(html[data-theme='dark']) .guide-link:hover { background: linear-gradient(135deg, rgba(30, 115, 216, 0.36), rgba(110, 70, 184, 0.28)); }
+  :global(html[data-theme='dark']) .guide-link-text strong { color: #b8d8ff; }
+  :global(html[data-theme='dark']) .guide-link-text span { color: #d5deeb; }
 
   .air-more { text-align: center; color: var(--text-light); font-size: 0.95rem; margin-top: 1.75rem; }
   .air-back { text-align: center; margin-top: 2rem; }

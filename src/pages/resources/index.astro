@@ -97,4 +97,18 @@ const cards = [
     font-size: 0.9rem;
     color: var(--card-accent);
   }
+  :global(html[data-theme='dark']) .hub-card {
+    background: linear-gradient(145deg, color-mix(in srgb, var(--card-accent) 16%, #172235), #141f31 78%);
+    border-color: color-mix(in srgb, var(--card-accent) 48%, transparent);
+    border-top-color: var(--card-accent);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28);
+  }
+  :global(html[data-theme='dark']) .hub-card:hover {
+    background: linear-gradient(145deg, color-mix(in srgb, var(--card-accent) 22%, #172235), #18253a 78%);
+    border-color: color-mix(in srgb, var(--card-accent) 62%, transparent);
+    box-shadow: 0 9px 30px rgba(0, 0, 0, 0.36);
+  }
+  :global(html[data-theme='dark']) .hub-title { color: #f1eaff; }
+  :global(html[data-theme='dark']) .hub-desc { color: #c5d0e1; }
+  :global(html[data-theme='dark']) .hub-go { color: color-mix(in srgb, var(--card-accent) 72%, white); }
 </style>

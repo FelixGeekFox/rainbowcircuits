@@ -49,6 +49,10 @@ import { withBase } from '../../lib/site';
   .ndr-emoji { font-size: 2.2rem; }
   .ndr-soon h2 { font-size: 1.4rem; margin: 0.5rem 0 0.6rem; }
   .ndr-soon p { color: var(--text); line-height: 1.7; }
+  :global(html[data-theme='dark']) .ndr-soon {
+    background: linear-gradient(135deg, rgba(24, 169, 58, 0.2), rgba(110, 70, 184, 0.22));
+    border-color: rgba(112, 217, 139, 0.34);
+  }
 
   .ndr-back { text-align: center; margin-top: 2rem; }
 </style>

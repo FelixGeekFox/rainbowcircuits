@@ -115,6 +115,13 @@ const groupId = (title: string) => `grp-${title.replace(/\s+/g, '-').toLowerCase
     margin-bottom: 0.4rem;
   }
   .emergency p:last-child { color: var(--text); line-height: 1.6; }
+  :global(html[data-theme='dark']) .emergency {
+    background: linear-gradient(135deg, rgba(132, 55, 18, 0.72), rgba(100, 32, 32, 0.68));
+    border-color: #f5b94d;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+  }
+  :global(html[data-theme='dark']) .emergency-title { color: #fff1c7; }
+  :global(html[data-theme='dark']) .emergency p:last-child { color: #ffe8d4; }
 
   .res-group { margin-bottom: 2.75rem; }
   .res-group h2 { font-size: 1.5rem; }
@@ -218,6 +225,11 @@ const groupId = (title: string) => `grp-${title.replace(/\s+/g, '-').toLowerCase
   .gentle-reminder h2 { font-size: 1.4rem; margin-bottom: 0.75rem; }
   .gentle-reminder p { color: var(--text); line-height: 1.7; }
   .gentle-reminder p + p { margin-top: 0.75rem; }
+  :global(html[data-theme='dark']) .res-crisis,
+  :global(html[data-theme='dark']) .gentle-reminder {
+    background: linear-gradient(135deg, rgba(110, 70, 184, 0.26), rgba(229, 37, 91, 0.14));
+    border: 1px solid rgba(196, 168, 255, 0.28);
+  }
 
   .res-back { text-align: center; }
 </style>
