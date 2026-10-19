@@ -1,0 +1,104 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { withBase } from '../../../lib/site';
+
+const principles = [
+  { icon: '🌱', title: 'Reflective', body: 'Explore your thoughts and patterns at your own pace.' },
+  { icon: '❤️', title: 'Consent-based', body: 'You choose what to consider, share, skip, or stop.' },
+  { icon: '🫂', title: 'Peer-informed', body: 'Built with neurodivergent lived experience at the centre.' },
+  { icon: '🍃', title: 'Non-diagnostic', body: 'Reflection and support, never a clinical assessment.' },
+];
+
+const lenses = [
+  ['🌊', 'Sensory world', 'Sounds, textures, light, movement, and environments that help you settle.'],
+  ['💬', 'Social rhythm', 'Communication, context, boundaries, connection, and recovery time.'],
+  ['🧭', 'Attention & energy', 'Starting, switching, remembering, deep focus, and what makes tasks easier.'],
+  ['🪴', 'Comfort & regulation', 'Routines, interests, movement, objects, and people that help you feel grounded.'],
+];
+---
+
+<Base title="NeuroMossaic — Rainbow Circuits" description="A gentle space for exploring neurodivergence, identity, and how you experience the world." path="/resources/neurodivergent/neuromossaic/">
+  <article class="nm-page">
+    <section class="nm-hero">
+      <div class="container hero-grid">
+        <div class="moss-portrait">
+          <img src={withBase('/images/neuromossaic/moss-mascot.webp')} alt="Moss, a smiling leafy cat-like creature" width="900" height="900" />
+          <p>Curiosity over certainty.<br />Agency over authority.</p>
+        </div>
+        <div class="hero-copy">
+          <p class="kicker">NeuroMossaic</p>
+          <h1>Meet Moss</h1>
+          <p class="hero-lead">A gentle space for exploring neurodivergence, identity, and how you experience the world.</p>
+          <div class="welcome">
+            <h2>Hey. I’m Moss. <span aria-hidden="true">🌱</span></h2>
+            <p>This is a space for thinking out loud, noticing patterns, and being honest without having to be certain.</p>
+            <p>Nothing here needs to be finished today. Where would you like to start?</p>
+          </div>
+          <div class="start-paths" aria-label="Ways to begin">
+            <a href="#reflect"><span aria-hidden="true">🌱</span><strong>I’m exploring how I experience the world</strong><span aria-hidden="true">→</span></a>
+            <a href="#deeper"><span aria-hidden="true">❤️</span><strong>I’m pretty sure I’m neurodivergent and want deeper exploration</strong><span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="container nm-content">
+      <div class="intro-grid">
+        <section class="panel principles" aria-labelledby="principles-heading">
+          <h2 id="principles-heading">What NeuroMossaic is</h2>
+          <div class="principle-grid">
+            {principles.map((item) => <div><span aria-hidden="true">{item.icon}</span><h3>{item.title}</h3><p>{item.body}</p></div>)}
+          </div>
+        </section>
+        <section class="panel meaning" aria-labelledby="meaning-heading">
+          <h2 id="meaning-heading">What neurodivergence means here</h2>
+          <p>Neurodivergence is an umbrella term for the many ways people experience and process the world. It can include autism, ADHD, dyslexia, dyspraxia, Tourette’s, and other differences in attention, senses, movement, learning, communication, or regulation.</p>
+          <p>Everyone’s experience is unique. Explore what feels relevant without forcing yourself into a box or conclusion.</p>
+        </section>
+      </div>
+
+      <section id="reflect" aria-labelledby="reflect-heading">
+        <div class="section-heading"><p class="kicker">Notice, don’t judge</p><h2 id="reflect-heading">A few places to look gently</h2><p>These are invitations, not tests. “Sometimes,” “it depends,” and “I don’t know yet” are useful answers.</p></div>
+        <div class="lens-grid">{lenses.map(([icon, title, body]) => <div class="lens-card"><span aria-hidden="true">{icon}</span><h3>{title}</h3><p>{body}</p></div>)}</div>
+      </section>
+
+      <section class="panel deeper" id="deeper" aria-labelledby="deeper-heading">
+        <div><p class="kicker">Consent before depth</p><h2 id="deeper-heading">Patterns, needs, and self-understanding</h2></div>
+        <div><p>A label can be a map, a community connection, or language you are trying on. You decide what fits and who you share it with.</p><p>Notice one recurring difficult moment. What is being asked of you, and what might reduce the barrier? More time, clearer instructions, less sensory input, a written prompt, movement, company, or recovery time can all be reasonable accommodations.</p></div>
+      </section>
+
+      <section class="panel chat-preview" aria-labelledby="chat-heading">
+        <div class="chat-head"><div><h2 id="chat-heading">Chat with Moss</h2><p>Static preview of a future conversation</p></div><span>Preview only</span></div>
+        <div class="messages">
+          <div class="message moss-message"><img src={withBase('/images/neuromossaic/moss-avatar.webp')} alt="" width="256" height="199" /><p><strong>Moss</strong><br />There are no wrong questions here. What’s on your mind today?</p></div>
+          <div class="message visitor-message"><p>I’ve been feeling overwhelmed lately, and I’m wondering whether it connects to neurodivergence…</p></div>
+        </div>
+        <p class="preview-note">This is an example, not an active chat. Nothing is sent or stored.</p>
+      </section>
+
+      <aside class="support-note" aria-labelledby="support-heading"><div><h2 id="support-heading">A note about support</h2><p>Moss is not a crisis service and cannot provide medical advice or diagnosis. If you need immediate support, use a trusted local service or helpline.</p></div><a class="btn btn-secondary" href={withBase('/resources/support/')}>Find support resources →</a></aside>
+      <nav class="page-nav" aria-label="Resource navigation"><a class="btn btn-secondary" href={withBase('/resources/neurodivergent/')}>← Neurodivergent resources</a></nav>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .nm-page { --forest:#0c1c24; --deep-moss:#142d34; --moss:#a6cc78; --sage:#789e80; --cream:#f7f3e8; --teal:#9cc9c7; --peach:#f3b9a4; --gold:#eec76a; --ink:#243b36; }
+  .nm-hero { padding-block: clamp(2.5rem,6vw,4.5rem); background: linear-gradient(rgba(247,245,236,.86),rgba(247,245,236,.94)),url('/images/neuromossaic/moonlit-garden.webp') center/cover no-repeat; }
+  .hero-grid { display:grid; grid-template-columns:.78fr 1.22fr; gap:clamp(2rem,5vw,4rem); align-items:center; }
+  .moss-portrait { display:grid; place-items:end center; min-height:30rem; position:relative; }
+  .moss-portrait img { width:min(100%,30rem); height:auto; filter:drop-shadow(0 18px 36px rgba(12,28,36,.25)); }
+  .moss-portrait p { position:absolute; bottom:1rem; padding:.45rem .8rem; border-radius:999px; text-align:center; color:var(--ink); background:rgba(247,243,232,.88); font-family:var(--font-ui); font-weight:700; }
+  .hero-copy h1 { color:#315c3d; font-size:clamp(3rem,7vw,5rem); letter-spacing:-.03em; }.hero-lead { color:var(--ink); font-size:clamp(1.08rem,2.4vw,1.3rem); line-height:1.55; max-width:38rem; }
+  .welcome { margin-top:1.3rem; padding:1.3rem 1.45rem; border:2px solid var(--sage); border-radius:18px; background:rgba(247,243,232,.94); box-shadow:var(--card-shadow); }.welcome h2 { color:#315c3d; font-size:1.35rem; }.welcome p { color:var(--ink); line-height:1.55; }.welcome p+p { margin-top:.4rem; }
+  .start-paths { display:grid; grid-template-columns:1fr 1fr; gap:.75rem; margin-top:.8rem; }.start-paths a { display:grid; grid-template-columns:auto 1fr auto; gap:.65rem; align-items:center; min-height:5.2rem; padding:1rem; border:2px solid var(--sage); border-radius:16px; color:#285238; background:rgba(231,239,216,.94); text-decoration:none; }.start-paths a:last-child { border-color:var(--peach); color:#77344a; background:rgba(255,235,226,.94); }.start-paths a:hover { transform:translateY(-2px); box-shadow:var(--card-shadow); }
+  .nm-content { display:grid; gap:2.5rem; padding-block:2.5rem 1rem; }.panel { border:var(--card-border); border-radius:var(--card-radius); background:var(--surface); box-shadow:var(--card-shadow); }
+  .intro-grid { display:grid; grid-template-columns:1.25fr .75fr; gap:1rem; }.principles,.meaning { padding:1.5rem; }.panel h2 { font-size:1.4rem; }.principle-grid { display:grid; grid-template-columns:repeat(4,1fr); margin-top:1rem; }.principle-grid>div { padding:.5rem .85rem; text-align:center; border-right:1px solid var(--border); }.principle-grid>div:last-child { border:0; }.principle-grid span { font-size:1.4rem; }.principle-grid h3 { font-size:1rem; margin:.25rem 0; }.principle-grid p,.meaning p { color:var(--text-light); font-size:.91rem; line-height:1.55; }.meaning { background:linear-gradient(135deg,rgba(156,201,199,.22),rgba(166,204,120,.16)); }.meaning p { margin-top:.7rem; }
+  .section-heading { max-width:44rem; margin:0 auto 1.25rem; text-align:center; }.section-heading h2 { font-size:2rem; }.section-heading p:last-child { color:var(--text-light); margin-top:.4rem; }.lens-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:.75rem; }.lens-card { padding:1.15rem; border:var(--card-border); border-top:3px solid var(--moss); border-radius:16px; background:var(--surface); }.lens-card span { font-size:1.4rem; }.lens-card h3 { font-size:1.05rem; margin:.3rem 0; }.lens-card p { color:var(--text-light); font-size:.9rem; line-height:1.55; }
+  .deeper { display:grid; grid-template-columns:.8fr 1.2fr; gap:2rem; padding:1.7rem; background:linear-gradient(135deg,rgba(166,204,120,.18),rgba(156,201,199,.22)); }.deeper p { color:var(--text); line-height:1.65; }.deeper p+p { margin-top:.7rem; }
+  .chat-preview { padding:1.5rem; background:linear-gradient(135deg,rgba(166,204,120,.15),rgba(156,201,199,.22)); }.chat-head { display:flex; justify-content:space-between; gap:1rem; }.chat-head p { color:var(--text-light); font-size:.82rem; text-transform:uppercase; letter-spacing:.08em; }.chat-head>span { align-self:start; padding:.25rem .65rem; border:1px solid var(--border-strong); border-radius:999px; color:var(--text-light); font-size:.78rem; }.messages { display:flex; align-items:flex-end; gap:1rem; margin-top:1rem; }.message { max-width:66%; padding:.85rem 1rem; border-radius:16px; }.moss-message { display:flex; gap:.7rem; border:1px solid rgba(120,158,128,.45); background:var(--surface); }.moss-message img { width:3.5rem; height:3.5rem; border-radius:50%; object-fit:cover; }.visitor-message { margin-left:auto; color:#173c5c; background:#d9eceb; }.preview-note { margin-top:.75rem; color:var(--text-light); font-size:.82rem; }
+  .support-note { display:flex; justify-content:space-between; align-items:center; gap:1.5rem; padding:1.3rem 1.5rem; border:1.5px solid rgba(243,185,164,.8); border-radius:var(--card-radius); background:rgba(243,185,164,.2); }.support-note h2 { font-size:1.2rem; }.support-note p { color:var(--text); margin-top:.25rem; line-height:1.55; }.support-note .btn { flex-shrink:0; }.page-nav { text-align:center; }
+  :global(html[data-theme='dark']) .nm-hero { background:linear-gradient(rgba(12,28,36,.72),rgba(12,28,36,.88)),url('/images/neuromossaic/moonlit-garden.webp') center/cover no-repeat; }:global(html[data-theme='dark']) .hero-copy h1,:global(html[data-theme='dark']) .welcome h2 { color:var(--moss); }:global(html[data-theme='dark']) .hero-lead { color:var(--cream); }:global(html[data-theme='dark']) .moss-portrait p { color:var(--cream); background:rgba(20,45,52,.9); }:global(html[data-theme='dark']) .welcome { border-color:var(--moss); background:rgba(20,45,52,.94); }:global(html[data-theme='dark']) .welcome p { color:var(--cream); }:global(html[data-theme='dark']) .start-paths a { border-color:var(--moss); color:#e2f2cf; background:rgba(20,45,52,.94); }:global(html[data-theme='dark']) .start-paths a:last-child { border-color:var(--peach); color:#ffe0d5; background:rgba(72,42,47,.94); }:global(html[data-theme='dark']) .meaning,:global(html[data-theme='dark']) .deeper,:global(html[data-theme='dark']) .chat-preview { background:linear-gradient(135deg,#142d34,#17343c); }:global(html[data-theme='dark']) .lens-card { background:#142d34; }:global(html[data-theme='dark']) .visitor-message { color:#e8f7f6; background:#24525a; }:global(html[data-theme='dark']) .support-note { border-color:rgba(243,185,164,.55); background:#3b2a30; }
+  @media(max-width:54rem){.hero-grid,.intro-grid,.deeper{grid-template-columns:1fr}.moss-portrait{min-height:20rem}.principle-grid,.lens-grid{grid-template-columns:repeat(2,1fr)}.principle-grid>div:nth-child(2){border-right:0}}
+  @media(max-width:38rem){.start-paths,.principle-grid,.lens-grid{grid-template-columns:1fr}.principle-grid>div{border-right:0;border-bottom:1px solid var(--border)}.principle-grid>div:last-child{border-bottom:0}.messages{flex-direction:column;align-items:stretch}.message{max-width:100%}.support-note{align-items:stretch;flex-direction:column}.support-note .btn{align-self:start}}
+</style>

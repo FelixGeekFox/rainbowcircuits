@@ -18,13 +18,19 @@ import { withBase } from '../../lib/site';
       </p>
     </header>
 
+    <a class="nm-card card" href={withBase('/resources/neurodivergent/neuromossaic/')}>
+      <span class="nm-card-icon" aria-hidden="true">🌱</span>
+      <span class="nm-card-copy">
+        <strong>NeuroMossaic</strong>
+        <span>A gentle space for exploring neurodivergence, identity, and how you experience the world.</span>
+      </span>
+      <span class="nm-card-go" aria-hidden="true">Explore →</span>
+    </a>
+
     <div class="ndr-soon card">
-      <p class="ndr-emoji" aria-hidden="true">🧠✨</p>
-      <h2>We’re building this space</h2>
-      <p>
-        This page is on its way. If you have a resource, tool, or community you’d love to see
-        listed here, the mod team would genuinely love to hear it.
-      </p>
+      <p class="ndr-emoji" aria-hidden="true">🧠</p>
+      <h2>More resources are growing here</h2>
+      <p>If you have a resource, tool, or community you’d love to see listed, the mod team would genuinely love to hear it.</p>
     </div>
 
     <div class="ndr-back">
@@ -39,19 +45,42 @@ import { withBase } from '../../lib/site';
   .ndr-header h1 { font-size: clamp(2.2rem, 6vw, 3.2rem); margin-top: 0.3rem; }
   .ndr-intro { color: var(--text); max-width: 38rem; margin: 1rem auto 0; line-height: 1.7; }
 
+  .nm-card {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    text-decoration: none;
+    background: linear-gradient(135deg, #e5efd8, #e0eeeb);
+    border-color: rgba(120, 158, 128, 0.48);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .nm-card:hover { transform: translateY(-2px); box-shadow: var(--card-shadow-hover); }
+  .nm-card-icon { font-size: 2.2rem; }
+  .nm-card-copy { display: grid; gap: 0.25rem; }
+  .nm-card-copy strong { color: #243b36; font-family: var(--font-display); font-size: 1.4rem; }
+  .nm-card-copy > span { color: #344f49; line-height: 1.55; }
+  .nm-card-go { color: #326d42; font-family: var(--font-ui); font-weight: 700; white-space: nowrap; }
+
   .ndr-soon {
     text-align: center;
     max-width: 34rem;
-    margin: 0 auto;
-    padding: 2.5rem 1.75rem;
-    background: linear-gradient(135deg, var(--mint), var(--lavender));
+    margin: 1.25rem auto 0;
+    padding: 1.5rem 1.75rem;
+    background: var(--surface);
   }
   .ndr-emoji { font-size: 2.2rem; }
   .ndr-soon h2 { font-size: 1.4rem; margin: 0.5rem 0 0.6rem; }
   .ndr-soon p { color: var(--text); line-height: 1.7; }
-  :global(html[data-theme='dark']) .ndr-soon {
-    background: linear-gradient(135deg, rgba(24, 169, 58, 0.2), rgba(110, 70, 184, 0.22));
-    border-color: rgba(112, 217, 139, 0.34);
+  :global(html[data-theme='dark']) .nm-card { background: linear-gradient(135deg, #142d34, #1a3440); border-color: rgba(166, 204, 120, 0.55); }
+  :global(html[data-theme='dark']) .nm-card-copy strong { color: #f7f3e8; }
+  :global(html[data-theme='dark']) .nm-card-copy > span { color: #c8d9d5; }
+  :global(html[data-theme='dark']) .nm-card-go { color: #a6cc78; }
+  :global(html[data-theme='dark']) .ndr-soon { border-color: var(--border); }
+  @media (max-width: 36rem) {
+    .nm-card { grid-template-columns: auto 1fr; }
+    .nm-card-go { grid-column: 2; }
   }
 
   .ndr-back { text-align: center; margin-top: 2rem; }
