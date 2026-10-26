@@ -37,7 +37,10 @@ const links = [
       </p>
     </div>
   )}
-  <p class="footer-copy">© {year} Rainbow Circuits · Made with kindness, glitter, and a little harmless chaos.</p>
+  <div class="footer-meta">
+    <p class="footer-copy">© {year} Rainbow Circuits · Made with kindness, glitter, and a little harmless chaos.</p>
+    <p class="footer-credit">Website designed and built by Felix Greyson and Ryuu Kurogane.</p>
+  </div>
 </footer>
 
 <style>
@@ -88,13 +91,20 @@ const links = [
     font-weight: 600;
     font-size: 0.9rem;
   }
-  .footer-copy {
+  .footer-meta {
     text-align: center;
     font-size: 0.8rem;
     color: var(--text-light);
     padding: 0.5rem var(--gutter) 1.5rem;
     border-top: 1px solid rgba(60, 90, 150, 0.08);
   }
+  .footer-copy,
+  .footer-credit {
+    margin: 0;
+  }
+  .footer-credit {
+    margin-top: 0.25rem;
+  }
   .site-footer.minimal { margin-top: 3rem; }
-  .site-footer.minimal .footer-copy { border-top: none; padding-top: 1.5rem; }
+  .site-footer.minimal .footer-meta { border-top: none; padding-top: 1.5rem; }
 </style>
