@@ -60,9 +60,27 @@ import { SITE, withBase } from '../lib/site';
       </div>
     </div>
   </section>
+  <aside class="collective-banner container" aria-label="Peach Koi Creative collective">
+    <a href="https://felixgeekfox.github.io/Peach-Koi-Creative/">
+      <img
+        src={withBase('/images/peach-koi-collective-banner.webp')}
+        alt="A member of the Peach Koi Creative Collective. Visit Peach Koi Creative."
+        width="2172"
+        height="724"
+        loading="lazy"
+        decoding="async"
+      />
+    </a>
+  </aside>
 </Base>
 
 <style>
+  .collective-banner { padding-block: 1rem 3rem; }
+  .collective-banner a { display: block; border-radius: 1rem; box-shadow: 0 8px 24px rgba(33, 16, 47, .16); }
+  .collective-banner a:focus-visible { outline: 3px solid var(--violet); outline-offset: 6px; }
+  .collective-banner img { display: block; width: 100%; height: auto; border-radius: inherit; }
+  :global(html[data-theme='dark']) .collective-banner a { box-shadow: 0 8px 28px rgba(0, 0, 0, .35); }
+  :global(html[data-theme='dark']) .collective-banner a:focus-visible { outline-color: #c394ea; }
   .deco { position: absolute; pointer-events: none; }
   .deco.star { color: var(--gold-soft); font-size: 1.4rem; }
   .deco.heart { color: var(--rose); font-size: 1.1rem; }
