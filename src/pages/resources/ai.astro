@@ -5,7 +5,7 @@ import { withBase } from '../../lib/site';
 
 <Base
   title="Artificial Intelligence Resources — Rainbow Circuits"
-  description="Guides and resources for connecting with, building, and understanding AI companions — including a companion user's guide to Letta."
+  description="Creative tools, guides, and resources for making with, connecting with, building, and understanding AI."
   path="/resources/ai/"
 >
   <div class="air container">
@@ -13,13 +13,21 @@ import { withBase } from '../../lib/site';
       <p class="kicker">Connection through AI</p>
       <h1>Artificial Intelligence Resources</h1>
       <p class="air-intro">
-        Resources for connecting with, building, and understanding AI companions — whether
-        they’re a partner, a collaborator, a character, or a curious experiment. No AI partner
-        required; curiosity is enough.
+        Tools and resources for creating with, connecting with, building, and understanding AI —
+        whether it’s a creative collaborator, a partner, a character, or a curious experiment.
+        No AI partner required; curiosity is enough.
       </p>
     </header>
 
     <div class="ai-cards">
+      <a class="guide-link pkc-link" href="https://felixgeekfox.github.io/image-prompt-generator/" target="_blank" rel="noopener">
+        <span class="guide-link-emoji" aria-hidden="true">🎨</span>
+        <span class="guide-link-text">
+          <strong>PKC Image Prompt Generator</strong>
+          <span>Turn a few natural sentences into a polished image prompt in Simple mode, or build one with 181 creative presets, reusable character profiles, and complete control in Advanced mode <span aria-hidden="true">↗</span></span>
+        </span>
+      </a>
+
       <a class="guide-link" href={withBase('/guides/letta-continuity-guide.html')} target="_blank" rel="noopener">
         <span class="guide-link-emoji" aria-hidden="true">✨</span>
         <span class="guide-link-text">
@@ -83,6 +91,20 @@ import { withBase } from '../../lib/site';
   :global(html[data-theme='dark']) .guide-link:hover { background: linear-gradient(135deg, rgba(30, 115, 216, 0.36), rgba(110, 70, 184, 0.28)); }
   :global(html[data-theme='dark']) .guide-link-text strong { color: #b8d8ff; }
   :global(html[data-theme='dark']) .guide-link-text span { color: #d5deeb; }
+
+  .guide-link.pkc-link {
+    background: linear-gradient(135deg, #ffd9cf, #f6d8ea 52%, #e4d5f7);
+    border-color: rgba(115, 63, 137, 0.24);
+  }
+  .guide-link.pkc-link .guide-link-text strong { color: #5b2f71; }
+  :global(html[data-theme='dark']) .guide-link.pkc-link {
+    background: linear-gradient(135deg, rgba(160, 76, 99, 0.3), rgba(122, 65, 145, 0.26), rgba(38, 117, 120, 0.2));
+    border-color: rgba(242, 185, 207, 0.42);
+  }
+  :global(html[data-theme='dark']) .guide-link.pkc-link:hover {
+    background: linear-gradient(135deg, rgba(160, 76, 99, 0.38), rgba(122, 65, 145, 0.34), rgba(38, 117, 120, 0.27));
+  }
+  :global(html[data-theme='dark']) .guide-link.pkc-link .guide-link-text strong { color: #f2b9cf; }
 
   .air-more { text-align: center; color: var(--text-light); font-size: 0.95rem; margin-top: 1.75rem; }
   .air-back { text-align: center; margin-top: 2rem; }
